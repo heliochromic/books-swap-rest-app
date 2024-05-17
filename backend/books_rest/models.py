@@ -40,9 +40,9 @@ class User(models.Model):
         return reverse('user', kwargs={'pk': str(self.userID)})
 
 
-class BookItem:
+class BookItem(models.Model):
     itemID = models.AutoField(primary_key=True)
-    userID = models.ForeignKey(User.userID, on_delete=models.CASCADE)
+    userID = models.ForeignKey(User, on_delete=models.CASCADE)
     bookID = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
     photo = models.ImageField(upload_to='images/books/', help_text="Upload the image of the book")
     status = models.CharField(max_length=1, default='a')
@@ -60,8 +60,8 @@ class BookItem:
 
 class Request(models.Model):
     requestID = models.AutoField(primary_key=True)
-    sender_book = models.ForeignKey(BookItem.bookID, on_delete=models.CASCADE)
-    receiver_book = models.ForeignKey(BookItem.bookID, on_delete=models.CASCADE)
+    sender_book = models.ForeignKey(BookItem, on_delete=models.CASCADE)
+    receiver_book = models.ForeignKey(BookItem, on_delete=models.CASCADE)
     status = models.CharField(max_length=1, default='p')
     sending_time = models.DateTimeField(default=datetime.now)
     approval_time = models.DateTimeField(null=True)
