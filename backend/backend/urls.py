@@ -21,8 +21,11 @@ from books_rest import views
 
 router = routers.DefaultRouter()
 router.register(r'catalog', views.CatalogView, 'catalog')
-router.register(r'users', views.UserView, 'users')
+router.register(r'bookitem', views.BookItemView, 'bookitem')
 router.register(r'requests', views.RequestView, 'requests')
+router.register(r'users', views.UserView, 'users')
+router.register(r'login', views.LoginView, 'login')
+router.register(r'signup', views.SignupView, 'signup')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
