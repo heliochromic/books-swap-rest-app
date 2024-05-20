@@ -60,8 +60,8 @@ class BookItem(models.Model):
 
 class Request(models.Model):
     requestID = models.AutoField(primary_key=True)
-    sender_book = models.ForeignKey(BookItem, on_delete=models.CASCADE)
-    receiver_book = models.ForeignKey(BookItem, on_delete=models.CASCADE)
+    sender_book = models.ForeignKey(BookItem, on_delete=models.CASCADE, related_name='sender_book')
+    receiver_book = models.ForeignKey(BookItem, on_delete=models.CASCADE, related_name='receiver_book')
     status = models.CharField(max_length=1, default='p')
     sending_time = models.DateTimeField(default=datetime.now)
     approval_time = models.DateTimeField(null=True)
