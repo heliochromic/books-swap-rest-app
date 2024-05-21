@@ -1,5 +1,6 @@
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User as DJUser
+from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
@@ -27,7 +28,19 @@ class CatalogView(APIView):
 class BookItemView(APIView):
 
     @action(detail=False, methods=['get'])
-    def get(self, request):
+    def get(self, request, pk):
+        pass
+
+    @action(detail=False, methods=['post'])
+    def post(self, request, pk):
+        pass
+
+    @action(detail=False, methods=['put'])
+    def put(self, request, pk):
+        pass
+
+    @action(detail=False, methods=['delete'])
+    def delete(self, request, pk):
         pass
 
 
@@ -40,13 +53,15 @@ class RequestView(APIView):
 
 class UserView(APIView):
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def post(self, request):
-        userID = request.data['userID']
-        user = User.objects.get(id=userID)
-        serializer = UserSerializer(data=user, many=False)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        user_id = request.data['userID']
+        try:
+            queryset = User.objects.get(userID=user_id)
+            serializer = UserSerializer(queryset)
+            return Response(serializer.data)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
     @action(detail=False, methods=['put'])
     def put(self, request):
@@ -79,18 +94,23 @@ class UserView(APIView):
 
         try:
             user = User.objects.get(userID=userID)
+            django_id = user.django.id
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        user.delete()
+        with transaction.atomic():
+            user.delete()
+            user = DJUser.objects.get(id=django_id)
+            Token.objects.filter(user=user).delete()
+            user.groups.clear()
+            user.delete()
         return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
 
 
 class ProfileView(APIView):
 
     @action(detail=False, methods=['get'])
-    def get(self, request):
-        userID = request.data['userID']
+    def get(self, request, pk):
+        userID = pk
 
         user = User.objects.get(userID=userID)
 
@@ -146,16 +166,27 @@ class SignUpView(APIView):
 
         if DJUser.objects.filter(email=mail).exists():
             return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            djuser = DJUser(username=username, email=mail)
+            djuser.set_password(password)
+            djuser.save()
+            user = DJUser.objects.latest('id').id
 
-        djuser = DJUser.objects.create(username=username, email=mail, password=password)
-
-        user = User.objects.latest('userID').userID
-
-        user = User.objects.create_user(first_name=first_name, last_name=last_name, age=age, mail=mail,
-                                        phone_number=phone_number, latitude=latitude, longitude=longitude,
-                                        rating=rating, image=image, django_id=user)
-
-        token, created = Token.objects.get_or_create(user=djuser)
+            custom_user = User(first_name=first_name, last_name=last_name, age=age, mail=mail,
+                               phone_number=phone_number, latitude=latitude, longitude=longitude,
+                               rating=rating, image=image, django_id=user)
+            custom_user.save()
+            token, created = Token.objects.get_or_create(user=djuser)
 
         return Response({"message": "User created successfully", "token": token.key},
                         status=status.HTTP_201_CREATED)
+
+
+class UserListView(APIView):
+
+    @action(methods=['get'], detail=False)
+    def get(self, request):
+        my_id = request.data.get('userID')
+        queryset = User.objects.exclude(userID=my_id)
+        serializer = UserSerializer(queryset, many=True)
+        return Response(serializer.data)
