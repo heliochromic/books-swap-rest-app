@@ -40,7 +40,7 @@ class RequestView(APIView):
 
 class UserView(APIView):
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['post'])
     def post(self, request):
         userID = request.data['userID']
         user = User.objects.get(id=userID)
@@ -89,8 +89,8 @@ class UserView(APIView):
 class ProfileView(APIView):
 
     @action(detail=False, methods=['get'])
-    def get(self, request):
-        userID = request.data['userID']
+    def get(self, request, pk):
+        userID = pk
 
         user = User.objects.get(userID=userID)
 

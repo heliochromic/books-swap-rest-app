@@ -27,6 +27,7 @@ urlpatterns = [
     path('api/catalog/<int:pk>', views.BookItemView.as_view(), name='bookitem'),
     path('api/requests/', views.RequestView.as_view(), name='requests'),
     path('api/users/', views.UserView.as_view(), name='users'),
+    path('api/profile/<int:pk>', views.ProfileView.as_view(), name='profile'),
     path('api/login/', views.LoginView.as_view(), name='login'),
     path('api/signup/', views.SignUpView.as_view(), name='signup'),
 ]
