@@ -20,14 +20,13 @@ from rest_framework import routers
 from books_rest import views
 
 router = routers.DefaultRouter()
-
-router.register(r'catalog/<int:pk>', views.BookItemView, 'bookitem')
-router.register(r'requests', views.RequestView, 'requests')
-router.register(r'users', views.UserView, 'users')
-router.register(r'login', views.LoginView, 'login')
-router.register(r'signup', views.SignUpView, 'signup')
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
-    path('api/catalog/', views.CatalogView.as_view(), name='catalog')
+    path('api/catalog/', views.CatalogView.as_view(), name='catalog'),
+    path('api/catalog/<int:pk>', views.BookItemView.as_view(), name='bookitem'),
+    path('api/requests/', views.RequestView.as_view(), name='requests'),
+    path('api/users/', views.UserView.as_view(), name='users'),
+    path('api/login/', views.LoginView.as_view(), name='login'),
+    path('api/signup/', views.SignUpView.as_view(), name='signup'),
 ]

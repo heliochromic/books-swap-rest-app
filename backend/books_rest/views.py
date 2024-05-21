@@ -19,22 +19,21 @@ class CatalogView(APIView):
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['post'])
     def post(self, request):
         pass
 
 
-class BookItemView(viewsets.ModelViewSet):
-    serializer_class = BookItemSerializer
-    queryset = BookItem.objects.all()
+class BookItemView(APIView):
 
+    @action(detail=False, methods=['get'])
     def get(self, request):
         pass
 
 
-class RequestView(viewsets.ModelViewSet):
-    serializer_class = RequestSerializer
-    queryset = Request.objects.all()
+class RequestView(APIView):
 
+    @action(detail=False, methods=['get'])
     def get(self, request):
         pass
 
@@ -148,11 +147,14 @@ class SignUpView(APIView):
         if DJUser.objects.filter(email=mail).exists():
             return Response({"error": "Email already in use"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = User.objects.create_user(first_name=first_name,last_name=last_name, age=age, mail=mail,
-                                        phone_number=phone_number, latitude=latitude, longitude=longitude,
-                                        rating=rating, image=image)
+        djuser = DJUser.objects.create(username=username, email=mail, password=password)
 
-        djuser = DJUser.objects.create(username=username, email=mail, password=password, )
+        user = User.objects.latest('userID').userID
+
+        user = User.objects.create_user(first_name=first_name, last_name=last_name, age=age, mail=mail,
+                                        phone_number=phone_number, latitude=latitude, longitude=longitude,
+                                        rating=rating, image=image, django_id=user)
+
         token, created = Token.objects.get_or_create(user=djuser)
 
         return Response({"message": "User created successfully", "token": token.key},
