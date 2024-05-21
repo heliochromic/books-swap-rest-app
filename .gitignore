@@ -1,1 +1,9 @@
 .idea
+.gitignore
+.env
+venv
+.idea
+*.pyc
+backend/books_rest/__pycache__/
+backend/backend/__pycache__/
+backend/books_rest/migrations/__pycache__/
