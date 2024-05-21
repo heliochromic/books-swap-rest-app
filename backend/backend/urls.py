@@ -23,7 +23,7 @@ router = routers.DefaultRouter()
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('users/', views.UserListView.as_view(), name='users'),
+    path('api/admin/users/', views.UserListView.as_view(), name='users'),
     path('api/', include(router.urls)),
     path('api/login/', views.LoginView.as_view(), name='login'),
     path('api/signup/', views.SignUpView.as_view(), name='signup'),
