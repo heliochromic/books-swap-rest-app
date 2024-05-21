@@ -4,15 +4,18 @@ from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer
 
 
 class CatalogView(APIView):
+    # permission_classes = [IsAuthenticated, ]
+    parser_classes = [FormParser, MultiPartParser]
 
     @action(detail=False, methods=['get'])
     def get(self, request):
@@ -21,8 +24,12 @@ class CatalogView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])
-    def post(self, request):
-        pass
+    def post(self, request, *args, **kwargs):
+        serializer = BookItemSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class BookItemView(APIView):
