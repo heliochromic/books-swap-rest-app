@@ -31,7 +31,7 @@ class User(models.Model):
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
     rating = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='uploads/', help_text="Upload your image", blank=True, null=True)
+    image = models.ImageField(upload_to='user_images/', help_text="Upload your image", blank=True, null=True)
     registration_date = models.DateField(default=datetime.now)
     django = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
@@ -46,7 +46,7 @@ class BookItem(models.Model):
     itemID = models.AutoField(primary_key=True)
     userID = models.ForeignKey(User, on_delete=models.CASCADE)
     bookID = models.ForeignKey(Book, on_delete=models.DO_NOTHING)
-    photo = models.ImageField(upload_to='uploads/', help_text="Upload the image of the book", blank=True,
+    photo = models.ImageField(upload_to='book_photos/', help_text="Upload the image of the book", blank=True,
                               null=True)
     status = models.CharField(max_length=1, default='a')
     description = models.TextField(help_text="Enter the description of the book")
