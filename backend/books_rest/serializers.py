@@ -16,9 +16,12 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class BookItemSerializer(serializers.ModelSerializer):
+    bookID = BookSerializer()
+
     class Meta:
         model = BookItem
-        fields = '__all__'
+        fields = ['itemID', 'photo', 'status', 'description', 'publish_time', 'deletion_time', 'exchange_time',
+                  'bookID', 'userID']
 
 
 class RequestSerializer(serializers.ModelSerializer):
