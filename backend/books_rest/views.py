@@ -16,11 +16,20 @@ class CatalogView(APIView):
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+    @action(detail=False, methods=['post'])
     def post(self, request):
         pass
 
 
-class BookItemView(viewsets.ModelViewSet):
+class CatalogItemView(APIView):
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        queryset = BookItem.objects.all()
+        serializer = BookItemSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BookItemView(APIView):
     serializer_class = BookItemSerializer
     queryset = BookItem.objects.all()
 
@@ -28,7 +37,7 @@ class BookItemView(viewsets.ModelViewSet):
         pass
 
 
-class RequestView(viewsets.ModelViewSet):
+class RequestView(APIView):
     serializer_class = RequestSerializer
     queryset = Request.objects.all()
 
@@ -36,7 +45,7 @@ class RequestView(viewsets.ModelViewSet):
         pass
 
 
-class UserView(viewsets.ModelViewSet):
+class UserView(APIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -53,7 +62,7 @@ class UserView(viewsets.ModelViewSet):
         pass
 
 
-class LoginView(viewsets.ModelViewSet):
+class LoginView(APIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
@@ -61,7 +70,7 @@ class LoginView(viewsets.ModelViewSet):
         pass
 
 
-class SignUpView(viewsets.ModelViewSet):
+class SignUpView(APIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
