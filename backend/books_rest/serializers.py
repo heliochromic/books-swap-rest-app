@@ -8,24 +8,22 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+    def update(self, instance, validated_data):
+        instance.image = validated_data.get('image', instance.image)
+        instance.save()
+        return instance
+
 
 class BookSerializer(serializers.ModelSerializer):
     class Meta:
         model = Book
-        fields = ['bookID', 'ISBN', 'name', 'author', 'genre', 'language', 'pages', 'year', 'description']
+        fields = '__all__'
 
 
 class BookItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = BookItem
-        fields = ['itemID', 'photo', 'status', 'description', 'publish_time', 'deletion_time', 'exchange_time',
-                  'bookID', 'userID']
-
-    # def create(self, validated_data):
-    #     book_data = validated_data.pop('bookID')
-    #     book, created = Book.objects.get_or_create(bookID=book_data['bookID'], defaults=book_data)
-    #     book_item = BookItem.objects.create(bookID=book, **validated_data)
-    #     return book_item
+        fields = '__all__'
 
     def update(self, instance, validated_data):
         instance.photo = validated_data.get('photo', instance.photo)
@@ -37,3 +35,13 @@ class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
         fields = '__all__'
+
+
+class BookItemBookJoinedSerializer(serializers.ModelSerializer):
+    # write a serializer that will make inner join for two models
+    bookID = BookSerializer()
+
+    class Meta:
+        model = BookItem
+        fields = ['itemID', 'photo', 'status', 'description', 'publish_time', 'deletion_time', 'exchange_time',
+                  'bookID', 'userID']

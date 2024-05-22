@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
@@ -10,20 +12,19 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 
 from .models import BookItem, User, Request
-from .serializers import BookItemSerializer, UserSerializer, RequestSerializer
+from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, BookItemBookJoinedSerializer
 
 
 class CatalogView(APIView):
-    # permission_classes = [IsAuthenticated, ]
     parser_classes = [FormParser, MultiPartParser]
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'])  # отримати каталог усіх книг без фільтрів
     def get(self, request):
         queryset = BookItem.objects.all()
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'])  # додати книгу (токен)
     def post(self, request, *args, **kwargs):
         serializer = BookItemSerializer(data=request.data)
         if serializer.is_valid():
@@ -34,78 +35,135 @@ class CatalogView(APIView):
 
 class BookItemView(APIView):
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'])  # сторінка книги
     def get(self, request, pk):
-        pass
+        try:
+            book_item_instance = BookItem.objects.get(itemID=pk)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['post'])
-    def post(self, request, pk):
-        pass
+        serializer = BookItemBookJoinedSerializer(instance=book_item_instance)
+        return Response(serializer.data)
 
-    @action(detail=False, methods=['put'])
+    @action(detail=False, methods=['put'])  # змінити свою книгу (токен) ((поки воно йде з запиту))
     def put(self, request, pk):
-        pass
+        try:
+            book_item_instance = BookItem.objects.get(itemID=pk)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['delete'])
+        book_item_instance.photo = request.data.get('photo', book_item_instance.photo)
+        book_item_instance.status = request.data.get('status', book_item_instance.status)
+        book_item_instance.description = request.data.get('description', book_item_instance.description)
+        book_item_instance.publish_time = request.data.get('publish_time', book_item_instance.publish_time)
+        book_item_instance.deletion_time = request.data.get('deletion_time', book_item_instance.deletion_time)
+        book_item_instance.exchange_time = request.data.get('exchange_time', book_item_instance.exchange_time)
+        book_item_instance.save()
+
+        serializer = BookItemBookJoinedSerializer(instance=book_item_instance)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['delete'])  # видалити свою книгу (токен) ((поки воно йде з запиту))
     def delete(self, request, pk):
-        pass
+        try:
+            book_item_instance = BookItem.objects.get(itemID=pk)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        book_item_instance.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RequestView(APIView):
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу (токен) ((поки воно йде з запиту))
     def get(self, request):
+        receiver_id = request.data.get("receiver_book_id")
+
+        if not receiver_id:
+            return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            queryset = Request.objects.filter(receiver_book__itemID=receiver_id)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = RequestSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['post'])  # зробити запит на книгу (токен) ((поки воно йде з запиту))
+    def post(self, request, pk):
+        receiver_id = request.data.get("receiver_book_id")
+        book_status = request.data.get('status')
+
+        if not receiver_id:
+            return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            sender_book_instance = BookItem.objects.get(itemID=pk)
+            receiver_book_instance = BookItem.objects.get(itemID=receiver_id)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if sender_book_instance.itemID == receiver_book_instance.itemID:
+            return Response(data={"error": "Sender and receiver books cannot be the same"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        request_instance = Request.objects.create(
+            sender_book=sender_book_instance,
+            receiver_book=receiver_book_instance,
+            status=book_status,
+            sending_time=datetime.now()
+        )
+
+        serializer = RequestSerializer(instance=request_instance)
+
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
+
+class CatalogItemView(APIView):
+    @action(detail=False, methods=['get'])  # отримати свій запит на книгу (токен)
+    def get(self, request, pk):
+        pass
+
+    @action(detail=False, methods=['post'])  # підтвердити свій запит на книгу (токен)
+    def post(self, request, pk):
+        pass
+
+    @action(detail=False, methods=['delete'])  # видалити свій запит на книгу (токен)
+    def delete(self, request, pk):
         pass
 
 
 class UserView(APIView):
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post', 'put'])  # отримати або редагувати сторінку свого профілю (токен)
     def post(self, request):
-        user_id = request.data['userID']
+        user_id = request.data.get('userID')
         try:
-            queryset = User.objects.get(userID=user_id)
-            serializer = UserSerializer(queryset)
-            return Response(serializer.data)
+            user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
             return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    @action(detail=False, methods=['put'])
-    def put(self, request):
-        try:
-            user = User.objects.get(userID=request.data['userID'])
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = UserSerializer(user_instance, data=request.data, partial=True)
 
-        user.userID = request.data['userID']
-        user.first_name = request.data['first_name']
-        user.last_name = request.data['last_name']
-        user.age = request.data['age']
-        user.mail = request.data['mail']
-        user.phone_number = request.data['phone_number']
-        user.latitude = request.data['latitude']
-        user.longitude = request.data['longitude']
-        user.rating = request.data['rating']
-        user.image = request.data['image']
-        user.save()
-        serializer = UserSerializer(user, many=False)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    @action(detail=False, methods=['delete'])
+    @action(detail=False, methods=['delete'])  # видалення свого профілю (токен)
     def delete(self, request):
-        userID = request.data['userID']
-
-        if not userID:
-            return Response({"error": "userID is required"}, status=status.HTTP_400_BAD_REQUEST)
-
+        user_id = request.data.get('userID')
         try:
-            user = User.objects.get(userID=userID)
-            django_id = user.django.id
+            user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        django_id = user_instance.django.id
+
         with transaction.atomic():
-            user.delete()
+            user_instance.delete()
             user = DJUser.objects.get(id=django_id)
             Token.objects.filter(user=user).delete()
             user.groups.clear()
@@ -115,12 +173,10 @@ class UserView(APIView):
 
 class ProfileView(APIView):
 
-    @action(detail=False, methods=['get'])
+    @action(detail=False, methods=['get'])  # отримати сторінку чужого профілю
     def get(self, request, pk):
         userID = pk
-
         user = User.objects.get(userID=userID)
-
         if not user:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -130,7 +186,7 @@ class ProfileView(APIView):
 
 class LoginView(APIView):
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'])  # логін
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -150,7 +206,7 @@ class LoginView(APIView):
 class SignUpView(APIView):
     permission_classes = [AllowAny]
 
-    @action(detail=False, methods=['post'])
+    @action(detail=False, methods=['post'])  # сайн ап
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -197,3 +253,10 @@ class UserListView(APIView):
         queryset = User.objects.exclude(userID=my_id)
         serializer = UserSerializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class MapView(APIView):
+
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        pass
