@@ -9,14 +9,16 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
+from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import BookItem, User, Request
-from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, BookItemBookJoinedSerializer
+from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, BookItemBookJoinedSerializer, \
+    BookItemLocationSerializer
 
 
 class CatalogView(APIView):
     parser_classes = [FormParser, MultiPartParser]
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])  # отримати каталог усіх книг без фільтрів
     def get(self, request):
@@ -34,6 +36,7 @@ class CatalogView(APIView):
 
 
 class BookItemView(APIView):
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])  # сторінка книги
     def get(self, request, pk):
@@ -51,6 +54,9 @@ class BookItemView(APIView):
             book_item_instance = BookItem.objects.get(itemID=pk)
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if not (request.user.is_staff or book_item_instance.userID.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
         book_item_instance.photo = request.data.get('photo', book_item_instance.photo)
         book_item_instance.status = request.data.get('status', book_item_instance.status)
@@ -70,11 +76,15 @@ class BookItemView(APIView):
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
 
+        if not (request.user.is_staff or book_item_instance.userID.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
         book_item_instance.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class RequestView(APIView):
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу (токен) ((поки воно йде з запиту))
     def get(self, request):
@@ -121,21 +131,8 @@ class RequestView(APIView):
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
 
-class CatalogItemView(APIView):
-    @action(detail=False, methods=['get'])  # отримати свій запит на книгу (токен)
-    def get(self, request, pk):
-        pass
-
-    @action(detail=False, methods=['post'])  # підтвердити свій запит на книгу (токен)
-    def post(self, request, pk):
-        pass
-
-    @action(detail=False, methods=['delete'])  # видалити свій запит на книгу (токен)
-    def delete(self, request, pk):
-        pass
-
-
 class UserView(APIView):
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['post', 'put'])  # отримати або редагувати сторінку свого профілю (токен)
     def post(self, request):
@@ -144,6 +141,8 @@ class UserView(APIView):
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
             return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+        if not (request.user.is_staff or user_instance.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
         serializer = UserSerializer(user_instance, data=request.data, partial=True)
 
@@ -160,18 +159,23 @@ class UserView(APIView):
         except User.DoesNotExist:
             return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        django_id = user_instance.django.id
+        if not (request.user.is_staff or user_instance.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+        django_id = user_instance.django_id.id if user_instance.django_id else None
 
         with transaction.atomic():
             user_instance.delete()
-            user = DJUser.objects.get(id=django_id)
-            Token.objects.filter(user=user).delete()
-            user.groups.clear()
-            user.delete()
+            if django_id:
+                user = DJUser.objects.get(id=django_id)
+                Token.objects.filter(user=user).delete()
+                user.groups.clear()
+                user.delete()
         return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
 
 
 class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['get'])  # отримати сторінку чужого профілю
     def get(self, request, pk):
@@ -185,6 +189,7 @@ class ProfileView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
 
     @action(detail=False, methods=['post'])  # логін
     def post(self, request):
@@ -246,9 +251,12 @@ class SignUpView(APIView):
 
 
 class UserListView(APIView):
+    permission_classes = [IsAuthenticated]
 
     @action(methods=['get'], detail=False)
     def get(self, request):
+        if not request.user.is_staff:
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         my_id = request.data.get('userID')
         queryset = User.objects.exclude(userID=my_id)
         serializer = UserSerializer(queryset, many=True)
@@ -256,7 +264,9 @@ class UserListView(APIView):
 
 
 class MapView(APIView):
-
+    permission_classes = [IsAuthenticated]
     @action(detail=False, methods=['get'])
     def get(self, request):
-        pass
+        book_items = BookItem.objects.all()
+        serializer = BookItemLocationSerializer(book_items, many=True)
+        return Response(serializer.data)

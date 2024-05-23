@@ -45,3 +45,17 @@ class BookItemBookJoinedSerializer(serializers.ModelSerializer):
         model = BookItem
         fields = ['itemID', 'photo', 'status', 'description', 'publish_time', 'deletion_time', 'exchange_time',
                   'bookID', 'userID']
+
+
+class UserLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['userID', 'latitude', 'longitude']
+
+
+class BookItemLocationSerializer(serializers.ModelSerializer):
+    user = UserLocationSerializer(source='userID')
+
+    class Meta:
+        model = BookItem
+        fields = ['itemID', 'user', 'bookID', 'status', 'description', 'photo', 'photo2', 'photo3', 'publish_time', 'deletion_time', 'exchange_time']

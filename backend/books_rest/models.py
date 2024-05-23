@@ -34,6 +34,7 @@ class User(models.Model):
     image = models.ImageField(upload_to='images/users/', help_text="Upload your image")
     registration_date = models.DateField(default=datetime.now)
     django = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
     def __str__(self):
         return f"{self.first_name}, {self.last_name}"
 
