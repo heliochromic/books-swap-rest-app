@@ -37,7 +37,17 @@ const Profile = () => {
 useEffect(() => {
   if (userProfile && !mapInitialized) {
     const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
-    console.log(newLatLng)// Replace newLatitude and newLongitude with your new coordinates
+
+     const newIcon = L.icon({
+        iconUrl: `http://localhost:8000${userProfile.image}`,
+        iconSize: [30, 30],
+        iconAnchor: [19, 38],
+        popupAnchor: [0, -38]
+    });
+
+    // Set new icon for the marker
+    marker.setIcon(newIcon);
+    // Replace newLatitude and newLongitude with your new coordinates
     marker.setLatLng(newLatLng);
     const newMap = L.map('mapid').setView([marker.getLatLng().lat, marker.getLatLng().lng], 13);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
