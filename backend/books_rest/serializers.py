@@ -9,7 +9,16 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def update(self, instance, validated_data):
+        instance.first_name = validated_data.get('first_name', instance.first_name)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.age = validated_data.get('age', instance.age)
+        instance.mail = validated_data.get('mail', instance.mail)
+        instance.phone_number = validated_data.get('phone_number', instance.phone_number)
+        instance.latitude = validated_data.get('latitude', instance.latitude)
+        instance.longitude = validated_data.get('longitude', instance.longitude)
+        instance.rating = validated_data.get('rating', instance.rating)
         instance.image = validated_data.get('image', instance.image)
+
         instance.save()
         return instance
 

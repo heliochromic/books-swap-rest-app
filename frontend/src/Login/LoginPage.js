@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const LoginPage = ({ setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -18,13 +18,10 @@ const LoginPage = () => {
             });
 
             const authToken = response.data.token;
-
-            // Save the token to local storage
             sessionStorage.setItem('token', authToken);
-
+            setIsAuthenticated(true); // Update authentication state
             navigate('/catalog');
         } catch (error) {
-            // Handle error (e.g., show error message)
             setError('Login failed. Please check your credentials and try again.');
             console.error('There was an error logging in:', error);
         }

@@ -187,8 +187,8 @@ class UserView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    @action(detail=False, methods=['post', 'put'])  # отримати або редагувати сторінку свого профілю (токен)
-    def post(self, request):
+    @action(detail=False, methods=['get'])  # отримати або редагувати сторінку свого профілю (токен)
+    def get(self, request):
         user_id = request.user.id
         try:
             user_instance = User.objects.get(userID=user_id)
@@ -202,6 +202,26 @@ class UserView(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @action(detail=False, methods=['put'])  # Update user profile
+    def put(self, request):
+        user_id = request.user.id
+        try:
+            user_instance = User.objects.get(userID=user_id)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        # Check if the user has permission to update the profile
+        if not (request.user.is_staff or user_instance.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+        serializer = UserSerializer(user_instance, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     @action(detail=False, methods=['delete'])  # видалення свого профілю (токен)

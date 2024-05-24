@@ -31,7 +31,7 @@ class User(models.Model):
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
     rating = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='images/users/', help_text="Upload your image")
+    image = models.CharField(help_text="Upload your image")
     registration_date = models.DateField(default=datetime.now)
     django = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
