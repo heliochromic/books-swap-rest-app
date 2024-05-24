@@ -20,7 +20,7 @@ const LoginPage = () => {
             const authToken = response.data.token;
 
             // Save the token to local storage
-            localStorage.setItem('token', authToken);
+            sessionStorage.setItem('token', authToken);
 
             navigate('/catalog');
         } catch (error) {

@@ -11,9 +11,8 @@ const Catalog = () => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
+        const token = sessionStorage.getItem('token');
 
-        // Include the token in the request headers
         const config = {
           headers: {
             'Authorization': `Token ${token}`
