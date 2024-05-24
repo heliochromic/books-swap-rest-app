@@ -1,15 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
 import HomePage from '../HomePage/HomePage';
-import Catalog from '../Catalog';
+import Catalog from '../Catalog/Catalog';
 import Profile from '../Profile/Profile';
 import Map from '../Map/Map';
 import LoginPage from "../Login/LoginPage";
+import './Header.css';
 import axios from "axios";
- const getCookie = (name) => {
-        const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-        return cookieValue ? cookieValue.pop() : '';
-    };
+
+const getCookie = (name) => {
+    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+    return cookieValue ? cookieValue.pop() : '';
+};
 const Header = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -50,33 +52,44 @@ const Header = () => {
 
     return (
         <Router>
-            <nav>
-                <div>
-                    <Link to="/">Home</Link>
-                </div>
-                <div>
-                    <Link to="/catalog">Catalog</Link>
-                </div>
-                <div>
-                    <Link to="/profile">Profile</Link>
-                </div>
-                <div>
-                    <Link to="/map">Map</Link>
-                </div>
-                {!isAuthenticated && (
+            <header>
+                <h2>Logo</h2>
+                <nav>
                     <div>
-                        <Link to="/login">Log In</Link>
+                        <Link to="/">Home</Link>
                     </div>
-                )}
-                {isAuthenticated && <button onClick={handleLogout}>Logout</button>}
-            </nav>
-            <Routes>
-                <Route path="/" element={<HomePage/>}/>
-                <Route path="/catalog" element={<Catalog />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/map" element={<Map />} />
-                <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated} />} />
-            </Routes>
+                    <div>
+                        <Link to="/catalog">Catalog</Link>
+                    </div>
+                    <div>
+                        <Link to="/profile">Profile</Link>
+                    </div>
+                    <div>
+                        <Link to="/map">Map</Link>
+                    </div>
+                    {!isAuthenticated && (
+                        <div>
+                            <Link to="/login">Log In</Link>
+                        </div>
+                    )}
+                    {isAuthenticated && (
+                        <div>
+                            <Link to="/" onClick={handleLogout}>Logout</Link>
+                        </div>
+                    )}
+                </nav>
+            </header>
+            <main>
+                <section>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>}/>
+                        <Route path="/catalog" element={<Catalog/>}/>
+                        <Route path="/profile" element={<Profile/>}/>
+                        <Route path="/map" element={<Map/>}/>
+                        <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
+                    </Routes>
+                </section>
+            </main>
         </Router>
     );
 };

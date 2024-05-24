@@ -25,7 +25,7 @@ class CatalogView(APIView):
     @action(detail=False, methods=['get'])
     def get(self, request):
         queryset = BookItem.objects.exclude(userID_id=request.user.id)
-        serializer = BookItemSerializer(queryset, many=True)
+        serializer = BookItemBookJoinedSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])  # додати книгу (токен)
@@ -111,6 +111,7 @@ class RequestView(APIView):
 class RequestItemView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+
     @action(detail=False, methods=['post'])  # зробити запит на книгу
     def post(self, request, pk):
         receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу

@@ -1,0 +1,36 @@
+.catalog {
+
+}
+
+.catalogContainer {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+    width: 100%
+}
+
+.bookItemCard {
+    margin: 10px;
+    height: 100px;
+    background-color: #0f0f0f;
+    width: calc(25% - 20px);
+    min-width: 200px;
+}
+
+@media screen and (max-width: 1024px) and (min-width: 671px) {
+    .bookItemCard {
+        width: calc(33.33% - 20px);
+    }
+}
+
+@media screen and (max-width: 670px) and (min-width: 481px) {
+    .bookItemCard {
+        width: calc(50% - 20px);
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .bookItemCard {
+        width: 100%;
+    }
+}
