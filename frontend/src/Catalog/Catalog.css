@@ -10,11 +10,16 @@
 }
 
 .bookItemCard {
-    margin: 10px;
-    height: 100px;
-    background-color: #0f0f0f;
+    margin: 8px;
+    height: 360px;
     width: calc(25% - 20px);
     min-width: 200px;
+    border: 2px solid;
+    position: relative;
+}
+
+.bookItemCard > img {
+    max-height: 170px;
 }
 
 @media screen and (max-width: 1024px) and (min-width: 671px) {
