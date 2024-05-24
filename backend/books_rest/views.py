@@ -105,6 +105,8 @@ class RequestView(APIView):
 
 
 class RequestItemView(APIView):
+    permission_classes = [IsAuthenticated]
+
     @action(detail=False, methods=['post'])  # зробити запит на книгу
     def post(self, request, pk):
         receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
@@ -118,7 +120,7 @@ class RequestItemView(APIView):
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        if sender_book_instance.userID == receiver_book_instance.userID:
+        if sender_book_instance.userID.userID == receiver_book_instance.userID.userID:
             return Response(data={"error": "Sender and receiver books cannot be the same"},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -135,6 +137,7 @@ class RequestItemView(APIView):
 
     @action(detail=False, methods=['put'])  # видалення або схвалення запиту на книгу
     def put(self, request, pk):
+        receiver_id = request.user.id  # я зараз sender
         request_status = request.data.get('status')
 
         if request_status not in ["A", "R"]:
@@ -153,8 +156,8 @@ class RequestItemView(APIView):
             return Response(data={"error": "Request was already approved or removed"},
                             status=status.HTTP_406_NOT_ACCEPTABLE)
 
-        # if sender_id != sender_book_item_instance.userID:
-        #     return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+        if receiver_id != receiver_book_item_instance.userID.userID:
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
         time = datetime.now()
 
