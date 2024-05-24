@@ -8,54 +8,51 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [mapInitialized, setMapInitialized] = useState(false);
-  const [marker, setMarker] = useState(null);
   const [map, setMap] = useState(null);
+  var marker = new L.Marker([51.505, -0.09]);
 
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      try {
-        const token = sessionStorage.getItem('token');
-        const csrftoken = getCookie('csrftoken');
-        const config = {
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Authorization': `Token ${token}`
-          }
-        };
-        const response = await axios.get('http://localhost:8000/api/user/', config);
-        setUserProfile(response.data);
-        setLoading(false);
-      } catch (error) {
-        setError(error.message);
-        setLoading(false);
-      }
-    };
-
-    fetchUserProfile();
-  }, []);
-
-  useEffect(() => {
-    if (userProfile && !mapInitialized) {
-      const newMap = L.map('mapid').setView([51.505, -0.09], 13);
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(newMap);
-      newMap.on('click', handleMapClick);
-      setMap(newMap);
-      setMapInitialized(true);
+  const fetchUserProfile = async () => {
+    try {
+      const token = sessionStorage.getItem('token');
+      const csrftoken = getCookie('csrftoken');
+      const config = {
+        headers: {
+          'X-CSRFToken': csrftoken,
+          'Authorization': `Token ${token}`
+        }
+      };
+      const response = await axios.get('http://localhost:8000/api/user/', config);
+      setUserProfile(response.data);
+      setLoading(false);
+    } catch (error) {
+      setError(error.message);
+      setLoading(false);
     }
-  }, [userProfile, mapInitialized]);
+  };
+
+  fetchUserProfile();
+}, []);
+
+useEffect(() => {
+  if (userProfile && !mapInitialized) {
+    const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
+    console.log(newLatLng)// Replace newLatitude and newLongitude with your new coordinates
+    marker.setLatLng(newLatLng);
+    const newMap = L.map('mapid').setView([marker.getLatLng().lat, marker.getLatLng().lng], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(newMap);
+    newMap.on('click', handleMapClick);
+    setMap(newMap);
+    setMapInitialized(true);
+    marker.addTo(newMap);
+  }
+}, [userProfile, mapInitialized]);
 
   const handleMapClick = (e) => {
     const { lat, lng } = e.latlng;
-    if (marker) {
-      // If marker exists, move it to the new location
       marker.setLatLng([lat, lng]);
-    } else {
-      // If no marker exists, create a new one
-      const newMarker = L.marker([lat, lng]).addTo(map);
-      setMarker(newMarker);
-    }
     setUserProfile(prevState => ({
       ...prevState,
       latitude: lat,
