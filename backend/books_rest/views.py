@@ -20,14 +20,16 @@ class CatalogView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['get'])  # отримати каталог усіх книг без фільтрів
+    @action(detail=False, methods=['get'])
     def get(self, request):
-        queryset = BookItem.objects.all()
+        queryset = BookItem.objects.exclude(userID_id=request.user.id)
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])  # додати книгу (токен)
     def post(self, request, *args, **kwargs):
+        request.data['userID'] = request.user.id
+
         serializer = BookItemSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -69,7 +71,7 @@ class BookItemView(APIView):
         serializer = BookItemBookJoinedSerializer(instance=book_item_instance)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['delete'])  # видалити свою книгу (токен) ((поки воно йде з запиту))
+    @action(detail=False, methods=['delete'])  # видалити свою книгу (токен)
     def delete(self, request, pk):
         try:
             book_item_instance = BookItem.objects.get(itemID=pk)
@@ -88,41 +90,42 @@ class RequestView(APIView):
 
     @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу (токен) ((поки воно йде з запиту))
     def get(self, request):
-        receiver_id = request.data.get("receiver_book_id")
+        receiver_id = request.user.id
 
         if not receiver_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             queryset = Request.objects.filter(receiver_book__itemID=receiver_id)
-        except BookItem.DoesNotExist:
-            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Request.DoesNotExist:
+            return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = RequestSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'])  # зробити запит на книгу (токен) ((поки воно йде з запиту))
-    def post(self, request, pk):
-        receiver_id = request.data.get("receiver_book_id")
-        book_status = request.data.get('status')
 
-        if not receiver_id:
+class RequestItemView(APIView):
+    @action(detail=False, methods=['post'])  # зробити запит на книгу
+    def post(self, request, pk):
+        receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
+
+        if not receiver_book_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             sender_book_instance = BookItem.objects.get(itemID=pk)
-            receiver_book_instance = BookItem.objects.get(itemID=receiver_id)
+            receiver_book_instance = BookItem.objects.get(itemID=receiver_book_id)
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        if sender_book_instance.itemID == receiver_book_instance.itemID:
+        if sender_book_instance.userID == receiver_book_instance.userID:
             return Response(data={"error": "Sender and receiver books cannot be the same"},
                             status=status.HTTP_400_BAD_REQUEST)
 
         request_instance = Request.objects.create(
             sender_book=sender_book_instance,
             receiver_book=receiver_book_instance,
-            status=book_status,
+            status="P",
             sending_time=datetime.now()
         )
 
@@ -130,13 +133,55 @@ class RequestView(APIView):
 
         return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
+    @action(detail=False, methods=['put'])  # видалення або схвалення запиту на книгу
+    def put(self, request, pk):
+        request_status = request.data.get('status')
+
+        if request_status not in ["A", "R"]:
+            return Response(data={"error": "Invalid status"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            request_instance = Request.objects.get(requestID=pk)
+            sender_book_item_instance = BookItem.objects.get(itemID=request_instance.sender_book_id)
+            receiver_book_item_instance = BookItem.objects.get(itemID=request_instance.receiver_book_id)
+        except Request.DoesNotExist:
+            return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "BookItem not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if request_instance.status != "P":
+            return Response(data={"error": "Request was already approved or removed"},
+                            status=status.HTTP_406_NOT_ACCEPTABLE)
+
+        # if sender_id != sender_book_item_instance.userID:
+        #     return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+        time = datetime.now()
+
+        request_instance.status = request_status
+
+        if request_status == "A":
+            request_instance.approval_time = time
+            sender_book_item_instance.exchange_time = time
+            receiver_book_item_instance.exchange_time = time
+        elif request_status == "R":
+            request_instance.deletion_time = time
+
+        with transaction.atomic():
+            request_instance.save()
+            sender_book_item_instance.save()
+            receiver_book_item_instance.save()
+
+        serializer = RequestSerializer(instance=request_instance)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
 
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['post', 'put'])  # отримати або редагувати сторінку свого профілю (токен)
     def post(self, request):
-        user_id = request.data.get('userID')
+        user_id = request.user.id
         try:
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
@@ -153,7 +198,7 @@ class UserView(APIView):
 
     @action(detail=False, methods=['delete'])  # видалення свого профілю (токен)
     def delete(self, request):
-        user_id = request.data.get('userID')
+        user_id = request.user.id
         try:
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
@@ -265,6 +310,7 @@ class UserListView(APIView):
 
 class MapView(APIView):
     permission_classes = [IsAuthenticated]
+
     @action(detail=False, methods=['get'])
     def get(self, request):
         book_items = BookItem.objects.all()

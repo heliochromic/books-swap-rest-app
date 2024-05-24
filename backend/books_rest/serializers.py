@@ -25,11 +25,6 @@ class BookItemSerializer(serializers.ModelSerializer):
         model = BookItem
         fields = '__all__'
 
-    def update(self, instance, validated_data):
-        instance.photo = validated_data.get('photo', instance.photo)
-        instance.save()
-        return instance
-
 
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
@@ -58,4 +53,5 @@ class BookItemLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookItem
-        fields = ['itemID', 'user', 'bookID', 'status', 'description', 'photo', 'photo2', 'photo3', 'publish_time', 'deletion_time', 'exchange_time']
+        fields = ['itemID', 'user', 'bookID', 'status', 'description', 'photo', 'photo2', 'photo3', 'publish_time',
+                  'deletion_time', 'exchange_time']

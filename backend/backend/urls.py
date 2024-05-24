@@ -34,5 +34,6 @@ urlpatterns = [
                   path('api/catalog/<int:pk>', views.BookItemView.as_view(), name='book-item'),
                   path('api/map/', views.MapView.as_view(), name='map'),
                   path('api/requests/', views.RequestView.as_view(), name='requests'),
+                  path('api/requests/<int:pk>', views.RequestItemView.as_view(), name='requests-item'),
                   path('api/user/', views.UserView.as_view(), name='user'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
