@@ -1,35 +1,33 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import HomePage from './HomePage';
-import Catalog from './Catalog';
-import Profile from './Profile';
-import Map from './Map';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import HomePage from '../HomePage/HomePage';
+import Catalog from '../Catalog/Catalog';
+import Profile from '../Profile/Profile';
+import Map from '../Map/Map';
 
 const Header = () => {
     return (
         <Router>
             <nav>
-                <ul>
-                    <li>
+                    <div>
                         <Link to="/">Home</Link>
-                    </li>
-                    <li>
+                    </div>
+                    <div>
                         <Link to="/catalog">Catalog</Link>
-                    </li>
-                    <li>
+                    </div>
+                    <div>
                         <Link to="/profile">Profile</Link>
-                    </li>
-                    <li>
+                    </div>
+                    <div>
                         <Link to="/map">Map</Link>
-                    </li>
-                </ul>
+                    </div>
             </nav>
-            <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/catalog" component={Catalog} />
-                <Route path="/profile" component={Profile} />
-                <Route path="/map" component={Map} />
-            </Switch>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/catalog" element={<Catalog />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/map" element={<Map />} />
+            </Routes>
         </Router>
     );
 };
