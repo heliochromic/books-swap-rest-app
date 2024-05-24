@@ -319,3 +319,16 @@ class MapView(APIView):
         book_items = BookItem.objects.all()
         serializer = BookItemLocationSerializer(book_items, many=True)
         return Response(serializer.data)
+
+
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        try:
+            token = Token.objects.get(user=request.user)
+            token.delete()
+            return Response(status=status.HTTP_200_OK, data={"message": "Successfully logged out"})
+        except Token.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Token not found"})
