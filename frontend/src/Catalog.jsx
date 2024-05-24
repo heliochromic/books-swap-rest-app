@@ -11,8 +11,16 @@ const Catalog = () => {
     // Fetch data from the API
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/catalog/');
-        console.log(response)
+        const token = localStorage.getItem('token');
+
+        // Include the token in the request headers
+        const config = {
+          headers: {
+            'Authorization': `Token ${token}`
+          }
+        };
+
+        const response = await axios.get('http://localhost:8000/api/catalog/', config);
         setItems(response.data);
       } catch (err) {
         setError(err);

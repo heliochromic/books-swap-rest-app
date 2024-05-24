@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
 from rest_framework import viewsets, status
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -19,6 +20,7 @@ from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, 
 class CatalogView(APIView):
     parser_classes = [FormParser, MultiPartParser]
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['get'])
     def get(self, request):
@@ -39,6 +41,7 @@ class CatalogView(APIView):
 
 class BookItemView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['get'])  # сторінка книги
     def get(self, request, pk):
@@ -87,6 +90,7 @@ class BookItemView(APIView):
 
 class RequestView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу (токен) ((поки воно йде з запиту))
     def get(self, request):
@@ -106,7 +110,7 @@ class RequestView(APIView):
 
 class RequestItemView(APIView):
     permission_classes = [IsAuthenticated]
-
+    authentication_classes = [TokenAuthentication]
     @action(detail=False, methods=['post'])  # зробити запит на книгу
     def post(self, request, pk):
         receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
@@ -181,6 +185,7 @@ class RequestItemView(APIView):
 
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['post', 'put'])  # отримати або редагувати сторінку свого профілю (токен)
     def post(self, request):
@@ -224,6 +229,7 @@ class UserView(APIView):
 
 class ProfileView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['get'])  # отримати сторінку чужого профілю
     def get(self, request, pk):
@@ -251,7 +257,8 @@ class LoginView(APIView):
 
         if user is not None:
             login(request, user)
-            return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            token, _ = Token.objects.get_or_create(user=user)
+            return Response({"token": token.key, "message": "Login successful"}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -323,6 +330,7 @@ class MapView(APIView):
 
 class LogoutView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['post'])
     def post(self, request):
