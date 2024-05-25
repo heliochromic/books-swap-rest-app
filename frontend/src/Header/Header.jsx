@@ -1,17 +1,14 @@
 import React, {useState, useEffect} from 'react';
-import {BrowserRouter as Router, Route, Routes, Link} from 'react-router-dom';
-import HomePage from '../HomePage/HomePage';
-import Catalog from '../Catalog/Catalog';
-import Profile from '../Profile/Profile';
-import Map from '../Map/Map';
-import LoginPage from "../Login/LoginPage";
+import {BrowserRouter as Router, Link} from 'react-router-dom';
 import './Header.css';
 import axios from "axios";
+import Main from '../Main/Main'; // Import the new Main component
 
 const getCookie = (name) => {
     const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     return cookieValue ? cookieValue.pop() : '';
 };
+
 const Header = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -24,7 +21,6 @@ const Header = () => {
             setIsAuthenticated(false);
         }
     }, []);
-
 
     const handleLogout = async () => {
         try {
@@ -79,17 +75,7 @@ const Header = () => {
                     )}
                 </nav>
             </header>
-            <main>
-                <section>
-                    <Routes>
-                        <Route path="/" element={<HomePage/>}/>
-                        <Route path="/catalog" element={<Catalog/>}/>
-                        <Route path="/profile" element={<Profile/>}/>
-                        <Route path="/map" element={<Map/>}/>
-                        <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
-                    </Routes>
-                </section>
-            </main>
+            <Main setIsAuthenticated={setIsAuthenticated} />
         </Router>
     );
 };

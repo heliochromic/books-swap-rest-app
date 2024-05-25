@@ -6,7 +6,7 @@ const BookItem = ({key, bookItem}) => {
 
     return (
         <div className="bookItemCard">
-            <a href={`http://localhost:8000/api/catalog/${itemID}`}>
+            <a href={`http://localhost:3000/catalog/${itemID}`}>
                 <div className="imageWrapper">
                     <img src={`http://localhost:8000/${photo}`} alt={bookID.name} className="card-img-top"/>
                 </div>

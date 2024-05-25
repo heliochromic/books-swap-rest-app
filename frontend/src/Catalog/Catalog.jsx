@@ -32,20 +32,16 @@ const Catalog = () => {
         fetchData().then(r => console.log(r));
     }, []);
 
-    if (loading) {
-        return <div>Loading...</div>;
-    }
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
-    if (error) {
-        return <div>Error: {error.message}</div>;
-    }
 
     return (
         <div className="catalog">
             <h1>Catalog</h1>
             <div className="catalogContainer">
                 {items.map(item => (
-                    <BookItem key={item.id} bookItem={item}/>
+                    <BookItem key={+item.id} bookItem={item}/>
                 ))}
             </div>
         </div>

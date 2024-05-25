@@ -47,8 +47,8 @@ class BookItemBookJoinedSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BookItem
-        fields = ['itemID', 'photo', 'status', 'description', 'publish_time', 'deletion_time', 'exchange_time',
-                  'bookID', 'userID']
+        fields = ['itemID', 'photo', 'photo2', 'photo3', 'status', 'description', 'publish_time', 'deletion_time',
+                  'exchange_time', 'bookID', 'userID']
 
 
 class UserLocationSerializer(serializers.ModelSerializer):
