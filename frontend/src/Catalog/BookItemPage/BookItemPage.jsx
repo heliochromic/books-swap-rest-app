@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
 import axios from 'axios';
 
 const BookItemPage = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [book, setBook] = useState(null);
+    const [requested, setRequest] = useState(false)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -31,6 +32,25 @@ const BookItemPage = () => {
         fetchBook();
     }, [id]);
 
+    const handleRequestBook = () => {
+        const requestBook = async () => {
+            try {
+                const token = sessionStorage.getItem('token')
+                const config = {
+                    headers: {
+                        'Authorization': `Token ${token}`
+                    }
+                }
+
+                const response = await axios.post()
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        }
+    };
+
 
     console.log(book)
     if (loading) return <div className="text-center py-5">Loading...</div>;
@@ -40,50 +60,82 @@ const BookItemPage = () => {
         <section>
             <div className="container py-4 my-5">
                 <div className="row gx-4 gx-lg-5 align-items-center">
-                    <div className="col-md-6">
-                        <div className="carousel slide" id="carouselExample" data-bs-ride="carousel">
+                    <div className="col-md-12">
+                        <div id="carouselExampleAutoplaying" className="carousel slide carousel-dark mx-auto"
+                             data-bs-ride="carousel ">
+                            <div className="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"
+                                        className="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1"
+                                        aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2"
+                                        aria-label="Slide 3"></button>
+                            </div>
                             <div className="carousel-inner">
-                                <div className="carousel-item active">
-                                    <img src={`http://localhost:8000/${book.photo}`} className="card-img-top mb-5 mb-md-0 imageDetail" alt={book.name}/>
+                                <div className="carousel-item active imageDetail">
+                                    <img src={`http://localhost:8000/${book.photo}`} className="d-block w-100"
+                                         alt="..."/>
                                 </div>
-                                <div className="carousel-item">
-                                    <img src={`http://localhost:8000/${book.photo2}`} className="card-img-top mb-5 mb-md-0 imageDetail" alt={book.name}/>
+                                <div className="carousel-item imageDetail">
+                                    <img src={`http://localhost:8000/${book.photo2}`} className="d-block w-100"
+                                         alt="..."/>
                                 </div>
-                                <div className="carousel-item">
-                                    <img src={`http://localhost:8000/${book.photo3}`} className="card-img-top mb-5 mb-md-0 imageDetail" alt={book.name}/>
+                                <div className="carousel-item imageDetail">
+                                    <img src={`http://localhost:8000/${book.photo3}`} className="d-block w-100"
+                                         alt="..."/>
                                 </div>
                             </div>
-                            <button className="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                            <button className="carousel-control-prev" type="button"
+                                    data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
                                 <span className="carousel-control-prev-icon" aria-hidden="true"></span>
                                 <span className="visually-hidden">Previous</span>
                             </button>
-                            <button className="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                            <button className="carousel-control-next" type="button"
+                                    data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
                                 <span className="carousel-control-next-icon" aria-hidden="true"></span>
                                 <span className="visually-hidden">Next</span>
                             </button>
                         </div>
                     </div>
-                    <div className="col-md-6">
-                        <div className="small mb-1">SKU: BST-498</div>
-                        <h1 className="display-5 fw-bolder">Shop item template</h1>
-                        <div className="fs-5 mb-5">
-                            <span className="text-decoration-line-through">$45.00</span>
-                            <span>$40.00</span>
+                    <div className="col-md-12">
+                        <div className="small mb-1">ISBN: {book.bookID.ISBN}</div>
+                        <h1 className="display-5 fw-bolder">{book.bookID.name}</h1>
+                        <div className="fs-5 mb-3">
+                            <span>{book.bookID.author}</span>
                         </div>
-                        <p className="lead">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium at
-                            dolorem quidem modi. Nam sequi consequatur obcaecati excepturi alias magni, accusamus eius
-                            blanditiis delectus ipsam minima ea iste laborum vero?</p>
-                        <div className="d-flex">
-                            <button className="btn btn-outline-dark flex-shrink-0" type="button">
-                                <i className="bi bi-cart-fill me-1"></i>
-                                Add to cart
-                            </button>
+                        <div className="fs-5">
+                            <span className="badge mx-1 text-bg-primary">{book.bookID.genre}</span>
+                            <span className="badge mx-1 text-bg-primary">{book.bookID.language}</span>
                         </div>
+                        <p className="mt-3">
+                            <span>Year: {book.bookID.year}</span>
+                        </p>
+                        <div>
+                            <p className="lead">{book.description}</p>
+                        </div>
+                        <form className="d-flex flex-column flex-md-row">
+                            <div className="col-md-8 mb-3">
+                                <select className="form-select" aria-label="Default select example">
+                                    <option selected>Open this select menu</option>
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </select>
+                            </div>
+                            <div className="col-md-4 mb-3">
+                                <button onClick={handleRequestBook} className="btn btn-outline-dark btn-md col-12"
+                                        type="button">
+                                    Exchange books
+                                </button>
+                            </div>
+                        </form>
+
                     </div>
                 </div>
             </div>
         </section>
-    );
+    )
+        ;
 };
 
 export default BookItemPage;
