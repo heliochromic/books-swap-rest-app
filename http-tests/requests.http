@@ -28,17 +28,17 @@ PUT http://localhost:8000/api/user/
 POST http://localhost:8000/api/signup/
 
 {
-  "username": "vova",
-  "password": "vova",
-  "first_name": "vova",
-  "last_name": "materynskyi",
+  "username": "bohdan",
+  "password": "bohdan",
+  "first_name": "bohdan",
+  "last_name": "prokhorov",
   "age": 19,
-  "mail": "volodymyr@example.com",
-  "phone_number": "0993348826",
+  "mail": "bohdan@example.com",
+  "phone_number": "0986652260",
   "latitude": 37.7749,
   "longitude": -122.4194,
   "rating": 5,
-  "image": "/volodymyr.jpg"
+  "image": "/bohdan.jpg"
 }
 
 
@@ -55,6 +55,8 @@ X-CSRFToken: g3gr1go0SrOIdJgSVgKBpoIndYUUQkwT
 ###
 
 POST http://localhost:8000/api/login/
+Content-Type: application/json
+X-CSRFToken: Fw5uRLHW01tRMDYJ9z1kmANVlgzGw3uS
 
 {
   "username": "vova",
@@ -105,4 +107,7 @@ GET http://localhost:8000/api/map/
 {
 }
 
+###
 
+GET http://localhost:8000/api/catalog/my/
+Content-Type: application/json

@@ -1,11 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import axios from 'axios';
+import RequestModal from "./RequestModal/RequestModal"
 
 const BookItemPage = () => {
     const {id} = useParams();
     const [book, setBook] = useState(null);
-    const [requested, setRequest] = useState(false)
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
@@ -32,27 +32,6 @@ const BookItemPage = () => {
         fetchBook();
     }, [id]);
 
-    const handleRequestBook = () => {
-        const requestBook = async () => {
-            try {
-                const token = sessionStorage.getItem('token')
-                const config = {
-                    headers: {
-                        'Authorization': `Token ${token}`
-                    }
-                }
-
-                const response = await axios.post()
-            } catch (err) {
-                setError(err.message);
-            } finally {
-                setLoading(false);
-            }
-        }
-    };
-
-
-    console.log(book)
     if (loading) return <div className="text-center py-5">Loading...</div>;
     if (error) return <div className="alert alert-danger text-center">Error: {error}</div>;
 
@@ -113,29 +92,12 @@ const BookItemPage = () => {
                         <div>
                             <p className="lead">{book.description}</p>
                         </div>
-                        <form className="d-flex flex-column flex-md-row">
-                            <div className="col-md-8 mb-3">
-                                <select className="form-select" aria-label="Default select example">
-                                    <option selected>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
-                                </select>
-                            </div>
-                            <div className="col-md-4 mb-3">
-                                <button onClick={handleRequestBook} className="btn btn-outline-dark btn-md col-12"
-                                        type="button">
-                                    Exchange books
-                                </button>
-                            </div>
-                        </form>
-
+                        <RequestModal/>
                     </div>
                 </div>
             </div>
         </section>
-    )
-        ;
+    );
 };
 
 export default BookItemPage;

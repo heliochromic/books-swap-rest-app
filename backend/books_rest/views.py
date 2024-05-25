@@ -53,6 +53,34 @@ class BookItemView(APIView):
         serializer = BookItemBookJoinedSerializer(instance=book_item_instance)
         return Response(serializer.data)
 
+    @action(detail=False, methods=['post'])  # зробити запит на книгу
+    def post(self, request, pk):
+        receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
+
+        if not receiver_book_id:
+            return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            sender_book_instance = BookItem.objects.get(itemID=pk)
+            receiver_book_instance = BookItem.objects.get(itemID=receiver_book_id)
+        except BookItem.DoesNotExist:
+            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if sender_book_instance.userID.userID == receiver_book_instance.userID.userID:
+            return Response(data={"error": "Sender and receiver books cannot be the same"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        request_instance = Request.objects.create(
+            sender_book=sender_book_instance,
+            receiver_book=receiver_book_instance,
+            status="P",
+            sending_time=datetime.now()
+        )
+
+        serializer = RequestSerializer(instance=request_instance)
+
+        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
+
     @action(detail=False, methods=['put'])  # змінити свою книгу (токен) ((поки воно йде з запиту))
     def put(self, request, pk):
         try:
@@ -88,6 +116,20 @@ class BookItemView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+class CatalogMyItemsView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        queryset = BookItem.objects.filter(userID=request.user.id)
+
+        serializer = BookItemBookJoinedSerializer(queryset, many=True)
+
+        print(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 class RequestView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
@@ -98,7 +140,6 @@ class RequestView(APIView):
 
         if not receiver_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
-
         try:
             queryset = Request.objects.filter(receiver_book__itemID=receiver_id)
         except Request.DoesNotExist:
@@ -111,34 +152,6 @@ class RequestView(APIView):
 class RequestItemView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
-
-    @action(detail=False, methods=['post'])  # зробити запит на книгу
-    def post(self, request, pk):
-        receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
-
-        if not receiver_book_id:
-            return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
-
-        try:
-            sender_book_instance = BookItem.objects.get(itemID=pk)
-            receiver_book_instance = BookItem.objects.get(itemID=receiver_book_id)
-        except BookItem.DoesNotExist:
-            return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        if sender_book_instance.userID.userID == receiver_book_instance.userID.userID:
-            return Response(data={"error": "Sender and receiver books cannot be the same"},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-        request_instance = Request.objects.create(
-            sender_book=sender_book_instance,
-            receiver_book=receiver_book_instance,
-            status="P",
-            sending_time=datetime.now()
-        )
-
-        serializer = RequestSerializer(instance=request_instance)
-
-        return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=False, methods=['put'])  # видалення або схвалення запиту на книгу
     def put(self, request, pk):
