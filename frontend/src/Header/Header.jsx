@@ -63,6 +63,13 @@ const Header = () => {
                     <div>
                         <Link to="/map">Map</Link>
                     </div>
+
+                    <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"
+                            title="Open Offcanvas">
+                        Requests
+                    </div>
+
                     {!isAuthenticated && (
                         <div>
                             <Link to="/login">Log In</Link>
@@ -75,7 +82,7 @@ const Header = () => {
                     )}
                 </nav>
             </header>
-            <Main setIsAuthenticated={setIsAuthenticated} />
+            <Main setIsAuthenticated={setIsAuthenticated}/>
         </Router>
     );
 };
