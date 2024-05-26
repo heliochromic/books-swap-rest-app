@@ -10,6 +10,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
+  const [imagePreview, setImagePreview] = useState(null);
   const mapRef = useRef(null); // Create a ref for the map
   const markerRef = useRef(new L.Marker([51.505, -0.09])); // Create a ref for the marker
   const first_name_ref = useRef(null)
@@ -17,6 +18,7 @@ const Profile = () => {
   const age_ref = useRef(null)
   const phone_number_ref = useRef(null)
   const mail_ref = useRef(null)
+  const image_ref = useRef(null)
 
 
 
@@ -48,6 +50,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (userProfile && !mapRef.current) {
+      document.getElementById('profile-image').src = 'http://localhost:8000/' + userProfile.image
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
@@ -97,10 +100,20 @@ const Profile = () => {
   };
 
   const handleInputChange = (e) => {
-    setUserProfile({
-      ...userProfile,
-      [e.target.name]: e.target.value
-    });
+    if (e.target.name === 'image') {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+        reader.onload = function(e) {
+          const previewImage = document.getElementById('profile-image');
+          previewImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+      setUserProfile({
+        ...userProfile,
+        [e.target.name]: e.target.value
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -117,6 +130,7 @@ const Profile = () => {
         }
       };
       await axios.put('http://localhost:8000/api/user/', userProfile, config);
+
       alert('Profile updated successfully!');
       setIsEditing(false);
     } catch (error) {
@@ -127,7 +141,9 @@ const Profile = () => {
 
   const handleCancelClick = async (e) => {
     setUserProfile(initialProfileRef.current)
-    setIsEditing(false)
+     setImagePreview(null);
+    setIsEditing(false);
+    document.getElementById('profile-image').src = 'http://localhost:8000/' + initialProfileRef.current.image;
   }
 
   if (loading) {
@@ -142,77 +158,89 @@ const Profile = () => {
     <div className="profile-container">
       <h1>User Profile</h1>
       {userProfile && (
-        <form className="profile-form" onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="first_name">First Name:</label>
-            <input
-              type="text"
-              id="first_name"
-              name="first_name"
-              ref={first_name_ref}
-              value={userProfile.first_name}
-              onChange={handleInputChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div>
-            <label htmlFor="last_name">Last Name:</label>
-            <input
-              type="text"
-              id="last_name"
-              name="last_name"
-              value={userProfile.last_name}
-              ref={last_name_ref}
-              onChange={handleInputChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div>
-            <label htmlFor="age">Age:</label>
-            <input
-              type="number"
-              id="age"
-              name="age"
-              ref={age_ref}
-              value={userProfile.age}
-              onChange={handleInputChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div>
-            <label htmlFor="mail">Email:</label>
-            <input
-              type="email"
-              id="mail"
-              name="mail"
-              ref={mail_ref}
-              value={userProfile.mail}
-              onChange={handleInputChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div>
-            <label htmlFor="phone_number">Phone Number:</label>
-            <input
-              type="text"
-              id="phone_number"
-              name="phone_number"
-              ref={phone_number_ref}
-              value={userProfile.phone_number}
-              onChange={handleInputChange}
-              readOnly={!isEditing}
-            />
-          </div>
-          <div id="mapid" style={{ height: '200px', width: '100%' }}></div>
-           <div className="button-container">
-            {isEditing ? (
-              <button type="button" onClick={handleCancelClick}>Cancel</button>
-            ) : (
-              <button type="button" onClick={() => setIsEditing(true)}>Edit Profile</button>
-            )}
-            {isEditing && <button type="submit">Save Changes</button>}
-          </div>
-        </form>
+          <form className="profile-form" onSubmit={handleSubmit}>
+            <div>
+              <img id="profile-image" src="" alt="Profile Image"/>
+              {isEditing && <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  ref={image_ref}
+                  // value={userProfile.image}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />}
+            </div>
+            <div>
+              <label htmlFor="first_name">First Name:</label>
+              <input
+                  type="text"
+                  id="first_name"
+                  name="first_name"
+                  ref={first_name_ref}
+                  value={userProfile.first_name}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />
+            </div>
+            <div>
+              <label htmlFor="last_name">Last Name:</label>
+              <input
+                  type="text"
+                  id="last_name"
+                  name="last_name"
+                  value={userProfile.last_name}
+                  ref={last_name_ref}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />
+            </div>
+            <div>
+              <label htmlFor="age">Age:</label>
+              <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  ref={age_ref}
+                  value={userProfile.age}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />
+            </div>
+            <div>
+              <label htmlFor="mail">Email:</label>
+              <input
+                  type="email"
+                  id="mail"
+                  name="mail"
+                  ref={mail_ref}
+                  value={userProfile.mail}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />
+            </div>
+            <div>
+              <label htmlFor="phone_number">Phone Number:</label>
+              <input
+                  type="text"
+                  id="phone_number"
+                  name="phone_number"
+                  ref={phone_number_ref}
+                  value={userProfile.phone_number}
+                  onChange={handleInputChange}
+                  readOnly={!isEditing}
+              />
+            </div>
+            <div id="mapid" style={{height: '200px', width: '100%'}}></div>
+            <div className="button-container">
+              {isEditing ? (
+                  <button type="button" onClick={handleCancelClick}>Cancel</button>
+              ) : (
+                  <button type="button" onClick={() => setIsEditing(true)}>Edit Profile</button>
+              )}
+              {isEditing && <button type="submit">Save Changes</button>}
+            </div>
+          </form>
       )}
     </div>
   );
