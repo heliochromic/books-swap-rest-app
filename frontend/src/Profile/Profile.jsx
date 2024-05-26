@@ -6,11 +6,19 @@ import './styles.css'
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
+  const initialProfileRef = useRef(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const mapRef = useRef(null); // Create a ref for the map
   const markerRef = useRef(new L.Marker([51.505, -0.09])); // Create a ref for the marker
+  const first_name_ref = useRef(null)
+  const last_name_ref = useRef(null)
+  const age_ref = useRef(null)
+  const phone_number_ref = useRef(null)
+  const mail_ref = useRef(null)
+
+
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -26,6 +34,9 @@ const Profile = () => {
         const response = await axios.get('http://localhost:8000/api/user/', config);
         setUserProfile(response.data);
         setLoading(false);
+        if(!initialProfileRef.current){
+          initialProfileRef.current = response.data
+        }
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -38,7 +49,6 @@ const Profile = () => {
   useEffect(() => {
     if (userProfile && !mapRef.current) {
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
-
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
         iconSize: [30, 30],
@@ -47,17 +57,23 @@ const Profile = () => {
       });
 
       markerRef.current.setIcon(newIcon);
-      markerRef.current.setLatLng(newLatLng);
 
       const mapElement = document.getElementById('mapid'); // Get the map container element
-      const newMap = L.map(mapElement).setView([markerRef.current.getLatLng().lat, markerRef.current.getLatLng().lng], 13);
+      const newMap = L.map(mapElement).setView([userProfile.latitude, userProfile.longitude], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(newMap);
 
       markerRef.current.addTo(newMap);
       mapRef.current = newMap; // Store map instance in ref
+      markerRef.current.setLatLng(newLatLng);
     }
+    else if (userProfile){
+      const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
+      markerRef.current.setLatLng(newLatLng);
+    }
+
+
   }, [userProfile]);
 
   useEffect(() => {
@@ -109,6 +125,11 @@ const Profile = () => {
     }
   };
 
+  const handleCancelClick = async (e) => {
+    setUserProfile(initialProfileRef.current)
+    setIsEditing(false)
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -128,6 +149,7 @@ const Profile = () => {
               type="text"
               id="first_name"
               name="first_name"
+              ref={first_name_ref}
               value={userProfile.first_name}
               onChange={handleInputChange}
               readOnly={!isEditing}
@@ -140,6 +162,7 @@ const Profile = () => {
               id="last_name"
               name="last_name"
               value={userProfile.last_name}
+              ref={last_name_ref}
               onChange={handleInputChange}
               readOnly={!isEditing}
             />
@@ -150,6 +173,7 @@ const Profile = () => {
               type="number"
               id="age"
               name="age"
+              ref={age_ref}
               value={userProfile.age}
               onChange={handleInputChange}
               readOnly={!isEditing}
@@ -161,6 +185,7 @@ const Profile = () => {
               type="email"
               id="mail"
               name="mail"
+              ref={mail_ref}
               value={userProfile.mail}
               onChange={handleInputChange}
               readOnly={!isEditing}
@@ -172,6 +197,7 @@ const Profile = () => {
               type="text"
               id="phone_number"
               name="phone_number"
+              ref={phone_number_ref}
               value={userProfile.phone_number}
               onChange={handleInputChange}
               readOnly={!isEditing}
@@ -180,7 +206,7 @@ const Profile = () => {
           <div id="mapid" style={{ height: '200px', width: '100%' }}></div>
            <div className="button-container">
             {isEditing ? (
-              <button type="button" onClick={() => setIsEditing(false)}>Cancel</button>
+              <button type="button" onClick={handleCancelClick}>Cancel</button>
             ) : (
               <button type="button" onClick={() => setIsEditing(true)}>Edit Profile</button>
             )}
