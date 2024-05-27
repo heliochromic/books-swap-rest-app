@@ -4,6 +4,7 @@ from .models import (Book, User, BookItem, Request)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = User
         fields = '__all__'
@@ -18,7 +19,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.longitude = validated_data.get('longitude', instance.longitude)
         instance.rating = validated_data.get('rating', instance.rating)
         instance.image = validated_data.get('image', instance.image)
-
         instance.save()
         return instance
 

@@ -19,6 +19,7 @@ const Profile = () => {
   const phone_number_ref = useRef(null)
   const mail_ref = useRef(null)
   const image_ref = useRef(null)
+  let [imagePresent, setImagePresent] = useState(true)
 
 
 
@@ -50,7 +51,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (userProfile && !mapRef.current) {
-      document.getElementById('profile-image').src = 'http://localhost:8000/' + userProfile.image
+      document.getElementById('profile-image').src = 'http://localhost:8000' + userProfile.image
+      if(userProfile.image == "/media/images/users/default.png"){
+        setImagePresent(false)
+      }
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
@@ -106,6 +110,7 @@ const Profile = () => {
         reader.onload = function(e) {
           const previewImage = document.getElementById('profile-image');
           previewImage.src = e.target.result;
+          setImagePresent(true)
         };
         reader.readAsDataURL(file);
     } else {
@@ -118,7 +123,6 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsEditing(!isEditing)
     try {
       const token = sessionStorage.getItem('token');
       const csrftoken = getCookie('csrftoken');
@@ -126,10 +130,26 @@ const Profile = () => {
         headers: {
           'X-CSRFToken': csrftoken,
           'Authorization': `Token ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       };
-      await axios.put('http://localhost:8000/api/user/', userProfile, config);
+      const formData = new FormData();
+      formData.append('first_name', userProfile.first_name);
+      formData.append('last_name', userProfile.last_name);
+      formData.append('age', userProfile.age);
+      formData.append('mail', userProfile.mail);
+      formData.append('phone_number', userProfile.phone_number);
+      formData.append('latitude', userProfile.latitude);
+      formData.append('longitude', userProfile.longitude);
+
+      if (image_ref.current && image_ref.current.files && image_ref.current.files[0]) {
+        console.log(image_ref.current.files[0])
+      formData.append('image', image_ref.current.files[0]);
+    }
+      else if (imagePresent){
+        formData.append('imageNotUpdated', true)
+     }
+      await axios.put('http://localhost:8000/api/user/', formData, config);
 
       alert('Profile updated successfully!');
       setIsEditing(false);
@@ -137,6 +157,8 @@ const Profile = () => {
       alert('Failed to update profile. Please try again.');
       console.error('Error updating profile:', error);
     }
+
+  setIsEditing(!isEditing)
   };
 
   const handleCancelClick = async (e) => {
@@ -144,6 +166,14 @@ const Profile = () => {
      setImagePreview(null);
     setIsEditing(false);
     document.getElementById('profile-image').src = 'http://localhost:8000/' + initialProfileRef.current.image;
+  }
+
+  const handleDeleteImage = async (e) => {
+    document.getElementById('profile-image').src = 'http://localhost:8000/media/images/users/default.png'
+    setImagePresent(false)
+    if (image_ref.current) {
+      image_ref.current = null;
+    }
   }
 
   if (loading) {
@@ -161,12 +191,12 @@ const Profile = () => {
           <form className="profile-form" onSubmit={handleSubmit}>
             <div>
               <img id="profile-image" src="" alt="Profile Image"/>
+              {(imagePresent && isEditing) && <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
               {isEditing && <input
                   type="file"
                   id="image"
                   name="image"
                   ref={image_ref}
-                  // value={userProfile.image}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />}
