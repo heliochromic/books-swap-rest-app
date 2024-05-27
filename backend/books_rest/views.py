@@ -1,5 +1,8 @@
+import re
 from datetime import datetime
 import os
+
+import requests
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
@@ -12,9 +15,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from .models import BookItem, User, Request
+from .models import BookItem, User, Request, Book
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, BookItemBookJoinedSerializer, \
-    UserLocationSerializer
+    UserLocationSerializer, BookSerializer
+
 
 class CatalogView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -122,8 +126,72 @@ class CatalogMyItemsView(APIView):
     @action(detail=False, methods=['get'])
     def get(self, request):
         queryset = BookItem.objects.filter(userID=request.user.id)
-
         serializer = BookItemBookJoinedSerializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ISBNView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    @staticmethod
+    def clean_isbn(isbn):
+        return re.sub(r'\D', '', isbn)
+
+    @staticmethod
+    def is_valid_isbn(isbn):
+        cleaned_isbn = ISBNView.clean_isbn(isbn)
+        isbn_pattern = r'^(?:\d{10}|\d{13})$'
+        return re.match(isbn_pattern, cleaned_isbn) is not None
+
+    @staticmethod
+    def fetch_book(isbn):
+        url = "https://www.googleapis.com/books/v1/volumes"
+
+        params = {
+            "q": f"isbn:{isbn}"
+        }
+
+        response = requests.get(url, params=params)
+
+        if response.status_code == 200:
+            data = response.json()
+            return data['items'][0]['volumeInfo']
+        return None
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        ISBN = request.data.get("isbn", None)
+
+        print(ISBN)
+        clean_ISBN = ISBNView.clean_isbn(ISBN)
+
+        if not ISBN or not ISBNView.is_valid_isbn(clean_ISBN):
+            return Response(data={"error": "ISBN is not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            book_instance = Book.objects.get(ISBN=clean_ISBN)
+        except Book.DoesNotExist:
+            book_info = ISBNView.fetch_book(clean_ISBN)
+            print(clean_ISBN)
+            if not book_info:
+                return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
+
+            date = book_info.get('publishedDate', 'N/A')
+            genre = book_info.get('categories', None)
+
+            book_instance = Book.objects.create(
+                ISBN=clean_ISBN,
+                name=book_info.get('title', 'N/A'),
+                author=book_info.get('authors', 'N/A')[0],
+                genre=", ".join(genre) if genre else "-",
+                language=book_info.get('language', 'N/A'),
+                pages=book_info.get('pageCount', 0),
+                year=date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
+                description=book_info.get('description')
+            )
+
+        serializer = BookSerializer(book_instance, many=False)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
 

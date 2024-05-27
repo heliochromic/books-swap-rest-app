@@ -23,6 +23,7 @@ const Catalog = () => {
 
                 const response = await axios.get('http://localhost:8000/api/catalog/', config);
                 setItems(response.data);
+                console.log(response.data);
             } catch (err) {
                 setError(err);
             } finally {
@@ -45,7 +46,7 @@ const Catalog = () => {
                     <BookItem key={+item.id} bookItem={item}/>
                 ))}
             </div>
-            <AddBookBadge />
+            <AddBookBadge/>
         </div>
     );
 };

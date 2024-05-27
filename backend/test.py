@@ -1,27 +1,37 @@
+from datetime import datetime
+
 import requests
 
-if __name__ == "__main__":
-    url = "http://localhost:8000/api/signup/"
-    data = {
-        "username": "bohdan",
-        "password": "bohdan",
-        "first_name": "bohdan",
-        "last_name": "prokhorov",
-        "age": 19,
-        "mail": "bohdan@example.com",
-        "phone_number": "0986652260",
-        "latitude": 37.7749,
-        "longitude": -122.4194,
-        "rating": 5,
-    }
+# Replace 'YOUR_API_KEY' with your actual Google API key
 
-    # Ensure the path to your image is correct
-    files = {
-        "image": (
-            "bgp052umgxs71.png", open("C:\\Users\\howch\\OneDrive\\Desktop\\bgp052umgxs71.png", "rb"), "image/png")
-    }
+isbn = "9781473655324"
+url = "https://www.googleapis.com/books/v1/volumes"
 
-    response = requests.post(url, data=data, files=files)
+params = {
+    "q": f"isbn:{isbn}"
+}
 
-    print(response.status_code)
-    print(response.text)
+response = requests.get(url, params=params)
+
+if response.status_code == 200:
+    data = response.json()
+
+    if 'items' in data:
+        book_info = data['items'][0]['volumeInfo']
+        name = book_info.get('title', 'N/A')
+        authors = ', '.join(book_info.get('authors', ['N/A']))
+        publisher = book_info.get('pageCount', 'N/A')
+        published_date = datetime.fromisoformat(book_info.get('publishedDate', 'N/A')).strftime('%Y')
+        description = book_info.get('description', 'N/A')
+
+        print(book_info)
+
+        print(f"Title: {name}")
+        print(f"Authors: {authors}")
+        print(f"Publisher: {publisher}")
+        print(f"Published Date: {published_date}")
+        print(f"Description: {description}")
+    else:
+        print("No results found.")
+else:
+    print(f"Failed: {response.status_code} {response.text}")
