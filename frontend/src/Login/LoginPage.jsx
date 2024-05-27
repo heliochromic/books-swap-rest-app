@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const LoginPage = ({ setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
@@ -51,9 +51,12 @@ const LoginPage = ({ setIsAuthenticated }) => {
                         required
                     />
                 </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {error && <p style={{color: 'red'}}>{error}</p>}
                 <button type="submit">Login</button>
             </form>
+            <p>
+                Don't have an account? <Link to="/signup">Sign Up</Link>
+            </p>
         </div>
     );
 };

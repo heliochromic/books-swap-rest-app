@@ -3,8 +3,8 @@ import os
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
-from rest_framework import viewsets, status
-from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework import status
+from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -217,7 +217,7 @@ class UserView(APIView):
             return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
         uploaded_image = request.data.get('image')
         if uploaded_image is None:
-            if not request.data.get('imageNotUpdated'):
+            if not request.data.get('imageNotUpdated') and user_instance.image.name != 'images/users/default.png':
                 os.remove(os.path.normpath(media_dir + "\\" + user_instance.image.name))
                 user_instance.image = 'images/users/default.png'
         else:

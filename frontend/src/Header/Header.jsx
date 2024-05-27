@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {BrowserRouter as Router, Link} from 'react-router-dom';
 import './Header.css';
 import axios from "axios";
-import Main from '../Main/Main'; // Import the new Main component
+import Main from '../Main/Main';
 
 const getCookie = (name) => {
     const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');

@@ -134,20 +134,20 @@ const Profile = () => {
         }
       };
       const formData = new FormData();
-    formData.append('first_name', userProfile.first_name);
-    formData.append('last_name', userProfile.last_name);
-    formData.append('age', userProfile.age);
-    formData.append('mail', userProfile.mail);
-    formData.append('phone_number', userProfile.phone_number);
-    formData.append('latitude', userProfile.latitude);
-    formData.append('longitude', userProfile.longitude);
+      formData.append('first_name', userProfile.first_name);
+      formData.append('last_name', userProfile.last_name);
+      formData.append('age', userProfile.age);
+      formData.append('mail', userProfile.mail);
+      formData.append('phone_number', userProfile.phone_number);
+      formData.append('latitude', userProfile.latitude);
+      formData.append('longitude', userProfile.longitude);
 
-     if (image_ref.current && image_ref.current.files && image_ref.current.files[0]) {
-       console.log(image_ref.current.files[0])
+      if (image_ref.current && image_ref.current.files && image_ref.current.files[0]) {
+        console.log(image_ref.current.files[0])
       formData.append('image', image_ref.current.files[0]);
     }
-     else if (imagePresent){
-       formData.append('imageNotUpdated', true)
+      else if (imagePresent){
+        formData.append('imageNotUpdated', true)
      }
       await axios.put('http://localhost:8000/api/user/', formData, config);
 
