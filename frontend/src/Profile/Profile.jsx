@@ -19,6 +19,7 @@ const Profile = () => {
   const phone_number_ref = useRef(null)
   const mail_ref = useRef(null)
   const image_ref = useRef(null)
+  let [imagePresent, setImagePresent] = useState(true)
 
 
 
@@ -50,7 +51,10 @@ const Profile = () => {
 
   useEffect(() => {
     if (userProfile && !mapRef.current) {
-      document.getElementById('profile-image').src = 'http://localhost:8000/' + userProfile.image
+      document.getElementById('profile-image').src = 'http://localhost:8000' + userProfile.image
+      if(userProfile.image == "/media/images/users/default.png"){
+        setImagePresent(false)
+      }
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
@@ -106,6 +110,7 @@ const Profile = () => {
         reader.onload = function(e) {
           const previewImage = document.getElementById('profile-image');
           previewImage.src = e.target.result;
+          setImagePresent(true)
         };
         reader.readAsDataURL(file);
     } else {
@@ -125,7 +130,7 @@ const Profile = () => {
         headers: {
           'X-CSRFToken': csrftoken,
           'Authorization': `Token ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       };
       const formData = new FormData();
@@ -141,6 +146,9 @@ const Profile = () => {
        console.log(image_ref.current.files[0])
       formData.append('image', image_ref.current.files[0]);
     }
+     else if (imagePresent){
+       formData.append('imageNotUpdated', true)
+     }
       await axios.put('http://localhost:8000/api/user/', formData, config);
 
       alert('Profile updated successfully!');
@@ -160,6 +168,14 @@ const Profile = () => {
     document.getElementById('profile-image').src = 'http://localhost:8000/' + initialProfileRef.current.image;
   }
 
+  const handleDeleteImage = async (e) => {
+    document.getElementById('profile-image').src = 'http://localhost:8000/media/images/users/default.png'
+    setImagePresent(false)
+    if (image_ref.current) {
+      image_ref.current = null;
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -175,12 +191,12 @@ const Profile = () => {
           <form className="profile-form" onSubmit={handleSubmit}>
             <div>
               <img id="profile-image" src="" alt="Profile Image"/>
+              {(imagePresent && isEditing) && <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
               {isEditing && <input
                   type="file"
                   id="image"
                   name="image"
                   ref={image_ref}
-                  // value={userProfile.image}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />}
