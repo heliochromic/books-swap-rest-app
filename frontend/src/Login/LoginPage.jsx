@@ -57,6 +57,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
             <p>
                 Don't have an account? <Link to="/signup">Sign Up</Link>
             </p>
+
         </div>
     );
 };

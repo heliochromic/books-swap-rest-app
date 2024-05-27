@@ -54,15 +54,15 @@ const Header = () => {
                     <div>
                         <Link to="/">Home</Link>
                     </div>
-                    <div>
+                    {isAuthenticated && <div>
                         <Link to="/catalog">Catalog</Link>
-                    </div>
-                    <div>
+                    </div>}
+                    {isAuthenticated && <div>
                         <Link to="/profile">Profile</Link>
-                    </div>
-                    <div>
+                    </div>}
+                    {isAuthenticated && <div>
                         <Link to="/map">Map</Link>
-                    </div>
+                    </div>}
                     {!isAuthenticated && (
                         <div>
                             <Link to="/login">Log In</Link>
