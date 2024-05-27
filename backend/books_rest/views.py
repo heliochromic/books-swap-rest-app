@@ -28,7 +28,7 @@ class CatalogView(APIView):
         serializer = BookItemBookJoinedSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(detail=False, methods=['post'])  # додати книгу (токен)
+    @action(detail=False, methods=['post'])
     def post(self, request, *args, **kwargs):
         request.data['userID'] = request.user.id
 
@@ -126,7 +126,6 @@ class CatalogMyItemsView(APIView):
 
         serializer = BookItemBookJoinedSerializer(queryset, many=True)
 
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -134,18 +133,20 @@ class RequestView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу (токен) ((поки воно йде з запиту))
+    @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу
     def get(self, request):
         receiver_id = request.user.id
-
+        print(receiver_id)
         if not receiver_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
         try:
-            queryset = Request.objects.filter(receiver_book__itemID=receiver_id)
+            queryset = Request.objects.filter(receiver_book_id__userID=receiver_id)
         except Request.DoesNotExist:
             return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = RequestSerializer(queryset, many=True)
+
+        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

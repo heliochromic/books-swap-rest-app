@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import BookItem from "./BookItem/BookItem";
+import AddBookBadge from "./AddBookBadge/AddBookBadge";
 import "./Catalog.css"
 
 
@@ -44,6 +45,7 @@ const Catalog = () => {
                     <BookItem key={+item.id} bookItem={item}/>
                 ))}
             </div>
+            <AddBookBadge />
         </div>
     );
 };
