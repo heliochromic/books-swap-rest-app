@@ -14,8 +14,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, BookItemBookJoinedSerializer, \
-    BookItemLocationSerializer
-
+    UserLocationSerializer
 
 class CatalogView(APIView):
     parser_classes = [FormParser, MultiPartParser]
@@ -313,6 +312,7 @@ class LoginView(APIView):
 
 class SignUpView(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]
 
     @action(detail=False, methods=['post'])  # сайн ап
     def post(self, request):
@@ -325,7 +325,6 @@ class SignUpView(APIView):
         phone_number = request.data['phone_number']
         latitude = request.data['latitude']
         longitude = request.data['longitude']
-        rating = request.data['rating']
         image = request.data['image']
 
         if not username or not password or not mail:
@@ -345,7 +344,7 @@ class SignUpView(APIView):
 
             custom_user = User(first_name=first_name, last_name=last_name, age=age, mail=mail,
                                phone_number=phone_number, latitude=latitude, longitude=longitude,
-                               rating=rating, image=image, django_id=user)
+                               image=image, django_id=user)
             custom_user.save()
             token, created = Token.objects.get_or_create(user=djuser)
 
@@ -368,11 +367,12 @@ class UserListView(APIView):
 
 class MapView(APIView):
     permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        book_items = BookItem.objects.all()
-        serializer = BookItemLocationSerializer(book_items, many=True)
+        users = User.objects.all()
+        serializer = UserLocationSerializer(users, many=True)
         return Response(serializer.data)
 
 

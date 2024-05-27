@@ -1,10 +1,11 @@
 from rest_framework import serializers
-
+from django.contrib.auth.models import User as DJUser
 from .models import (Book, User, BookItem, Request)
 
 
 class UserSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
+
     class Meta:
         model = User
         fields = '__all__'
@@ -51,16 +52,22 @@ class BookItemBookJoinedSerializer(serializers.ModelSerializer):
                   'exchange_time', 'bookID', 'userID']
 
 
+class DJUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DJUser
+        fields = ['username', 'email']
+
+
 class UserLocationSerializer(serializers.ModelSerializer):
+    djuser = DJUserSerializer(source='django')
+    active_book_items_count = serializers.SerializerMethodField()
+
     class Meta:
         model = User
-        fields = ['userID', 'latitude', 'longitude']
+        fields = ['userID', "djuser", 'latitude', 'longitude','image', 'active_book_items_count']
+
+    def get_active_book_items_count(self, obj):
+
+        return BookItem.objects.filter(userID=obj.userID, status='a').count()
 
 
-class BookItemLocationSerializer(serializers.ModelSerializer):
-    user = UserLocationSerializer(source='userID')
-
-    class Meta:
-        model = BookItem
-        fields = ['itemID', 'user', 'bookID', 'status', 'description', 'photo', 'photo2', 'photo3', 'publish_time',
-                  'deletion_time', 'exchange_time']
