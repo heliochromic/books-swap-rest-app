@@ -118,7 +118,6 @@ const Profile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsEditing(!isEditing)
     try {
       const token = sessionStorage.getItem('token');
       const csrftoken = getCookie('csrftoken');
@@ -129,7 +128,20 @@ const Profile = () => {
           'Content-Type': 'application/json'
         }
       };
-      await axios.put('http://localhost:8000/api/user/', userProfile, config);
+      const formData = new FormData();
+    formData.append('first_name', userProfile.first_name);
+    formData.append('last_name', userProfile.last_name);
+    formData.append('age', userProfile.age);
+    formData.append('mail', userProfile.mail);
+    formData.append('phone_number', userProfile.phone_number);
+    formData.append('latitude', userProfile.latitude);
+    formData.append('longitude', userProfile.longitude);
+
+     if (image_ref.current && image_ref.current.files && image_ref.current.files[0]) {
+       console.log(image_ref.current.files[0])
+      formData.append('image', image_ref.current.files[0]);
+    }
+      await axios.put('http://localhost:8000/api/user/', formData, config);
 
       alert('Profile updated successfully!');
       setIsEditing(false);
@@ -137,6 +149,8 @@ const Profile = () => {
       alert('Failed to update profile. Please try again.');
       console.error('Error updating profile:', error);
     }
+
+  setIsEditing(!isEditing)
   };
 
   const handleCancelClick = async (e) => {

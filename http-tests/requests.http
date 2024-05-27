@@ -78,23 +78,23 @@ GET http://localhost:8000/api/catalog
 ###
 
 
-#POST localhost:8000/api/user/ HTTP/1.1
-#Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
-#
-#------WebKitFormBoundary7MA4YWxkTrZu0gW
-#Content-Disposition: form-data; name="itemID"
-#
-#10
-#------WebKitFormBoundary7MA4YWxkTrZu0gW
-#Content-Disposition: form-data; name="photo"; filename="photo10.jpg"
-#Content-Type: image/jpeg
-#
-#<contents of photo10.jpg>
-#------WebKitFormBoundary7MA4YWxkTrZu0gW
-#Content-Disposition: form-data; name="status"
-#
-#B
-#------WebKitFormBoundary7MA4YWxkTrZu0gW
+POST localhost:8000/api/user/ HTTP/1.1
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="itemID"
+
+10
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="photo"; filename="photo10.jpg"
+Content-Type: image/jpeg
+
+<contents of photo10.jpg>
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="status"
+
+B
+------WebKitFormBoundary7MA4YWxkTrZu0gW
 
 
 ###

@@ -187,6 +187,7 @@ class RequestItemView(APIView):
 class UserView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
+    parser_classes = [MultiPartParser, FormParser]
 
     @action(detail=False, methods=['get'])  # отримати або редагувати сторінку свого профілю (токен)
     def get(self, request):
@@ -197,11 +198,8 @@ class UserView(APIView):
             return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
         if not (request.user.is_staff or user_instance.django_id == request.user.id):
             return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
-
         serializer = UserSerializer(user_instance, data=request.data, partial=True)
-
         if serializer.is_valid():
-            serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

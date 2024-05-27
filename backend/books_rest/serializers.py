@@ -4,6 +4,7 @@ from .models import (Book, User, BookItem, Request)
 
 
 class UserSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(required=False)
     class Meta:
         model = User
         fields = '__all__'
