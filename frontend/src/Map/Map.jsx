@@ -37,19 +37,25 @@ const Map = () => {
                         // Customize the marker popup content
                         const popupContent = `
                             <div style="display: flex;
-                                        flex-direction: column;
-                                        align-content: center;
-                                        align-items: center"
-                                        >
-                            <img src="http://localhost:8000${user.image}" 
-                            alt="Profile Image" 
-                            style="width: 50px; 
-                                   height: 50px;
-                                   border-radius: 50px;"
-                                   >
-                                <strong><a href="/user/${user.userID}">${user.djuser ? user.djuser.username : 'Unknown User'}</a></strong>
-                                <strong>Active Books:</strong> ${user.active_book_items_count}
-                            </div>
+            flex-direction: column;
+            align-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
+    <img src="http://localhost:8000${user.image}" 
+         alt="Profile Image" 
+         onerror="this.onerror=null;this.src='http://localhost:8000/media/images/users/default.png';"
+         style="width: 50px; 
+                height: 50px;
+                border-radius: 50%;">
+    <strong style="font-size: 1.2em; padding: 2px 5px; border-radius: 5px;">
+        <a href="/user/${user.userID}" style="text-decoration: none; color: inherit;">
+            ${user.djuser ? user.djuser.username : 'Unknown User'}
+        </a>
+    </strong>
+    <strong style="background-color: lightblue; padding: 2px 5px; border-radius: 5px;">
+        Active Books: ${user.active_book_items_count}
+    </strong>
+</div>
                         `;
                         marker.bindPopup(popupContent);
                     }
