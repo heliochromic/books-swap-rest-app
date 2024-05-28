@@ -85,7 +85,7 @@ const AddBookPage = () => {
                         <label htmlFor="name" className="form-label">Name</label>
                         <input type="text"
                                className="form-control"
-                               placeholder="ISBN"
+                               placeholder="Name"
                                id="name"
                                name="name"
                                value={formValues.name}
@@ -95,6 +95,7 @@ const AddBookPage = () => {
                         <label htmlFor="author" className="form-label">Author</label>
                         <input type="text"
                                className="form-control"
+                               placeholder="Author"
                                id="author"
                                name="author"
                                value={formValues.author}
@@ -104,6 +105,7 @@ const AddBookPage = () => {
                         <label htmlFor="genre" className="form-label">Genre</label>
                         <input type="text"
                                className="form-control"
+                               placeholder="Genre"
                                id="genre"
                                name="genre"
                                value={formValues.genre}
@@ -113,6 +115,7 @@ const AddBookPage = () => {
                         <label htmlFor="language" className="form-label">Language</label>
                         <input type="text"
                                className="form-control"
+                               placeholder="Language"
                                id="language"
                                name="language"
                                value={formValues.language}
@@ -122,6 +125,7 @@ const AddBookPage = () => {
                         <label htmlFor="pages" className="form-label">Pages</label>
                         <input type="number"
                                className="form-control"
+                               placeholder="Pages"
                                id="pages" name="pages"
                                value={formValues.pages}
                                onChange={handleInputChange}/>
@@ -130,6 +134,7 @@ const AddBookPage = () => {
                         <label htmlFor="year" className="form-label">Year</label>
                         <input type="text"
                                className="form-control"
+                               placeholder="Year"
                                id="year"
                                name="year"
                                value={formValues.year}
@@ -140,6 +145,7 @@ const AddBookPage = () => {
                         <textarea className="form-control"
                                   id="description"
                                   name="description"
+                                  placeholder="Description"
                                   rows="3"
                                   value={formValues.description}
                                   onChange={handleInputChange}></textarea>

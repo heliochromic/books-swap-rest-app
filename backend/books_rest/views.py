@@ -167,33 +167,34 @@ class ISBNView(APIView):
         clean_ISBN = ISBNView.clean_isbn(ISBN)
 
         if not ISBN or not ISBNView.is_valid_isbn(clean_ISBN):
-            return Response(data={"error": "ISBN is not provided"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(data={"error": "ISBN is not provided or invalid"}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            book_instance = Book.objects.get(ISBN=clean_ISBN)
-        except Book.DoesNotExist:
-            book_info = ISBNView.fetch_book(clean_ISBN)
-            print(clean_ISBN)
-            if not book_info:
-                return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
+        book_info = ISBNView.fetch_book(clean_ISBN)
+        print(clean_ISBN)
+        if not book_info:
+            return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
 
-            date = book_info.get('publishedDate', 'N/A')
-            genre = book_info.get('categories', None)
+        date = book_info.get('publishedDate', 'N/A')
+        genre = book_info.get('categories', None)
 
-            book_instance = Book.objects.create(
-                ISBN=clean_ISBN,
-                name=book_info.get('title', 'N/A'),
-                author=book_info.get('authors', 'N/A')[0],
-                genre=", ".join(genre) if genre else "-",
-                language=book_info.get('language', 'N/A'),
-                pages=book_info.get('pageCount', 0),
-                year=date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
-                description=book_info.get('description')
-            )
+        book_data = {
+            "ISBN": clean_ISBN,
+            "name": book_info.get('title', 'N/A'),
+            "author": book_info.get('authors', ['N/A'])[0],
+            "genre": ", ".join(genre) if genre else "-",
+            "language": book_info.get('language', 'N/A'),
+            "pages": book_info.get('pageCount', 0),
+            "year": date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
+            "description": book_info.get('description')
+        }
 
-        serializer = BookSerializer(book_instance, many=False)
+        serializer = BookSerializer(data=book_data)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RequestView(APIView):
