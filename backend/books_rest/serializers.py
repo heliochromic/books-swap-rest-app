@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User as DJUser
-from .models import (Book, User, BookItem, Request)
+from .models import User, BookItem, Request
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -24,10 +24,21 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = '__all__'
+class BookSerializer(serializers.Serializer):
+    ISBN = serializers.CharField(allow_null=True)
+    name = serializers.CharField(allow_null=True)
+    author = serializers.CharField(allow_null=True)
+    genre = serializers.CharField(allow_null=True)
+    language = serializers.CharField(allow_null=True)
+    pages = serializers.IntegerField(allow_null=True)
+    year = serializers.CharField(allow_null=True)
+    description = serializers.CharField(allow_blank=True, allow_null=True)
+
+    @staticmethod
+    def validate_year(value):
+        if not value.isdigit() or len(value) != 4:
+            raise serializers.ValidationError("Year must be a 4-digit string.")
+        return value
 
 
 class BookItemSerializer(serializers.ModelSerializer):
@@ -42,16 +53,6 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class BookItemBookJoinedSerializer(serializers.ModelSerializer):
-    # write a serializer that will make inner join for two models
-    bookID = BookSerializer()
-
-    class Meta:
-        model = BookItem
-        fields = ['itemID', 'photo', 'photo2', 'photo3', 'status', 'description', 'publish_time', 'deletion_time',
-                  'exchange_time', 'bookID', 'userID']
-
-
 class DJUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DJUser
@@ -64,10 +65,7 @@ class UserLocationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', "djuser", 'latitude', 'longitude','image', 'active_book_items_count']
+        fields = ['userID', "djuser", 'latitude', 'longitude', 'image', 'active_book_items_count']
 
     def get_active_book_items_count(self, obj):
-
         return BookItem.objects.filter(userID=obj.userID, status='a').count()
-
-

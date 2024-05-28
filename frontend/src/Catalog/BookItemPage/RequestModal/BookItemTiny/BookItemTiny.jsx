@@ -30,7 +30,7 @@ const BookItemTiny = ({ book, onClick }) => {
             />
           </div>
           <div className="textContainer mx-3">
-            <p className="h4">{book.bookID.name}</p>
+            <p className="h4">{book.title}</p>
             <p className="small">Publish time: {formatDate(book.publish_time)}</p>
           </div>
         </div>

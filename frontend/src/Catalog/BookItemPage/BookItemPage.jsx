@@ -77,17 +77,17 @@ const BookItemPage = () => {
                         </div>
                     </div>
                     <div className="col-md-12">
-                        <div className="small mb-1">ISBN: {book.bookID.ISBN}</div>
-                        <h1 className="display-5 fw-bolder">{book.bookID.name}</h1>
+                        <div className="small mb-1">ISBN: {book.ISBN}</div>
+                        <h1 className="display-5 fw-bolder">{book.title}</h1>
                         <div className="fs-5 mb-3">
-                            <span>{book.bookID.author}</span>
+                            <span>{book.author}</span>
                         </div>
                         <div className="fs-5">
-                            <span className="badge mx-1 text-bg-primary">{book.bookID.genre}</span>
-                            <span className="badge mx-1 text-bg-primary">{book.bookID.language}</span>
+                            <span className="badge mx-1 text-bg-primary">{book.genre}</span>
+                            <span className="badge mx-1 text-bg-primary">{book.language}</span>
                         </div>
                         <p className="mt-3">
-                            <span>Year: {book.bookID.year}</span>
+                            <span>Year: {book.year}</span>
                         </p>
                         <div>
                             <p className="lead">{book.description}</p>
