@@ -1,14 +1,12 @@
 import './App.css';
-import axios from 'axios';
-import Catalog from './Catalog'
+import Header from './Header/Header'
+import Offcanvas from "./Offcanvas/Offcanvas";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        SLS YF[EQ
-          <Catalog></Catalog>
-      </header>
+        <Header />
+        <Offcanvas />
     </div>
   );
 }
