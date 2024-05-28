@@ -1,0 +1,46 @@
+.profile-container {
+  padding: 20px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.profile-image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+}
+
+.username {
+  font-size: 18px;
+  font-weight: normal;
+    color: darkgray;
+}
+
+.profile-details {
+  margin-bottom: 10px;
+}
+.first-last{
+    margin: 0 0 0 0;
+}
+.profile-details p{
+  margin-bottom: 2px;
+}
+.delete-button {
+  position: absolute;
+  top: 50px;
+  right: 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.delete-button:hover {
+  background-color: #d32f2f;
+}

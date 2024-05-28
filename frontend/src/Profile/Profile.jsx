@@ -72,7 +72,7 @@ const Profile = () => {
       }).addTo(newMap);
 
       markerRef.current.addTo(newMap);
-      mapRef.current = newMap; // Store map instance in ref
+      mapRef.current = newMap;
       markerRef.current.setLatLng(newLatLng);
     }
     else if (userProfile){

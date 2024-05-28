@@ -1,4 +1,4 @@
-html, body, #root, .App, section, #mapid {
+html, body, #root, .App, main > section, #mapid {
     height: 100%;
     margin: 0;
     padding: 0;

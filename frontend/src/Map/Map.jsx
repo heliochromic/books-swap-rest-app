@@ -66,7 +66,9 @@ const Map = () => {
             });
     }, []);
 
-    return (<div id="mapid"></div>);
+    return (
+        <div id="mapid"></div>
+    );
 }
 
 const getCookie = (name) => {
