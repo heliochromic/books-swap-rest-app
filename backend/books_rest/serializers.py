@@ -26,7 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class BookSerializer(serializers.Serializer):
     ISBN = serializers.CharField(allow_null=True)
-    name = serializers.CharField(allow_null=True)
+    title = serializers.CharField(allow_null=True)
     author = serializers.CharField(allow_null=True)
     genre = serializers.CharField(allow_null=True)
     language = serializers.CharField(allow_null=True)
@@ -34,11 +34,11 @@ class BookSerializer(serializers.Serializer):
     year = serializers.CharField(allow_null=True)
     description = serializers.CharField(allow_blank=True, allow_null=True)
 
-    @staticmethod
-    def validate_year(value):
-        if not value.isdigit() or len(value) != 4:
-            raise serializers.ValidationError("Year must be a 4-digit string.")
-        return value
+    # @staticmethod
+    # def validate_year(value):
+    #     if not value.isdigit() or len(value) != 4:
+    #         raise serializers.ValidationError("Year must be a 4-digit string.")
+    #     return value
 
 
 class BookItemSerializer(serializers.ModelSerializer):

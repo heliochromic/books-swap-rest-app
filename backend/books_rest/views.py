@@ -34,13 +34,47 @@ class CatalogView(APIView):
 
     @action(detail=False, methods=['post'])
     def post(self, request, *args, **kwargs):
-        request.data['userID'] = request.user.id
+        data = request.data
 
-        serializer = BookItemSerializer(data=request.data)
+        isbn = data.get('isbn')
+        title = data.get('title')
+        author = data.get('author')
+        genre = data.get('genre')
+        language = data.get('language')
+        pages = data.get('pages')
+        year = data.get('year')
+        description = data.get('description')
+        book_status = data.get('status')
+        user_id = request   .user.id
+        photo = data.get('file1')
+        photo2 = data.get('file2')
+        photo3 = data.get('file3')
+
+        book_item_data = {
+            'ISBN': isbn,
+            'title': title,
+            'author': author,
+            'genre': genre,
+            'language': language,
+            'pages': int(pages),
+            'year': year,
+            'description': description,
+            'status': book_status,
+            'userID': user_id,
+            'photo': photo,
+            'photo2': photo2,
+            'photo3': photo3,
+            'publish_time': datetime.now()
+        }
+
+        serializer = BookItemSerializer(data=book_item_data)
+
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            print(serializer.data)
+            return Response(serializer.data, status=201)
+        print(serializer.errors)
+        return Response(serializer.errors, status=400)
 
 
 class BookItemView(APIView):
@@ -181,7 +215,7 @@ class ISBNView(APIView):
 
         book_data = {
             "ISBN": clean_ISBN,
-            "name": book_info.get('title', 'N/A'),
+            "title": book_info.get('title', 'N/A'),
             "author": book_info.get('authors', ['N/A'])[0],
             "genre": ", ".join(genre) if genre else "-",
             "language": book_info.get('language', 'N/A'),
