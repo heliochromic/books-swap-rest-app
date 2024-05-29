@@ -45,24 +45,24 @@ const Header = () => {
                     <div>
                         <Link to="/">Home</Link>
                     </div>
-                    <div>
+                    {isAuthenticated && <div>
                         <Link to="/catalog">Catalog</Link>
-                    </div>
-                    <div>
+                    </div>}
+                    {isAuthenticated && <div>
                         <Link to="/profile">Profile</Link>
-                    </div>
-                    <div>
+                    </div>}
+                    {isAuthenticated && <div>
                         <Link to="/map">Map</Link>
-                    </div>
+                    </div>}
 
-                    <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"
-                            title="Open Offcanvas">
+                    {isAuthenticated && <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
+                          data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"
+                          title="Open Offcanvas">
                         Requests
-                    </div>
+                    </div>}
 
                     {!isAuthenticated && (
-                        <div>
+                        <div className="login-ref">
                             <Link to="/login">Log In</Link>
                         </div>
                     )}

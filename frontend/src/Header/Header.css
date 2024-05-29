@@ -23,3 +23,6 @@ header > nav > div > a{
     text-decoration: none;
     color: white;
 }
+.login-ref{
+    margin-right: 20px;
+}
