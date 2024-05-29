@@ -29,7 +29,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
     };
 
     return (
-        <div>
+        <div className="login-page">
             <h2>Svvap</h2>
             <div className='login-container'>
             <form onSubmit={handleLogin}>

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles.css'
+import './signup.css'
 
 const SignUpPage = ({setIsAuthenticated}) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -25,7 +25,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
             "password": "",
             "first_name": "",
             "last_name": "",
-            "age": 0,
+            "age": "",
             "mail": "",
             "phone_number": "",
             "latitude": "",
@@ -43,7 +43,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
 
   useEffect(() => {
     if (userProfile && !mapRef.current) {
-      document.getElementById('profile-image').src = 'http://localhost:8000/media/images/users/default.png'
+      document.getElementById('signup-image').src = 'http://localhost:8000/media/images/users/default.png'
       const newLatLng = L.latLng(50.46446973182625, 30.51927042844712);
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
@@ -82,7 +82,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
       const file = e.target.files[0];
       const reader = new FileReader();
         reader.onload = function(e) {
-          const previewImage = document.getElementById('profile-image');
+          const previewImage = document.getElementById('signup-image');
           previewImage.src = e.target.result;
           setImagePresent(true)
         };
@@ -134,7 +134,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
   };
 
   const handleDeleteImage = async (e) => {
-    document.getElementById('profile-image').src = 'http://localhost:8000/media/images/users/default.png'
+    document.getElementById('signup-image').src = 'http://localhost:8000/media/images/users/default.png'
     setImagePresent(false)
     if (image_ref.current) {
       image_ref.current.value = null;
@@ -150,12 +150,12 @@ const SignUpPage = ({setIsAuthenticated}) => {
   }
 
   return (
-    <div className="profile-container">
-      <h1>User Profile</h1>
+    <div className="signup-container">
+      <h1>Sign Up</h1>
       {userProfile && (
-          <form className="profile-form" onSubmit={handleSubmit}>
+          <form className="signup-form" onSubmit={handleSubmit}>
             <div>
-              <img id="profile-image" src="" alt="Profile Image"/>
+              <img id="signup-image" src="" alt="Profile Image"/>
               {(imagePresent) &&
                   <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
               <input
@@ -172,68 +172,90 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="username"
                   name="username"
+                  className="input-username"
                   value={userProfile.username}
                   onChange={handleInputChange}
+                  placeholder={userProfile.username ? '' : 'Enter your username'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.username ? '' : 'Enter your username'}
               />
             </div>
             <div>
-              <label htmlFor="password">Password:</label>
               <input
                   type="password"
                   id="password"
                   name="password"
+                  className="input-password"
                   value={userProfile.password}
                   onChange={handleInputChange}
+                  placeholder={userProfile.password ? '' : 'Enter your password'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.password ? '' : 'Enter your password'}
               />
             </div>
             <div>
-              <label htmlFor="first_name">First Name:</label>
               <input
                   type="text"
                   id="first_name"
                   name="first_name"
+                  className="input-first-name"
                   value={userProfile.first_name}
                   onChange={handleInputChange}
+                  placeholder={userProfile.first_name ? '' : 'Enter your first name'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.first_name ? '' : 'Enter your first name'}
               />
             </div>
             <div>
-              <label htmlFor="last_name">Last Name:</label>
               <input
                   type="text"
                   id="last_name"
                   name="last_name"
+                  className="input-last-name"
                   value={userProfile.last_name}
                   onChange={handleInputChange}
+                  placeholder={userProfile.last_name ? '' : 'Enter your last name'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.last_name ? '' : 'Enter your last name'}
               />
             </div>
             <div>
-              <label htmlFor="age">Age:</label>
               <input
-                  type="number"
+                  type="text"
                   id="age"
                   name="age"
+                  className="input-age"
                   value={userProfile.age}
                   onChange={handleInputChange}
+                  placeholder={userProfile.age ? '' : 'Enter your age'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.age ? '' : 'Enter your age'}
               />
             </div>
             <div>
-              <label htmlFor="mail">Email:</label>
               <input
                   type="email"
                   id="mail"
                   name="mail"
+                  className="input-email"
                   value={userProfile.mail}
                   onChange={handleInputChange}
+                  placeholder={userProfile.email ? '' : 'Enter your email'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.email ? '' : 'Enter your email'}
               />
             </div>
             <div>
-              <label htmlFor="phone_number">Phone Number:</label>
               <input
                   type="text"
                   id="phone_number"
                   name="phone_number"
+                  className="input-phone-number"
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
+                  placeholder={userProfile.phone_number ? '' : 'Enter your phone number'}
+                  onFocus={(e) => e.target.placeholder = ''}
+                  onBlur={(e) => e.target.placeholder = userProfile.phone_number ? '' : 'Enter your phone number'}
               />
             </div>
             <div id="mapid" style={{height: '200px', width: '100%'}}></div>

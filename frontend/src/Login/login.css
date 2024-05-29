@@ -1,4 +1,4 @@
-.login-container, #root > div > main > section > div{
+.login-container, #root > div > main > section > .login-page{
     margin-top: 20px;
     display: flex;
     flex-direction: column;
