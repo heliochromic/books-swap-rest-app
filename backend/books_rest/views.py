@@ -248,8 +248,6 @@ class RequestView(APIView):
             return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = RequestSerializer(queryset, many=True)
-
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
@@ -270,8 +268,10 @@ class RequestItemView(APIView):
             sender_book_item_instance = BookItem.objects.get(itemID=request_instance.sender_book_id)
             receiver_book_item_instance = BookItem.objects.get(itemID=request_instance.receiver_book_id)
         except Request.DoesNotExist:
+            print("hehehehe")
             return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
         except BookItem.DoesNotExist:
+            print("hehehehe")
             return Response(data={"error": "BookItem not found"}, status=status.HTTP_404_NOT_FOUND)
 
         if request_instance.status != "P":
