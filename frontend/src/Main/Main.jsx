@@ -10,6 +10,7 @@ import BookItemPage from "../Catalog/BookItemPage/BookItemPage";
 import SignUpPage from "../SignUp/SignUpPage";
 import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";
+import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
 
 const Main = ({setIsAuthenticated}) => {
     return (
@@ -25,6 +26,7 @@ const Main = ({setIsAuthenticated}) => {
                     <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
                     <Route path="/signup" element={<SignUpPage setIsAuthenticated={setIsAuthenticated}/>}/>
                     <Route path="/user/:id" element={<UserProfile/>}/>
+                    <Route path="/password-change" element={<PasswordChangePage/>}/>
                 </Routes>
             </section>
         </main>

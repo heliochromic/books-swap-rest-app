@@ -4,6 +4,7 @@ import os
 
 import requests
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
 from rest_framework import status
@@ -17,7 +18,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
-    UserLocationSerializer, BookSerializer, UserCatalogSerializer
+    UserLocationSerializer, BookSerializer, UserCatalogSerializer, PasswordChangeSerializer
 
 
 class CatalogView(APIView):
@@ -480,3 +481,22 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_200_OK, data={"message": "Successfully logged out"})
         except Token.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Token not found"})
+
+
+class PasswordChangeView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        if not user.check_password(serializer.validated_data['current_password']):
+            return Response({"current_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({"detail": "Password has been changed successfully."}, status=status.HTTP_200_OK)

@@ -3,6 +3,7 @@ import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles.css'
+import {Link} from "react-router-dom";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -191,7 +192,8 @@ const Profile = () => {
           <form className="profile-form" onSubmit={handleSubmit}>
             <div>
               <img id="profile-image" src="" alt="Profile Image"/>
-              {(imagePresent && isEditing) && <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
+              {(imagePresent && isEditing) &&
+                  <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
               {isEditing && <input
                   type="file"
                   id="image"
@@ -270,7 +272,11 @@ const Profile = () => {
               )}
               {isEditing && <button type="submit">Save Changes</button>}
             </div>
+            <div>
+              <Link to="/password-change">Change password</Link>
+            </div>
           </form>
+
       )}
     </div>
   );

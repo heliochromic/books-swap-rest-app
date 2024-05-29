@@ -81,3 +81,8 @@ class UserCatalogSerializer(serializers.ModelSerializer):
         model = User
         fields = ['userID', 'first_name', 'last_name', 'age', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser', 'book_items']
+
+
+class PasswordChangeSerializer(serializers.Serializer):
+    current_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
