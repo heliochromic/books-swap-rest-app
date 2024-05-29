@@ -3,24 +3,17 @@ import { useEffect, useState } from "react";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './map.css'
+import {getConfig} from "../utils";
 
 const Map = () => {
     useEffect(() => {
-        const token = sessionStorage.getItem('token');
-        const csrftoken = getCookie('csrftoken');
-        const config = {
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Authorization': `Token ${token}`
-            }
-        };
         const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
         iconSize: [30, 30],
         iconAnchor: [19, 38],
         popupAnchor: [0, -38]
       });
-        axios.get('http://localhost:8000/api/map/', config)
+        axios.get('http://localhost:8000/api/map/', getConfig())
             .then(response => {
                 const userData = response.data;
                 const map = L.map('mapid').setView([50.46446973182625, 30.5192704284471], 10); // Set initial center and zoom level
@@ -70,10 +63,5 @@ const Map = () => {
         <div id="mapid"></div>
     );
 }
-
-const getCookie = (name) => {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : '';
-};
 
 export default Map;

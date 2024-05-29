@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
+import {getConfig} from "../../utils";
 
 const PasswordChange = () => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -11,19 +12,10 @@ const PasswordChange = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const token = sessionStorage.getItem('token');
-      const csrftoken = getCookie('csrftoken');
-      const config = {
-        headers: {
-          'X-CSRFToken': csrftoken,
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      };
             const response = await axios.post('http://localhost:8000/api/password-change/', {
                 current_password: currentPassword,
                 new_password: newPassword,
-            }, config);
+            }, getConfig());
             setMessage(response.data.detail);
             navigate('/profile')
         } catch (error) {
@@ -62,10 +54,6 @@ const PasswordChange = () => {
             {message && <p>{message}</p>}
         </div>
     );
-};
-const getCookie = (name) => {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
 };
 
 export default PasswordChange;

@@ -2,14 +2,24 @@ header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 0 50px
+    background-color: dodgerblue;
+    color: white;
+    height: 15%;
 }
 
 header > nav {
     display: flex;
 }
 
+header > h2 {
+    margin-left: 20px;
+}
+
 header > nav > div {
     display: block;
     padding: 10px;
+}
+header > nav > div > a{
+    text-decoration: none;
+    color: white;
 }

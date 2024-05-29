@@ -19,7 +19,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
 
             const authToken = response.data.token;
             sessionStorage.setItem('token', authToken);
-            setIsAuthenticated(true); // Update authentication state
+            setIsAuthenticated(true);
             navigate('/catalog');
         } catch (error) {
             setError('Login failed. Please check your credentials and try again.');

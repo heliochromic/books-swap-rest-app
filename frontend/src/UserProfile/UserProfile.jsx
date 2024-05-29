@@ -4,6 +4,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import L from 'leaflet';
 import BookItem from "../Catalog/BookItem/BookItem";
 import './userProfile.css';
+import {getConfig} from "../utils";
 
 const UserProfile = () => {
   const { id } = useParams();
@@ -18,41 +19,27 @@ const UserProfile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const token = sessionStorage.getItem('token');
-        const csrftoken = getCookie('csrftoken');
-        const config = {
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Authorization': `Token ${token}`
-          }
-        };
         const response = await axios.get(`http://localhost:8000/api/profile/${id}`, config);
-        const me = await axios.get(`http://localhost:8000/api/user/`, config)
+        const me = await axios.get(`http://localhost:8000/api/user/`, getConfig())
+
         setProfileData(response.data);
         setMe(me.data)
+
         setItems(response.data.book_items);
         setLoading(false);
+
       } catch (err) {
         setError(err);
         setLoading(false);
       }
     };
-
     fetchProfile();
   }, [id]);
 
   const handleDelete = async () => {
   try {
-    const token = sessionStorage.getItem('token');
-    const csrftoken = getCookie('csrftoken');
-    const config = {
-      headers: {
-        'X-CSRFToken': csrftoken,
-        'Authorization': `Token ${token}`
-      }
-    };
+    await axios.delete(`http://localhost:8000/api/profile/${profileData.userID}`, getConfig());
 
-    await axios.delete(`http://localhost:8000/api/profile/${profileData.userID}`, config);
     navigate('/catalog')
   } catch (err) {
     console.error('Error deleting user:', err);
@@ -97,10 +84,4 @@ const UserProfile = () => {
 
   );
 };
-
-const getCookie = (name) => {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : '';
-};
-
 export default UserProfile;

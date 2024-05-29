@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './styles.css'
 import {Link} from "react-router-dom";
+import {getConfig} from "../utils";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -27,15 +28,8 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = sessionStorage.getItem('token');
-        const csrftoken = getCookie('csrftoken');
-        const config = {
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Authorization': `Token ${token}`
-          }
-        };
-        const response = await axios.get('http://localhost:8000/api/user/', config);
+
+        const response = await axios.get('http://localhost:8000/api/user/', getConfig());
         setUserProfile(response.data);
         setLoading(false);
         if(!initialProfileRef.current){
@@ -53,7 +47,7 @@ const Profile = () => {
   useEffect(() => {
     if (userProfile && !mapRef.current) {
       document.getElementById('profile-image').src = 'http://localhost:8000' + userProfile.image
-      if(userProfile.image == "/media/images/users/default.png"){
+      if(userProfile.image === "/media/images/users/default.png"){
         setImagePresent(false)
       }
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
@@ -66,7 +60,7 @@ const Profile = () => {
 
       markerRef.current.setIcon(newIcon);
 
-      const mapElement = document.getElementById('mapid'); // Get the map container element
+      const mapElement = document.getElementById('mapid');
       const newMap = L.map(mapElement).setView([userProfile.latitude, userProfile.longitude], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
@@ -125,15 +119,6 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = sessionStorage.getItem('token');
-      const csrftoken = getCookie('csrftoken');
-      const config = {
-        headers: {
-          'X-CSRFToken': csrftoken,
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      };
       const formData = new FormData();
       formData.append('first_name', userProfile.first_name);
       formData.append('last_name', userProfile.last_name);
@@ -150,7 +135,7 @@ const Profile = () => {
       else if (imagePresent){
         formData.append('imageNotUpdated', true)
      }
-      await axios.put('http://localhost:8000/api/user/', formData, config);
+      await axios.put('http://localhost:8000/api/user/', formData, getConfig());
 
       alert('Profile updated successfully!');
       setIsEditing(false);
@@ -281,10 +266,4 @@ const Profile = () => {
     </div>
   );
 };
-
-const getCookie = (name) => {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
-};
-
 export default Profile;

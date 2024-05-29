@@ -3,11 +3,9 @@ import {BrowserRouter as Router, Link} from 'react-router-dom';
 import './Header.css';
 import axios from "axios";
 import Main from '../Main/Main';
+import {getConfig} from '../utils'
 
-const getCookie = (name) => {
-    const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
-    return cookieValue ? cookieValue.pop() : '';
-};
+
 
 const Header = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -25,16 +23,9 @@ const Header = () => {
     const handleLogout = async () => {
         try {
             // Get CSRF token from cookies
-            const csrftoken = getCookie('csrftoken');
-            const authToken = sessionStorage.getItem('token');
-            // Include CSRF token in headers
-            const headers = {
-                'X-CSRFToken': csrftoken,
-                'Authorization': `Token ${authToken}`
-            };
-
+            const config = getConfig()
             // Send POST request to logout endpoint
-            await axios.post('http://localhost:8000/api/logout/', {}, {headers});
+            await axios.post('http://localhost:8000/api/logout/', {}, config);
             sessionStorage.removeItem('token');
             console.log('Logout successful');
         } catch (error) {

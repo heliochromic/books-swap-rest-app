@@ -10,18 +10,10 @@ const SignUpPage = ({setIsAuthenticated}) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
-  const mapRef = useRef(null); // Create a ref for the map
-  const markerRef = useRef(new L.Marker([51.505, -0.09]));
-  const username_ref = useRef(null);
-  const password_ref = useRef();// Create a ref for the marker
-  const first_name_ref = useRef(null)
-  const last_name_ref = useRef(null)
-  const age_ref = useRef(null)
-  const phone_number_ref = useRef(null)
-  const mail_ref = useRef(null)
-  const image_ref = useRef(null)
   let [imagePresent, setImagePresent] = useState(false)
+  const mapRef = useRef(null);
+  const markerRef = useRef(new L.Marker([0, 0]));
+  const image_ref = useRef(null)
   const navigate = useNavigate();
 
 
@@ -101,7 +93,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
         [e.target.name]: e.target.value
       });
     }
-    console.log(JSON.stringify(userProfile))
   };
 
   const handleSubmit = async (e) => {
@@ -124,13 +115,12 @@ const SignUpPage = ({setIsAuthenticated}) => {
       formData.append('longitude', userProfile.longitude);
 
       if (image_ref.current && image_ref.current.files && image_ref.current.files[0]) {
-        console.log(image_ref.current.files[0])
-      formData.append('image', image_ref.current.files[0]);
+        formData.append('image', image_ref.current.files[0]);
     }
       const response = await axios.post('http://localhost:8000/api/signup/', formData, config);
        const authToken = response.data.token;
             sessionStorage.setItem('token', authToken);
-            setIsAuthenticated(true); // Update authentication state
+            setIsAuthenticated(true);
             navigate('/catalog');
       alert('Profile created successfully!');
       setIsEditing(false);
@@ -182,7 +172,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="username"
                   name="username"
-                  ref={username_ref}
                   value={userProfile.username}
                   onChange={handleInputChange}
               />
@@ -193,7 +182,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="password"
                   id="password"
                   name="password"
-                  ref={password_ref}
                   value={userProfile.password}
                   onChange={handleInputChange}
               />
@@ -204,7 +192,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="first_name"
                   name="first_name"
-                  ref={first_name_ref}
                   value={userProfile.first_name}
                   onChange={handleInputChange}
               />
@@ -216,7 +203,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   id="last_name"
                   name="last_name"
                   value={userProfile.last_name}
-                  ref={last_name_ref}
                   onChange={handleInputChange}
               />
             </div>
@@ -226,7 +212,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="number"
                   id="age"
                   name="age"
-                  ref={age_ref}
                   value={userProfile.age}
                   onChange={handleInputChange}
               />
@@ -237,7 +222,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="email"
                   id="mail"
                   name="mail"
-                  ref={mail_ref}
                   value={userProfile.mail}
                   onChange={handleInputChange}
               />
@@ -248,7 +232,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="phone_number"
                   name="phone_number"
-                  ref={phone_number_ref}
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
               />
@@ -261,11 +244,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
       )}
     </div>
   );
-};
-
-const getCookie = (name) => {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
 };
 
 export default SignUpPage;
