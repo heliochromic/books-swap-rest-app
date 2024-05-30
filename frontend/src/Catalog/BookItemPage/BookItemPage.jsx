@@ -57,21 +57,21 @@ const BookItemPage = () => {
                                 <div className="carousel-item active imageDetail">
                                     <span className="imageDetailCrop"
                                           style={{
-                                              backgroundImage: `url(http://localhost:8000/${book.photo})`,
+                                              backgroundImage: `url(http://localhost:8000${book.photo})`,
                                           }}>
                                     </span>
                                 </div>
                                 {book.photo2 && <div className="carousel-item imageDetail">
                                     <span className="imageDetailCrop"
                                           style={{
-                                              backgroundImage: `url(http://localhost:8000/${book.photo2})`,
+                                              backgroundImage: `url(http://localhost:8000${book.photo2})`,
                                           }}>
                                     </span>
                                 </div>}
                                 {book.photo3 && <div className="carousel-item imageDetail">
                                     <span className="imageDetailCrop"
                                           style={{
-                                              backgroundImage: `url(http://localhost:8000/${book.photo3})`,
+                                              backgroundImage: `url(http://localhost:8000${book.photo3})`,
                                           }}>
                                     </span>
                                 </div>}

@@ -5,12 +5,12 @@ export const getCookie = (name) => {
 
 export const getConfig = () => {
     const token = sessionStorage.getItem('token');
-      const csrftoken = getCookie('csrftoken');
+    const csrftoken = getCookie('csrftoken');
     return {
-          headers: {
-              'X-CSRFToken': csrftoken,
-              'Authorization': `Token ${token}`,
-              'Content-Type': 'multipart/form-data'
-          }
-      };
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Authorization': `Token ${token}`,
+            'Content-Type': 'multipart/form-data'
+        }
+    };
 }
