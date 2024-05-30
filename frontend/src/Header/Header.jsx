@@ -4,6 +4,7 @@ import './Header.css';
 import axios from "axios";
 import Main from '../Main/Main';
 import {getConfig} from '../utils'
+import Offcanvas from "../Offcanvas/Offcanvas";
 
 
 
@@ -55,11 +56,17 @@ const Header = () => {
                         <Link to="/map">Map</Link>
                     </div>}
 
-                    {isAuthenticated && <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
-                          data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"
-                          title="Open Offcanvas">
-                        Requests
-                    </div>}
+                    {isAuthenticated && (
+                        <>
+                            <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
+                                 data-bs-target="#offcanvasWithBothOptions"
+                                 aria-controls="offcanvasWithBothOptions"
+                                 title="Open Offcanvas">
+                                Requests
+                            </div>
+                            <Offcanvas/>
+                        </>
+                    )}
 
                     {!isAuthenticated && (
                         <div className="login-ref">

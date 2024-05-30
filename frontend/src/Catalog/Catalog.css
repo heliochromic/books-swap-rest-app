@@ -103,7 +103,7 @@
     object-fit: cover;
 }
 
-.newBookBadge {
+#newBookBadge {
     position: fixed;
     width: 220px;
     height: 250px;
@@ -113,6 +113,6 @@
     transition: bottom 0.3s ease-in-out;
 }
 
-.newBookBadge:hover {
+#newBookBadge:hover {
     bottom: -120px;
 }
