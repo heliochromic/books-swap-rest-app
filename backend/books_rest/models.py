@@ -45,7 +45,7 @@ class BookItem(models.Model):
     publish_time = models.DateTimeField(default=datetime.now)
     deletion_time = models.DateTimeField(null=True)
     exchange_time = models.DateTimeField(null=True)
-    ISBN = models.CharField(max_length=13, unique=True, help_text="Enter the ISBN of the book")
+    ISBN = models.CharField(max_length=13, help_text="Enter the ISBN of the book")
     title = models.CharField(max_length=200, help_text="Enter the name of the book")
     author = models.CharField(max_length=200, help_text="Enter the name of the book's author")
     genre = models.CharField(max_length=30, help_text="Enter the genre of the book")
