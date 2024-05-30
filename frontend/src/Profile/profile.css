@@ -58,39 +58,39 @@
   border-radius: 50%;
   max-width: 200px;
 }
-#first_name, #last_name, #age, #mail, #phone_number, #cur-password, #new-password{
-    width: 100%;
-    padding: 10px 10px 10px 20px;
-    margin: 5px 10px;
-    display: flex;
-    border: 1px solid #ccc;
-    border-radius: 25px;
-    box-sizing: border-box;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    font-size: 16px;
-    text-align: left;
-    outline: none;
-    flex: 1;
-    max-width: 200px;
-}
-#cur-password, #new-password{
-    max-width: 300px;
-}
+/*#first_name, #last_name, #age, #mail, #phone_number, #cur-password, #new-password{*/
+/*    width: 100%;*/
+/*    padding: 10px 10px 10px 20px;*/
+/*    margin: 5px 10px;*/
+/*    display: flex;*/
+/*    border: 1px solid #ccc;*/
+/*    border-radius: 25px;*/
+/*    box-sizing: border-box;*/
+/*    transition: border-color 0.3s, box-shadow 0.3s;*/
+/*    font-size: 16px;*/
+/*    text-align: left;*/
+/*    outline: none;*/
+/*    flex: 1;*/
+/*    max-width: 200px;*/
+/*}*/
+/*#cur-password, #new-password{*/
+/*    max-width: 300px;*/
+/*}*/
 
-#first_name:read-only, #last_name:read-only,
-#age:read-only, #mail:read-only, #phone_number:read-only{
-    border: 0;
-}
-#first_name:focus, #last_name:focus,
-#age:focus, #mail:focus, #phone_number:focus,
-#cur-password:focus, #new-password:focus{
-  border-color: #6b73ff;
-  box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
-}
-#first_name:read-only:focus, #last_name:read-only:focus,
-#age:read-only:focus, #mail:read-only:focus, #phone_number:read-only:focus{
-    box-shadow: 0 0 0 0;
-}
+/*#first_name:read-only, #last_name:read-only,*/
+/*#age:read-only, #mail:read-only, #phone_number:read-only{*/
+/*    border: 0;*/
+/*}*/
+/*#first_name:focus, #last_name:focus,*/
+/*#age:focus, #mail:focus, #phone_number:focus,*/
+/*#cur-password:focus, #new-password:focus{*/
+/*  border-color: #6b73ff;*/
+/*  box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);*/
+/*}*/
+/*#first_name:read-only:focus, #last_name:read-only:focus,*/
+/*#age:read-only:focus, #mail:read-only:focus, #phone_number:read-only:focus{*/
+/*    box-shadow: 0 0 0 0;*/
+/*}*/
 
 .edit-button, .cancel-button, .save-button, .change-button{
     margin-top: 10px;
@@ -139,6 +139,7 @@
     flex-direction: row;
     text-align: center;
     justify-content: center;
+    max-width: 400px;
 }
 .input-group label {
   margin-right: 10px;

@@ -5,20 +5,24 @@
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 0;
+    display: flex;
+    justify-content: center;
 }
 
 .signup-container h1 {
   font-size: 24px;
   margin-bottom: 20px;
 }
-
-.signup-form {
-  margin-bottom: 20px;
+.signup-form{
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
-
-.signup-form label {
-  display: block;
-  margin-bottom: 5px;
+.signup-form > .input-group{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #signup-image{
     width: 120px;
