@@ -72,7 +72,7 @@ const Header = () => {
                     </div>
                 </div>
             </nav>
-            {isAuthenticated && <Offcanvas/>}
+            {/*{isAuthenticated && <Offcanvas/>}*/}
             <Main setIsAuthenticated={setIsAuthenticated}/>
         </Router>
     );

@@ -15,7 +15,7 @@ import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
 const Main = ({setIsAuthenticated}) => {
     return (
         <main>
-            <section>
+            <section id="content-section">
                 <Routes>
                     <Route path="/" element={<HomePage/>}/>
                     <Route path="/catalog" element={<Catalog/>}/>

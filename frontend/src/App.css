@@ -3,7 +3,7 @@ main {
     justify-content: center;
 }
 
-section {
-    margin: 20px auto;
+#content-section {
+    margin: 0 auto;
     max-width: 1200px;
 }
