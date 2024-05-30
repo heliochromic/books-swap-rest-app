@@ -19,7 +19,7 @@
     flex-direction: column;
     justify-content: center;
 }
-.signup-form > .input-group{
+.signup-form > .signup-input-group{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -125,4 +125,7 @@
 }
 #image-delete:focus{
     box-shadow: 0 0 0 3px #f44336;
+}
+.signup-form > #signup-mapid{
+    max-width: 100%;
 }

@@ -59,7 +59,7 @@ const UserProfile = () => {
     return (
         <div className="profile-container">
             {me.djuser.is_staff && (
-                <button className="delete-button" onClick={handleDelete}>Delete</button>
+                <button className="user-delete-button" onClick={handleDelete}>Delete</button>
             )}
             <img
                 src={`http://localhost:8000${profileData.image}`}

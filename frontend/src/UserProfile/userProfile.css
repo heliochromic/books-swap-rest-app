@@ -27,7 +27,7 @@
 .profile-details p{
   margin-bottom: 2px;
 }
-.delete-button {
+.user-delete-button {
   position: absolute;
   top: 50px;
   right: 20px;
@@ -41,6 +41,6 @@
   margin-top: 10px;
 }
 
-.delete-button:hover {
+.user-delete-button:hover {
   background-color: #d32f2f;
 }

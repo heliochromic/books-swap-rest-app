@@ -165,7 +165,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onChange={handleInputChange}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="text"
                   id="username"
@@ -178,7 +178,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.username ? '' : 'Enter your username'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="password"
                   id="password"
@@ -191,7 +191,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.password ? '' : 'Enter your password'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="text"
                   id="first_name"
@@ -204,7 +204,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.first_name ? '' : 'Enter your first name'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="text"
                   id="last_name"
@@ -217,7 +217,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.last_name ? '' : 'Enter your last name'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="text"
                   id="age"
@@ -230,7 +230,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.age ? '' : 'Enter your age'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="email"
                   id="mail"
@@ -243,7 +243,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.email ? '' : 'Enter your email'}
               />
             </div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <input
                   type="text"
                   id="phone_number"
@@ -257,7 +257,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
               />
             </div>
             <div id="signup-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="input-group">
+            <div className="signup-input-group">
               <button type="submit" className="signup-button">Sign Up</button>
             </div>
           </form>
