@@ -6,13 +6,10 @@ import Main from '../Main/Main';
 import {getConfig} from '../utils'
 import Offcanvas from "../Offcanvas/Offcanvas";
 
-
-
 const Header = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        // Check if the token is present in session storage
         const token = sessionStorage.getItem('token');
         if (token) {
             setIsAuthenticated(true);
@@ -23,63 +20,59 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
-            // Get CSRF token from cookies
-            const config = getConfig()
-            // Send POST request to logout endpoint
+            const config = getConfig();
             await axios.post('http://localhost:8000/api/logout/', {}, config);
             sessionStorage.removeItem('token');
             console.log('Logout successful');
         } catch (error) {
             console.error('Logout failed:', error);
         }
-        // Clear session storage
         sessionStorage.clear();
-        // Redirect to home page
         window.location.href = '/';
     };
 
     return (
         <Router>
-            <header>
-                <h2>Logo</h2>
-                <nav>
-                    <div>
-                        <Link to="/">Home</Link>
+            <nav className="navbar navbar-secondary navbar-expand-lg">
+                <div className="container-fluid">
+                    <Link className="navbar-brand" to="/">
+                        <h2 id="logo">
+                            svvap
+                        </h2></Link>
+                    <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                        <span className="navbar-toggler-icon"></span>
+                    </button>
+                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+                            {isAuthenticated && <li className="nav-item m-1">
+                                <Link to="/catalog">Catalog</Link>
+                            </li>}
+                            {isAuthenticated && <li className="nav-item m-1">
+                                <Link to="/profile">Profile</Link>
+                            </li>}
+                            {isAuthenticated && <li className="nav-item m-1">
+                                <Link to="/map">Map</Link>
+                            </li>}
+                            {isAuthenticated &&
+                                <li className="nav-item m-1" type="button" data-bs-toggle="offcanvas"
+                                    data-bs-target="#offcanvasWithBothOptions">
+                                    <div>
+                                        Requests
+                                    </div>
+                                </li>}
+                            {!isAuthenticated && <li className="nav-item m-1">
+                                <Link to="/login">Log In</Link>
+                            </li>}
+                            {isAuthenticated && <li className="nav-item m-1">
+                                <Link to="/" onClick={handleLogout}>Logout</Link>
+                            </li>}
+                        </ul>
                     </div>
-                    {isAuthenticated && <div>
-                        <Link to="/catalog">Catalog</Link>
-                    </div>}
-                    {isAuthenticated && <div>
-                        <Link to="/profile">Profile</Link>
-                    </div>}
-                    {isAuthenticated && <div>
-                        <Link to="/map">Map</Link>
-                    </div>}
-
-                    {isAuthenticated && (
-                        <>
-                            <div className="offcanvasButton" type="button" data-bs-toggle="offcanvas"
-                                 data-bs-target="#offcanvasWithBothOptions"
-                                 aria-controls="offcanvasWithBothOptions"
-                                 title="Open Offcanvas">
-                                Requests
-                            </div>
-                            <Offcanvas/>
-                        </>
-                    )}
-
-                    {!isAuthenticated && (
-                        <div className="login-ref">
-                            <Link to="/login">Log In</Link>
-                        </div>
-                    )}
-                    {isAuthenticated && (
-                        <div>
-                            <Link to="/" onClick={handleLogout}>Logout</Link>
-                        </div>
-                    )}
-                </nav>
-            </header>
+                </div>
+            </nav>
+            {isAuthenticated && <Offcanvas/>}
             <Main setIsAuthenticated={setIsAuthenticated}/>
         </Router>
     );

@@ -31,7 +31,7 @@ const Offcanvas = () => {
 
     return (
         <section className="offcanvasContainer">
-            <div className="offcanvas offcanvas-end" tabIndex="-1" id="offcanvasWithBothOptions"
+            <div className="offcanvas offcanvas-end w-50" tabIndex="-1" id="offcanvasWithBothOptions"
                 aria-labelledby="offcanvasWithBothOptions">
                 <div className="offcanvas-header">
                     <h5 className="offcanvas-title" id="offcanvasWithBothOptions">Backdrop with scrolling</h5>
