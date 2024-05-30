@@ -6,18 +6,18 @@ import Profile from '../Profile/Profile';
 import Map from '../Map/Map';
 import LoginPage from "../Login/LoginPage";
 
-import BookItemPage from "../Catalog/BookItemPage/BookItemPage";
+import BookItemPage from "../BookItemPage/BookItemPage";
 import SignUpPage from "../SignUp/SignUpPage";
 import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";
 import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
 
-const Main = ({setIsAuthenticated}) => {
+const Main = ({isAuthenticated, setIsAuthenticated}) => {
     return (
         <main>
-            <section>
+            <section id="content-section">
                 <Routes>
-                    <Route path="/" element={<HomePage/>}/>
+                    <Route path="/" element={<HomePage isAuthenticated={isAuthenticated}/>}/>
                     <Route path="/catalog" element={<Catalog/>}/>
                     <Route path="/catalog/:id" element={<BookItemPage/>}/>
                     <Route path="/catalog/add" element={<AddBookPage/>}/>

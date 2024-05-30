@@ -1,28 +1,23 @@
-header {
+#logo {
+    color:black;
+    padding: 0 30px;
+}
+
+.navbar-collapse {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background-color: dodgerblue;
-    color: white;
-    height: 15%;
+    justify-content: center;
 }
 
-header > nav {
-    display: flex;
+.navbar-nav {
+    flex-direction: row;
 }
 
-header > h2 {
-    margin-left: 20px;
+.container-fluid {
+    width: 1400px !important;
 }
 
-header > nav > div {
-    display: block;
-    padding: 10px;
-}
-header > nav > div > a{
-    text-decoration: none;
-    color: white;
-}
-.login-ref{
-    margin-right: 20px;
+.nav-item a {
+    color: black;
+    all: unset;
+    cursor: pointer;
 }
