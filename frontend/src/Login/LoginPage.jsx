@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
+import './login.css';
 
 const LoginPage = ({ setIsAuthenticated }) => {
     const [username, setUsername] = useState('');
@@ -19,7 +20,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
 
             const authToken = response.data.token;
             sessionStorage.setItem('token', authToken);
-            setIsAuthenticated(true); // Update authentication state
+            setIsAuthenticated(true);
             navigate('/catalog');
         } catch (error) {
             setError('Login failed. Please check your credentials and try again.');
@@ -28,36 +29,41 @@ const LoginPage = ({ setIsAuthenticated }) => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
+        <div className="login-page">
+            <h2>Svvap</h2>
+            <div className='login-container'>
             <form onSubmit={handleLogin}>
-                <div>
-                    <label htmlFor="username">Username:</label>
+                <div className='username-div'>
                     <input
                         type="text"
                         id="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         required
+                        placeholder={username ? '' : 'Enter your username'}
+                        onFocus={(e) => e.target.placeholder = ''}
+                        onBlur={(e) => e.target.placeholder = username ? '' : 'Enter your username'}
                     />
                 </div>
-                <div>
-                    <label htmlFor="password">Password:</label>
+                <div className="password-div">
                     <input
                         type="password"
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        placeholder={password ? '' : 'Enter your password'}
+                        onFocus={(e) => e.target.placeholder = ''}
+                        onBlur={(e) => e.target.placeholder = password ? '' : 'Enter your password'}
                     />
                 </div>
-                {error && <p style={{color: 'red'}}>{error}</p>}
-                <button type="submit">Login</button>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <button type="submit" className='login-button'>Log In</button>
             </form>
-            <p>
+            <p className="signup-message">
                 Don't have an account? <Link to="/signup">Sign Up</Link>
             </p>
-
+                </div>
         </div>
     );
 };

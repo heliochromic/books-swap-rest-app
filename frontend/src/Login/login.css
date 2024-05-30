@@ -1,0 +1,72 @@
+.login-container, #root > div > main > section > .login-page{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.username-div > label, .password-div > label{
+    margin: 10px;
+}
+
+.login-button {
+    margin-top: 10px;
+    background: linear-gradient(135deg, dodgerblue, dodgerblue);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:hover {
+    background: linear-gradient(135deg, dodgerblue,dodgerblue);
+    transform: scale(1.05);
+}
+
+.login-button:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px dodgerblue;
+}
+
+.password-div > input, .username-div > input{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+}
+
+.password-div > input:focus, .username-div > input:focus{
+    border-color: #6b73ff;
+    box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
+}
+.password-div > input{
+    margin-bottom: 10px;
+}
+.signup-message{
+    margin-top: 20px;
+}

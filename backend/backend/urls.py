@@ -38,5 +38,7 @@ urlpatterns = [
                   path('api/requests/', views.RequestView.as_view(), name='requests'),
                   path('api/requests/<int:pk>', views.RequestItemView.as_view(), name='requests-item'),
                   path('api/user/', views.UserView.as_view(), name='user'),
-                  path('api/logout/', views.LogoutView.as_view(), name='logout')
+                  path('api/logout/', views.LogoutView.as_view(), name='logout'),
+                  path('api/password-change/', views.PasswordChangeView.as_view(), name='password-change'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

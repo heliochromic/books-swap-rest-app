@@ -4,6 +4,7 @@ import os
 
 import requests
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
 from rest_framework import status
@@ -17,7 +18,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
-    UserLocationSerializer, BookSerializer
+    UserLocationSerializer, BookSerializer, UserCatalogSerializer, PasswordChangeSerializer
 
 
 class CatalogView(APIView):
@@ -366,7 +367,7 @@ class UserView(APIView):
         if not (request.user.is_staff or user_instance.django_id == request.user.id):
             return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
 
-        django_id = user_instance.django_id.id if user_instance.django_id else None
+        django_id = user_instance.django.id if user_instance.django_id else None
 
         with transaction.atomic():
             user_instance.delete()
@@ -389,8 +390,30 @@ class ProfileView(APIView):
         if not user:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = UserSerializer(user, many=False)
+        serializer = UserCatalogSerializer(user, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['delete'])  # видалення чужого профілю (токен)
+    def delete(self, request, pk):
+        user_id = pk
+        try:
+            user_instance = User.objects.get(userID=user_id)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        if not (request.user.is_staff or user_instance.django_id == request.user.id):
+            return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+        django_id = user_instance.django.id if user_instance.django_id else None
+
+        with transaction.atomic():
+            user_instance.delete()
+            if django_id:
+                user = DJUser.objects.get(id=django_id)
+                Token.objects.filter(user=user).delete()
+                user.groups.clear()
+                user.delete()
+        return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):
@@ -429,7 +452,7 @@ class SignUpView(APIView):
         phone_number = request.data['phone_number']
         latitude = request.data['latitude']
         longitude = request.data['longitude']
-        image = request.data['image']
+        image = request.data.get('image')
 
         if not username or not password or not mail:
             return Response({"error": "Username, password, and email are required"},
@@ -475,7 +498,7 @@ class MapView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        users = User.objects.all()
+        users = User.objects.exclude(userID=request.user.id)
         serializer = UserLocationSerializer(users, many=True)
         return Response(serializer.data)
 
@@ -492,3 +515,22 @@ class LogoutView(APIView):
             return Response(status=status.HTTP_200_OK, data={"message": "Successfully logged out"})
         except Token.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST, data={"error": "Token not found"})
+
+
+class PasswordChangeView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        serializer = PasswordChangeSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        if not user.check_password(serializer.validated_data['current_password']):
+            return Response({"current_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+
+        return Response({"detail": "Password has been changed successfully."}, status=status.HTTP_200_OK)

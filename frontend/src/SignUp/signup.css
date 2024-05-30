@@ -1,0 +1,124 @@
+.signup-container {
+  width: 100%;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
+}
+
+.signup-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.signup-form {
+  margin-bottom: 20px;
+}
+
+.signup-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+#signup-image{
+    width: 120px;
+    height: 120px;
+    margin-right: 10px;
+    border-radius: 50%;
+}
+#signup-mapid{
+    margin: 20px 0 20px 0;
+    max-width: 400px;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+.loading {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 50px;
+}
+/* login.css */
+.input-username,
+.input-password,
+.input-first-name,
+.input-last-name,
+.input-age,
+.input-email,
+.input-phone-number{
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+    text-align: center;
+    outline: none;
+}
+
+.input-username:focus,
+.input-password:focus,
+.input-first-name:focus,
+.input-last-name:focus,
+.input-age:focus,
+.input-email:focus,
+.input-phone-number:focus {
+    border-color: #6b73ff;
+    box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
+}
+
+.input-username::placeholder,
+.input-password::placeholder,
+.input-first-name::placeholder,
+.input-last-name::placeholder,
+.input-age::placeholder,
+.input-email::placeholder,
+.input-phone-number::placeholder {
+    color: #999;
+}
+.signup-button, #image-delete{
+    margin-top: 10px;
+    background: linear-gradient(135deg, dodgerblue, dodgerblue);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#image-delete{
+    background: linear-gradient(135deg, #f44336, #f44336);
+    margin-right: 10px;
+}
+
+.signup-button:hover, #image-delete:hover {
+    background: linear-gradient(135deg, dodgerblue,dodgerblue);
+    transform: scale(1.05);
+}
+ #image-delete:hover{
+      background: linear-gradient(135deg, #f44336,#f44336);
+ }
+.signup-button:active, #image-delete:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.signup-button:focus, #image-delete:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px dodgerblue;
+}
+#image-delete:focus{
+    box-shadow: 0 0 0 3px #f44336;
+}
