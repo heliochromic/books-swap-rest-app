@@ -19,12 +19,17 @@ class User(models.Model):
     longitude = models.FloatField(null=True)
     rating = models.IntegerField(default=0)
     image = models.ImageField(upload_to='images/users/', help_text="Upload your image",
-                              default='images/users/default.png')
+                              default='images/users/default.png', null=False)
     registration_date = models.DateField(default=datetime.now)
     django = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.first_name}, {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        if not self.image:
+            self.image = 'images/users/default.png'
+        super(User, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('user', kwargs={'pk': str(self.userID)})

@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles.css'
+import './profile.css'
+import {Link} from "react-router-dom";
+import {getConfig} from "../utils";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -26,15 +28,8 @@ const Profile = () => {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const token = sessionStorage.getItem('token');
-        const csrftoken = getCookie('csrftoken');
-        const config = {
-          headers: {
-            'X-CSRFToken': csrftoken,
-            'Authorization': `Token ${token}`
-          }
-        };
-        const response = await axios.get('http://localhost:8000/api/user/', config);
+
+        const response = await axios.get('http://localhost:8000/api/user/', getConfig());
         setUserProfile(response.data);
         setLoading(false);
         if(!initialProfileRef.current){
@@ -52,7 +47,7 @@ const Profile = () => {
   useEffect(() => {
     if (userProfile && !mapRef.current) {
       document.getElementById('profile-image').src = 'http://localhost:8000' + userProfile.image
-      if(userProfile.image == "/media/images/users/default.png"){
+      if(userProfile.image === "/media/images/users/default.png"){
         setImagePresent(false)
       }
       const newLatLng = L.latLng(userProfile.latitude, userProfile.longitude);
@@ -65,14 +60,14 @@ const Profile = () => {
 
       markerRef.current.setIcon(newIcon);
 
-      const mapElement = document.getElementById('mapid'); // Get the map container element
+      const mapElement = document.getElementById('profile-mapid');
       const newMap = L.map(mapElement).setView([userProfile.latitude, userProfile.longitude], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
       }).addTo(newMap);
 
       markerRef.current.addTo(newMap);
-      mapRef.current = newMap; // Store map instance in ref
+      mapRef.current = newMap;
       markerRef.current.setLatLng(newLatLng);
     }
     else if (userProfile){
@@ -124,15 +119,6 @@ const Profile = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const token = sessionStorage.getItem('token');
-      const csrftoken = getCookie('csrftoken');
-      const config = {
-        headers: {
-          'X-CSRFToken': csrftoken,
-          'Authorization': `Token ${token}`,
-          'Content-Type': 'multipart/form-data'
-        }
-      };
       const formData = new FormData();
       formData.append('first_name', userProfile.first_name);
       formData.append('last_name', userProfile.last_name);
@@ -149,7 +135,7 @@ const Profile = () => {
       else if (imagePresent){
         formData.append('imageNotUpdated', true)
      }
-      await axios.put('http://localhost:8000/api/user/', formData, config);
+      await axios.put('http://localhost:8000/api/user/', formData, getConfig());
 
       alert('Profile updated successfully!');
       setIsEditing(false);
@@ -186,12 +172,13 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h1>User Profile</h1>
+      <h1>{userProfile.djuser.username}</h1>
       {userProfile && (
           <form className="profile-form" onSubmit={handleSubmit}>
-            <div>
+            <div className="input-group">
               <img id="profile-image" src="" alt="Profile Image"/>
-              {(imagePresent && isEditing) && <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
+              {(imagePresent && isEditing) &&
+                  <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
               {isEditing && <input
                   type="file"
                   id="image"
@@ -201,8 +188,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />}
             </div>
-            <div>
-              <label htmlFor="first_name">First Name:</label>
+            <div className='input-group'>
+              <span htmlFor="first_name">First Name:</span>
               <input
                   type="text"
                   id="first_name"
@@ -213,8 +200,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="last_name">Last Name:</label>
+            <div className='input-group'>
+              <span htmlFor="last_name">Last Name:</span>
               <input
                   type="text"
                   id="last_name"
@@ -225,8 +212,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="age">Age:</label>
+            <div className='input-group'>
+              <span htmlFor="age">Age:</span>
               <input
                   type="number"
                   id="age"
@@ -237,8 +224,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="mail">Email:</label>
+            <div className='input-group'>
+              <span htmlFor="mail">Email:</span>
               <input
                   type="email"
                   id="mail"
@@ -249,8 +236,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="phone_number">Phone Number:</label>
+            <div className='input-group'>
+              <span htmlFor="phone_number">Phone Number:</span>
               <input
                   type="text"
                   id="phone_number"
@@ -261,24 +248,22 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div id="mapid" style={{height: '200px', width: '100%'}}></div>
+            <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
             <div className="button-container">
               {isEditing ? (
-                  <button type="button" onClick={handleCancelClick}>Cancel</button>
+                  <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               ) : (
-                  <button type="button" onClick={() => setIsEditing(true)}>Edit Profile</button>
+                  <button type="button" className="edit-button" onClick={() => setIsEditing(true)}>Edit Profile</button>
               )}
-              {isEditing && <button type="submit">Save Changes</button>}
+              {isEditing && <button type="submit" className="save-button">Save Changes</button>}
+            </div>
+            <div>
+              <Link to="/password-change">Change password</Link>
             </div>
           </form>
+
       )}
     </div>
   );
 };
-
-const getCookie = (name) => {
-  const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*([^;]+)');
-  return cookieValue ? cookieValue.pop() : '';
-};
-
 export default Profile;

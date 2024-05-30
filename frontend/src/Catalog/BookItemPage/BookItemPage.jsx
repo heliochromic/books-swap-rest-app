@@ -40,40 +40,57 @@ const BookItemPage = () => {
             <div className="container py-4 my-5">
                 <div className="row gx-4 gx-lg-5 align-items-center">
                     <div className="col-md-12">
-                        <div id="carouselExampleAutoplaying" className="carousel slide carousel-dark mx-auto"
+                        <div id="carouselExampleAutoplaying" className="carousel slide carousel-dark mb-5 mx-auto"
                              data-bs-ride="carousel ">
                             <div className="carousel-indicators">
                                 <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="0"
-                                        className="active" aria-current="true" aria-label="Slide 1"></button>
-                                <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="1"
-                                        aria-label="Slide 2"></button>
-                                <button type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide-to="2"
-                                        aria-label="Slide 3"></button>
+                                        className="active" aria-current="true" aria-label="Slide 1">
+                                </button>
+                                {book.photo2 && <button type="button" data-bs-target="#carouselExampleAutoplaying"
+                                                        data-bs-slide-to="1"
+                                                        aria-label="Slide 2"></button>}
+                                {book.photo3 && <button type="button" data-bs-target="#carouselExampleAutoplaying"
+                                                        data-bs-slide-to="2"
+                                                        aria-label="Slide 3"></button>}
                             </div>
                             <div className="carousel-inner">
                                 <div className="carousel-item active imageDetail">
-                                    <img src={`http://localhost:8000/${book.photo}`} className="d-block w-100"
-                                         alt="..."/>
+                                    <span className="imageDetailCrop"
+                                          style={{
+                                              backgroundImage: `url(http://localhost:8000${book.photo})`,
+                                          }}>
+                                    </span>
                                 </div>
-                                <div className="carousel-item imageDetail">
-                                    <img src={`http://localhost:8000/${book.photo2}`} className="d-block w-100"
-                                         alt="..."/>
-                                </div>
-                                <div className="carousel-item imageDetail">
-                                    <img src={`http://localhost:8000/${book.photo3}`} className="d-block w-100"
-                                         alt="..."/>
-                                </div>
+                                {book.photo2 && <div className="carousel-item imageDetail">
+                                    <span className="imageDetailCrop"
+                                          style={{
+                                              backgroundImage: `url(http://localhost:8000${book.photo2})`,
+                                          }}>
+                                    </span>
+                                </div>}
+                                {book.photo3 && <div className="carousel-item imageDetail">
+                                    <span className="imageDetailCrop"
+                                          style={{
+                                              backgroundImage: `url(http://localhost:8000${book.photo3})`,
+                                          }}>
+                                    </span>
+                                </div>}
                             </div>
-                            <button className="carousel-control-prev" type="button"
-                                    data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
-                                <span className="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Previous</span>
-                            </button>
-                            <button className="carousel-control-next" type="button"
-                                    data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
-                                <span className="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span className="visually-hidden">Next</span>
-                            </button>
+                            {book.photo2 && (
+                                <>
+                                    <button className="carousel-control-prev" type="button"
+                                            data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+                                        <span className="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Previous</span>
+                                    </button>
+                                    <button className="carousel-control-next" type="button"
+                                            data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+                                        <span className="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span className="visually-hidden">Next</span>
+                                    </button>
+                                </>
+                            )
+                            }
                         </div>
                     </div>
                     <div className="col-md-12">

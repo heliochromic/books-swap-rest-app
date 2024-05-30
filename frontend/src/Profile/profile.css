@@ -1,0 +1,145 @@
+.profile-container, .change-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.change-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.profile-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.profile-form {
+  margin-bottom: 20px;
+}
+
+.profile-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.profile-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.map-container {
+  height: 200px;
+  margin-bottom: 20px;
+}
+
+.map-container #profile-mapid {
+  height: 100%;
+  width: 100%;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+.loading {
+  font-size: 18px;
+  text-align: center;
+  margin-top: 50px;
+}
+
+#profile-image{
+  border-radius: 50%;
+  max-width: 200px;
+}
+#first_name, #last_name, #age, #mail, #phone_number, #cur-password, #new-password{
+    width: 100%;
+    padding: 10px 10px 10px 20px;
+    margin: 5px 10px;
+    display: flex;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    box-sizing: border-box;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    font-size: 16px;
+    text-align: left;
+    outline: none;
+    flex: 1;
+    max-width: 200px;
+}
+#cur-password, #new-password{
+    max-width: 300px;
+}
+
+#first_name:read-only, #last_name:read-only,
+#age:read-only, #mail:read-only, #phone_number:read-only{
+    border: 0;
+}
+#first_name:focus, #last_name:focus,
+#age:focus, #mail:focus, #phone_number:focus,
+#cur-password:focus, #new-password:focus{
+  border-color: #6b73ff;
+  box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
+}
+#first_name:read-only:focus, #last_name:read-only:focus,
+#age:read-only:focus, #mail:read-only:focus, #phone_number:read-only:focus{
+    box-shadow: 0 0 0 0;
+}
+
+.edit-button, .cancel-button, .save-button, .change-button{
+    margin-top: 10px;
+    background: linear-gradient(135deg, dodgerblue, dodgerblue);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-button{
+    background: linear-gradient(135deg, #f44336, #f44336);
+    margin-right: 10px;
+}
+
+.edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover{
+    background: linear-gradient(135deg, dodgerblue,dodgerblue);
+    transform: scale(1.05);
+}
+.cancel-button:hover{
+      background: linear-gradient(135deg, #f44336,#f44336);
+ }
+.edit-button:active, .save-button:active, .cancel-button:active, .change-button:active{
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button:focus, .save-button:focus, .cancel-button:focus, .change-button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px dodgerblue;
+}
+.cancel-button:focus{
+    box-shadow: 0 0 0 3px #f44336;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+    flex-direction: row;
+    text-align: center;
+    justify-content: center;
+}
+.input-group label {
+  margin-right: 10px;
+}
