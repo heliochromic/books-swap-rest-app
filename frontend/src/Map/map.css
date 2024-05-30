@@ -4,6 +4,11 @@ html, body, #root, .App, main > section, #mapid {
     padding: 0;
     width: 100%;
 }
+
+#mapid {
+    border-radius: 30px;
+}
+
 main{
     height: 100%;
 }

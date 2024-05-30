@@ -1,7 +1,3 @@
-.catalog {
-    margin-top: 100px;
-}
-
 .catalogContainer {
     display: flex;
     flex-wrap: wrap;

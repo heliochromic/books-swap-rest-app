@@ -1,9 +1,10 @@
 main {
     display: flex;
+    padding-top:50px;
     justify-content: center;
 }
 
-#content-section {
-    margin: 0 auto;
+section {
+    margin: 20px auto;
     max-width: 1200px;
 }

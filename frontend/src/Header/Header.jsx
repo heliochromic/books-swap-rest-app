@@ -33,7 +33,7 @@ const Header = () => {
 
     return (
         <Router>
-            <nav className="navbar navbar-secondary navbar-expand-lg">
+            <nav className="navbar navbar-secondary navbar-expand-lg mt-1">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/">
                         <h2 id="logo">
@@ -46,26 +46,26 @@ const Header = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
-                            {isAuthenticated && <li className="nav-item m-1">
+                            {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/catalog">Catalog</Link>
                             </li>}
-                            {isAuthenticated && <li className="nav-item m-1">
+                            {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/profile">Profile</Link>
                             </li>}
-                            {isAuthenticated && <li className="nav-item m-1">
+                            {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/map">Map</Link>
                             </li>}
                             {isAuthenticated &&
-                                <li className="nav-item m-1" type="button" data-bs-toggle="offcanvas"
+                                <li className="nav-item mx-2" type="button" data-bs-toggle="offcanvas"
                                     data-bs-target="#offcanvasWithBothOptions">
                                     <div>
                                         Requests
                                     </div>
                                 </li>}
-                            {!isAuthenticated && <li className="nav-item m-1">
-                                <Link to="/login">Log In</Link>
-                            </li>}
-                            {isAuthenticated && <li className="nav-item m-1">
+                            {/*{!isAuthenticated && <li className="nav-item mx-2">*/}
+                            {/*    <Link to="/login">Log In</Link>*/}
+                            {/*</li>}*/}
+                            {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/" onClick={handleLogout}>Logout</Link>
                             </li>}
                         </ul>
@@ -73,7 +73,7 @@ const Header = () => {
                 </div>
             </nav>
             {/*{isAuthenticated && <Offcanvas/>}*/}
-            <Main setIsAuthenticated={setIsAuthenticated}/>
+            <Main isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
         </Router>
     );
 };
