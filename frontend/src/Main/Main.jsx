@@ -6,7 +6,7 @@ import Profile from '../Profile/Profile';
 import Map from '../Map/Map';
 import LoginPage from "../Login/LoginPage";
 
-import BookItemPage from "../Catalog/BookItemPage/BookItemPage";
+import BookItemPage from "../BookItemPage/BookItemPage";
 import SignUpPage from "../SignUp/SignUpPage";
 import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";

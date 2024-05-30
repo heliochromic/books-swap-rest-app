@@ -13,11 +13,12 @@ const LoginPage = ({ setIsAuthenticated }) => {
         e.preventDefault();
 
         try {
+            console.log(username, password)
             const response = await axios.post('http://localhost:8000/api/login/', {
                 username,
                 password
             });
-
+            console.log(response)
             const authToken = response.data.token;
             sessionStorage.setItem('token', authToken);
             setIsAuthenticated(true);
@@ -29,41 +30,42 @@ const LoginPage = ({ setIsAuthenticated }) => {
     };
 
     return (
-        <div className="login-page">
-            <h2>Svvap</h2>
-            <div className='login-container'>
-            <form onSubmit={handleLogin}>
-                <div className='username-div'>
-                    <input
-                        type="text"
-                        id="username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                        placeholder={username ? '' : 'Enter your username'}
-                        onFocus={(e) => e.target.placeholder = ''}
-                        onBlur={(e) => e.target.placeholder = username ? '' : 'Enter your username'}
-                    />
+        <div className="login-page d-flex justify-content-center align-items-center h-75">
+            <div className="container">
+                <div className="row justify-content-center">
+                    <div className="col-md-6 col-lg-3">
+                        <h1 className="text-center mb-3">Log in</h1>
+                        <div className='login-container'>
+                            <form onSubmit={handleLogin} className="text-center">
+                                <div className="mb-4">
+                                    <input required
+                                           type="text"
+                                           value={username}
+                                           className="form-control"
+                                           id="exampleInputEmail"
+                                           placeholder="Enter your username"
+                                           onChange={(e) => setUsername(e.target.value)}
+                                           aria-describedby="emailHelp" />
+                                </div>
+                                <div className="mb-4">
+                                    <input required
+                                           type="password"
+                                           value={password}
+                                           className="form-control"
+                                           id="exampleInputPassword"
+                                           onChange={(e) => setPassword(e.target.value)}
+                                           placeholder="Enter your password" />
+                                </div>
+                                <button type="submit" className="btn btn-primary w-100">Submit</button>
+                                {error && <p style={{color: 'red'}}>{error}</p>}
+                            </form>
+                            <p className="signup-message text-center mt-3">
+                                Don't have an account? <Link to="/signup">Sign Up</Link>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div className="password-div">
-                    <input
-                        type="password"
-                        id="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        placeholder={password ? '' : 'Enter your password'}
-                        onFocus={(e) => e.target.placeholder = ''}
-                        onBlur={(e) => e.target.placeholder = password ? '' : 'Enter your password'}
-                    />
-                </div>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-                <button type="submit" className='login-button'>Log In</button>
-            </form>
-            <p className="signup-message">
-                Don't have an account? <Link to="/signup">Sign Up</Link>
-            </p>
-                </div>
+            </div>
         </div>
     );
 };
