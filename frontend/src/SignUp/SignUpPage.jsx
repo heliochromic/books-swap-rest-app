@@ -54,7 +54,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
 
       markerRef.current.setIcon(newIcon);
 
-      const mapElement = document.getElementById('mapid'); // Get the map container element
+      const mapElement = document.getElementById('signup-mapid'); // Get the map container element
       const newMap = L.map(mapElement).setView([50.46446973182625, 30.51927042844712], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
@@ -258,9 +258,9 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onBlur={(e) => e.target.placeholder = userProfile.phone_number ? '' : 'Enter your phone number'}
               />
             </div>
-            <div id="mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="button-container">
-              <button type="submit">Sign Up</button>
+            <div id="signup-mapid" style={{height: '200px', width: '100%'}}></div>
+            <div>
+              <button type="submit" className="signup-button">Sign Up</button>
             </div>
           </form>
       )}

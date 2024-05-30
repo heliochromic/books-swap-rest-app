@@ -28,28 +28,33 @@ const PasswordChange = () => {
     };
 
     return (
-        <div>
-            <h2>Change Password</h2>
+        <div className="change-container">
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label>Current Password:</label>
+                <div className="input-group">
                     <input
                         type="password"
+                        id="cur-password"
                         value={currentPassword}
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         required
+                        placeholder={currentPassword ? '' : 'Enter your current password'}
+                        onFocus={(e) => e.target.placeholder = ''}
+                        onBlur={(e) => e.target.placeholder = currentPassword ? '' : 'Enter your current password'}
                     />
                 </div>
-                <div>
-                    <label>New Password:</label>
+                <div className="input-group">
                     <input
                         type="password"
+                        id="new-password"
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         required
+                         placeholder={newPassword ? '' : 'Enter your new password'}
+                        onFocus={(e) => e.target.placeholder = ''}
+                        onBlur={(e) => e.target.placeholder = newPassword ? '' : 'Enter your new password'}
                     />
                 </div>
-                <button type="submit">Change Password</button>
+                <button type="submit" className="change-button">Change Password</button>
             </form>
             {message && <p>{message}</p>}
         </div>

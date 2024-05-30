@@ -23,29 +23,12 @@
 #signup-image{
     width: 120px;
     height: 120px;
-    margin: auto;
+    margin-right: 10px;
     border-radius: 50%;
 }
-#mapid{
+#signup-mapid{
     margin: 20px 0 20px 0;
-}
-.button-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.button-container button {
-  padding: 10px 20px;
-  font-size: 16px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.button-container button:hover {
-  background-color: #4CAF50;
-  color: white;
+    max-width: 400px;
 }
 
 .error-message {
@@ -98,4 +81,44 @@
 .input-email::placeholder,
 .input-phone-number::placeholder {
     color: #999;
+}
+.signup-button, #image-delete{
+    margin-top: 10px;
+    background: linear-gradient(135deg, dodgerblue, dodgerblue);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+#image-delete{
+    background: linear-gradient(135deg, #f44336, #f44336);
+    margin-right: 10px;
+}
+
+.signup-button:hover, #image-delete:hover {
+    background: linear-gradient(135deg, dodgerblue,dodgerblue);
+    transform: scale(1.05);
+}
+ #image-delete:hover{
+      background: linear-gradient(135deg, #f44336,#f44336);
+ }
+.signup-button:active, #image-delete:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.signup-button:focus, #image-delete:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px dodgerblue;
+}
+#image-delete:focus{
+    box-shadow: 0 0 0 3px #f44336;
 }

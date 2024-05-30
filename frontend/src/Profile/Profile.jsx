@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './styles.css'
+import './profile.css'
 import {Link} from "react-router-dom";
 import {getConfig} from "../utils";
 
@@ -60,7 +60,7 @@ const Profile = () => {
 
       markerRef.current.setIcon(newIcon);
 
-      const mapElement = document.getElementById('mapid');
+      const mapElement = document.getElementById('profile-mapid');
       const newMap = L.map(mapElement).setView([userProfile.latitude, userProfile.longitude], 13);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; OpenStreetMap contributors'
@@ -172,10 +172,10 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h1>User Profile</h1>
+      <h1>{userProfile.djuser.username}</h1>
       {userProfile && (
           <form className="profile-form" onSubmit={handleSubmit}>
-            <div>
+            <div className="input-group">
               <img id="profile-image" src="" alt="Profile Image"/>
               {(imagePresent && isEditing) &&
                   <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
@@ -188,8 +188,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />}
             </div>
-            <div>
-              <label htmlFor="first_name">First Name:</label>
+            <div className='input-group'>
+              <span htmlFor="first_name">First Name:</span>
               <input
                   type="text"
                   id="first_name"
@@ -200,8 +200,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="last_name">Last Name:</label>
+            <div className='input-group'>
+              <span htmlFor="last_name">Last Name:</span>
               <input
                   type="text"
                   id="last_name"
@@ -212,8 +212,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="age">Age:</label>
+            <div className='input-group'>
+              <span htmlFor="age">Age:</span>
               <input
                   type="number"
                   id="age"
@@ -224,8 +224,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="mail">Email:</label>
+            <div className='input-group'>
+              <span htmlFor="mail">Email:</span>
               <input
                   type="email"
                   id="mail"
@@ -236,8 +236,8 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div>
-              <label htmlFor="phone_number">Phone Number:</label>
+            <div className='input-group'>
+              <span htmlFor="phone_number">Phone Number:</span>
               <input
                   type="text"
                   id="phone_number"
@@ -248,14 +248,14 @@ const Profile = () => {
                   readOnly={!isEditing}
               />
             </div>
-            <div id="mapid" style={{height: '200px', width: '100%'}}></div>
+            <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
             <div className="button-container">
               {isEditing ? (
-                  <button type="button" onClick={handleCancelClick}>Cancel</button>
+                  <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               ) : (
-                  <button type="button" onClick={() => setIsEditing(true)}>Edit Profile</button>
+                  <button type="button" className="edit-button" onClick={() => setIsEditing(true)}>Edit Profile</button>
               )}
-              {isEditing && <button type="submit">Save Changes</button>}
+              {isEditing && <button type="submit" className="save-button">Save Changes</button>}
             </div>
             <div>
               <Link to="/password-change">Change password</Link>
