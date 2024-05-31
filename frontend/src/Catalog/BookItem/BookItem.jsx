@@ -9,8 +9,8 @@ const BookItem = ({bookItem}) => {
         <div className="bookItemCard">
             <a href={`http://localhost:3000/catalog/${itemID}`}>
                 <div className="card rounded-5">
-                    <div className="card-img-top pt-3">
-                        <span className="card-img-fit"
+                    <div className="card-img-top p-3 overflow-hidden">
+                        <span className="card-img-fit overflow-hidden"
                               style={{
                                   backgroundImage: `url(http://localhost:8000/${photo})`,
                               }}/>

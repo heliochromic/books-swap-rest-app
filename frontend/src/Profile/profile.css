@@ -17,7 +17,7 @@
     width: 50%;
     height: 800px;
     border-left: 1px solid darkgray;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 .change-container {
     display: flex;
@@ -190,4 +190,23 @@
     text-align: center;
     align-items: center;
     justify-content: center;
+}
+
+
+.my-books::-webkit-scrollbar {
+    width: 12px; /* Width of the scrollbar */
+}
+
+.my-books::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Background of the scrollbar track */
+    border-radius: 10px;
+}
+
+.my-books::-webkit-scrollbar-thumb {
+    background: #888; /* Color of the scrollbar thumb */
+    border-radius: 10px;
+}
+
+.my-books::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Color of the scrollbar thumb on hover */
 }
