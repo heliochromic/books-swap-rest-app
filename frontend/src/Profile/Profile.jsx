@@ -158,6 +158,7 @@ const Profile = () => {
     document.getElementById('profile-image').src = 'http://localhost:8000/media/images/users/default.png'
     setImagePresent(false)
     if (image_ref.current) {
+      image_ref.current.value = null
       image_ref.current = null;
     }
   }
@@ -175,7 +176,7 @@ const Profile = () => {
       <h1>@{userProfile.djuser.username}</h1>
       {userProfile && (
           <form className="profile-form" onSubmit={handleSubmit}>
-            <div className="profile-input-group">
+            <div className="">
               <img id="profile-image" src="" alt="Profile Image"/>
               {(imagePresent && isEditing) &&
                   <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
@@ -194,7 +195,7 @@ const Profile = () => {
                   type="text"
                   id="first_name"
                   name="first_name"
-                  className="profile-first-name"
+                  className="form-control"
                   ref={first_name_ref}
                   value={userProfile.first_name}
                   onChange={handleInputChange}
@@ -207,7 +208,7 @@ const Profile = () => {
                   type="text"
                   id="last_name"
                   name="last_name"
-                  className="profile-last-name"
+                  className="form-control"
                   value={userProfile.last_name}
                   ref={last_name_ref}
                   onChange={handleInputChange}
@@ -220,7 +221,7 @@ const Profile = () => {
                   type="number"
                   id="age"
                   name="age"
-                  className="profile-age"
+                  className="form-control"
                   ref={age_ref}
                   value={userProfile.age}
                   onChange={handleInputChange}
@@ -233,7 +234,7 @@ const Profile = () => {
                   type="email"
                   id="mail"
                   name="mail"
-                  className="profile-mail"
+                  className="form-control"
                   ref={mail_ref}
                   value={userProfile.mail}
                   onChange={handleInputChange}
@@ -246,7 +247,7 @@ const Profile = () => {
                   type="text"
                   id="phone_number"
                   name="phone_number"
-                  className="profile-phone-number"
+                  className="form-control"
                   ref={phone_number_ref}
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
@@ -254,7 +255,7 @@ const Profile = () => {
               />
             </div>
             <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="button-container">
+            <div className="profile-button-container">
               {isEditing ? (
                   <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               ) : (

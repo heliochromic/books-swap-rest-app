@@ -153,7 +153,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
     <div className="signup-container">
       {userProfile && (
           <form className="signup-form" onSubmit={handleSubmit}>
-            <div>
+            <div className="mb-4">
               <img id="signup-image" src="" alt="Profile Image" onError={(e) => (e.target.src = "http://localhost:8000/media/images/users/default.png")}/>
               {(imagePresent) &&
                   <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
@@ -161,103 +161,90 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="file"
                   id="image"
                   name="image"
+                  className="mt-3"
                   ref={image_ref}
                   onChange={handleInputChange}
               />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="text"
                   id="username"
                   name="username"
-                  className="input-username"
+                  className="form-control text-center"
                   value={userProfile.username}
                   onChange={handleInputChange}
                   placeholder={userProfile.username ? '' : 'Enter your username'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.username ? '' : 'Enter your username'}
-              />
+                 />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="password"
                   id="password"
                   name="password"
-                  className="input-password"
+                  className="form-control text-center"
                   value={userProfile.password}
                   onChange={handleInputChange}
                   placeholder={userProfile.password ? '' : 'Enter your password'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.password ? '' : 'Enter your password'}
-              />
+                />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="text"
                   id="first_name"
                   name="first_name"
-                  className="input-first-name"
+                  className="form-control text-center"
                   value={userProfile.first_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.first_name ? '' : 'Enter your first name'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.first_name ? '' : 'Enter your first name'}
-              />
+                 />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="text"
                   id="last_name"
                   name="last_name"
-                  className="input-last-name"
+                  className="form-control text-center"
                   value={userProfile.last_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.last_name ? '' : 'Enter your last name'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.last_name ? '' : 'Enter your last name'}
-              />
+                 />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="text"
                   id="age"
                   name="age"
-                  className="input-age"
+                  className="form-control text-center"
                   value={userProfile.age}
                   onChange={handleInputChange}
                   placeholder={userProfile.age ? '' : 'Enter your age'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.age ? '' : 'Enter your age'}
-              />
+                 />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="email"
                   id="mail"
                   name="mail"
-                  className="input-email"
+                  className="form-control text-center"
                   value={userProfile.mail}
                   onChange={handleInputChange}
                   placeholder={userProfile.email ? '' : 'Enter your email'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.email ? '' : 'Enter your email'}
-              />
+                  />
             </div>
-            <div className="signup-input-group">
+            <div className="mb-3">
               <input
                   type="text"
                   id="phone_number"
                   name="phone_number"
-                  className="input-phone-number"
+                  className="form-control text-center"
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
                   placeholder={userProfile.phone_number ? '' : 'Enter your phone number'}
-                  onFocus={(e) => e.target.placeholder = ''}
-                  onBlur={(e) => e.target.placeholder = userProfile.phone_number ? '' : 'Enter your phone number'}
-              />
+                 />
             </div>
             <div id="signup-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="signup-input-group">
+            <div className="mb-3 mx-auto">
               <button type="submit" className="signup-button">Sign Up</button>
             </div>
           </form>

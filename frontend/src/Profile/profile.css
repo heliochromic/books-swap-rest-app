@@ -23,6 +23,10 @@
 .profile-form {
     margin-bottom: 20px;
     width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .catalogContainer {
@@ -64,33 +68,22 @@
 }
 
 #profile-image {
+    width: 120px;
+    height: 120px;
+    margin-right: 10px;
     border-radius: 50%;
-    max-width: 200px;
+    margin-bottom: 10px;
 }
 
-.profile-first-name, .profile-last-name, .profile-age,
-.profile-mail, .profile-phone-number, #cur-password, #new-password {
-    width: 100%;
-    padding: 10px 10px 10px 20px;
-    margin: 5px 10px;
-    display: flex;
-    border: 1px solid #ccc;
+.form-control, #cur-password, #new-password {
     border-radius: 25px;
-    box-sizing: border-box;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    font-size: 16px;
-    text-align: left;
-    outline: none;
-    flex: 1;
-    max-width: 200px;
 }
 
 #cur-password, #new-password {
     max-width: 300px;
 }
 
-.profile-first-name:read-only, .profile-last-name:read-only, .profile-age:read-only,
-.profile-mail:read-only, .profile-phone-number:read-only {
+.form-control:read-only {
     border: 0;
 }
 
@@ -150,8 +143,13 @@
     margin-top: 20px;
 }
 
-.password-reset-link {
+.password-reset-link, .profile-button-container {
+    width: 40%;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
 .cancel-button:focus {
@@ -159,15 +157,18 @@
 }
 
 .profile-input-group, .signup-input-group {
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: row;
     text-align: center;
     justify-content: center;
+    margin-bottom: 5px;
 }
 
 .input-group label {
     margin-right: 10px;
+    width: 50%
 }
 
 .profile-input-group > #image-delete {

@@ -10,3 +10,10 @@
     border-radius: 23px;
     padding: 80px 60px;
 }
+#landing-page > div > div.col-lg-5.my-auto > div > a:nth-child(1) > button,
+#landing-page > div > div.col-lg-5.my-auto > div > a:nth-child(2) > button{
+    border-radius: 25px;
+}
+#landing-page > div > div.col-lg-5.my-auto > div > a:nth-child(1) > button{
+    margin-left: 0 !important;;
+}
