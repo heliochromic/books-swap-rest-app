@@ -104,6 +104,7 @@ const RequestModal = () => {
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
                                         type="button"
+                                        style={{ borderRadius: '25px' }}
                                     >
                                         Exchange books
                                     </button>
