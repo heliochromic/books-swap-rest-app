@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from "react";
-import {useRef} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import axios from "axios";
 import "./AddBookPage.css";
 import ImagePreview from './ImagePreview';
+import {fetchBook} from "../utils";
 
 const AddBookPage = () => {
     const [isbn, setIsbn] = useState('');
@@ -24,41 +24,33 @@ const AddBookPage = () => {
 
     useEffect(() => {
         if (isbn.length === 10 || isbn.length === 13) {
-            checkISBN();
+            checkISBN().then(r => console.log(r));
         }
     }, [isbn]);
 
     const checkISBN = async () => {
         setLoading(true);
         try {
-            const token = sessionStorage.getItem('token');
-
-            const config = {
-                headers: {
-                    'Authorization': `Token ${token}`
-                }
-            };
-
-            console.log('hehe')
-            const response = await axios.post('http://localhost:8000/api/isbn/', {
-                'isbn': isbn
-            }, config);
-
-            setBook(response.data);
-            setFormValues({
-                title: response.data.title,
-                author: response.data.author,
-                genre: response.data.genre,
-                language: response.data.language,
-                pages: response.data.pages,
-                year: response.data.year,
-                description: response.data.description,
-            });
+            const response = await fetchBook(isbn);
+            if (response) {
+                setBook(response);
+                setFormValues({
+                    title: response.title,
+                    author: response.authors ? response.authors.join(', ') : '',
+                    genre: response.categories ? response.categories.join(', ') : '',
+                    language: response.language,
+                    pages: response.pageCount,
+                    year: response.publishedDate ? response.publishedDate.split('-')[0] : '',
+                    description: response.description,
+                    status: ''
+                });
+            } else {
+                alert("Unable to fetch book data, please fill in the data manually");
+            }
         } catch (err) {
             setError(err);
         } finally {
             setLoading(false);
-            alert("Unable to fetch book data, please fill in the data manually")
         }
     };
 
@@ -244,7 +236,7 @@ const AddBookPage = () => {
                                     onChange={handleInputChange}
                                     required
                                 >
-                                    <option val="" disabled>
+                                    <option value="" disabled>
                                         Condition: A (Best) - E (Worst)
                                     </option>
                                     <option value="A">A - Best</option>

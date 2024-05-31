@@ -3,7 +3,7 @@ import '../Catalog.css';
 import {truncateDescription} from '../../utils'
 
 const BookItem = ({bookItem}) => {
-    const {itemID, photo, bookID} = bookItem;
+    const {itemID, photo} = bookItem;
     const truncatedDescription = truncateDescription(bookItem.description, 80); // Truncate to 100 characters
 
     return (

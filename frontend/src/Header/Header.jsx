@@ -4,7 +4,6 @@ import './Header.css';
 import axios from "axios";
 import Main from '../Main/Main';
 import {getConfig} from '../utils'
-import Offcanvas from "../Offcanvas/Offcanvas";
 
 const Header = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -66,7 +65,6 @@ const Header = () => {
                     </div>
                 </div>
             </nav>
-            {isAuthenticated && <Offcanvas/>}
             <Main isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/>
         </Router>
     );
