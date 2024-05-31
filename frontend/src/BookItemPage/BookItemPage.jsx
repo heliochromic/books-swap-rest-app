@@ -109,7 +109,7 @@ const BookItemPage = () => {
                         <div>
                             <p className="lead">{book.description}</p>
                         </div>
-                        <RequestModal/>
+                        <RequestModal />
                     </div>
                 </div>
             </div>
