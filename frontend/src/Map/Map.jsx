@@ -34,7 +34,7 @@ const Map = () => {
                                      alt="Profile Image" 
                                      onerror="this.onerror=null;this.src='http://localhost:8000/media/images/users/default.png';"
                                      class="miniature-image">
-                                <strong class="miniature-username">
+                                <strong class="miniature-username mb-2">
                                     <a href="/user/${user.userID}">
                                         ${user.djuser ? user.djuser.username : 'Unknown User'}
                                     </a>

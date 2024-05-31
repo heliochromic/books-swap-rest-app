@@ -171,7 +171,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="username"
                   name="username"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.username}
                   onChange={handleInputChange}
                   placeholder={userProfile.username ? '' : 'Enter your username'}
@@ -182,7 +182,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="password"
                   id="password"
                   name="password"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.password}
                   onChange={handleInputChange}
                   placeholder={userProfile.password ? '' : 'Enter your password'}
@@ -193,7 +193,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="first_name"
                   name="first_name"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.first_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.first_name ? '' : 'Enter your first name'}
@@ -204,7 +204,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="last_name"
                   name="last_name"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.last_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.last_name ? '' : 'Enter your last name'}
@@ -215,7 +215,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="age"
                   name="age"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.age}
                   onChange={handleInputChange}
                   placeholder={userProfile.age ? '' : 'Enter your age'}
@@ -226,7 +226,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="email"
                   id="mail"
                   name="mail"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.mail}
                   onChange={handleInputChange}
                   placeholder={userProfile.email ? '' : 'Enter your email'}
@@ -237,7 +237,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   type="text"
                   id="phone_number"
                   name="phone_number"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
                   placeholder={userProfile.phone_number ? '' : 'Enter your phone number'}
