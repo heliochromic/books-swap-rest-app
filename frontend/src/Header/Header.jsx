@@ -56,11 +56,8 @@ const Header = () => {
                                 <Link to="/map">Map</Link>
                             </li>}
                             {isAuthenticated &&
-                                <li className="nav-item mx-2" type="button" data-bs-toggle="offcanvas"
-                                    data-bs-target="#offcanvasWithBothOptions">
-                                    <div>
-                                        Requests
-                                    </div>
+                                <li className="nav-item mx-2">
+                                <Link to="/requests">Requests</Link>
                                 </li>}
                             {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/" onClick={handleLogout}>Logout</Link>

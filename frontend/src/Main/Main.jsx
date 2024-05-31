@@ -11,6 +11,7 @@ import SignUpPage from "../SignUp/SignUpPage";
 import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";
 import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
+import RequestModal from "../BookItemPage/RequestModal/RequestModal";
 
 const Main = ({isAuthenticated, setIsAuthenticated}) => {
     return (
@@ -25,6 +26,7 @@ const Main = ({isAuthenticated, setIsAuthenticated}) => {
                     <Route path="/map" element={<Map/>}/>
                     <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
                     <Route path="/signup" element={<SignUpPage setIsAuthenticated={setIsAuthenticated}/>}/>
+                    <Route path="/map" element={<RequestModal />}/>
                     <Route path="/user/:id" element={<UserProfile/>}/>
                     <Route path="/password-change" element={<PasswordChangePage/>}/>
                 </Routes>
