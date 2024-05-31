@@ -21,7 +21,7 @@ const Profile = () => {
   const phone_number_ref = useRef(null)
   const mail_ref = useRef(null)
   const image_ref = useRef(null)
-  let [imagePresent, setImagePresent] = useState(true)
+  let [imagePresent, setImagePresent] = useState(false)
 
 
 
@@ -172,10 +172,10 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h1>{userProfile.djuser.username}</h1>
+      <h1>@{userProfile.djuser.username}</h1>
       {userProfile && (
           <form className="profile-form" onSubmit={handleSubmit}>
-            <div className="input-group">
+            <div className="profile-input-group">
               <img id="profile-image" src="" alt="Profile Image"/>
               {(imagePresent && isEditing) &&
                   <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
@@ -188,60 +188,65 @@ const Profile = () => {
                   readOnly={!isEditing}
               />}
             </div>
-            <div className='input-group'>
-              <span htmlFor="first_name">First Name:</span>
+            <div className='profile-input-group'>
+              <label htmlFor="first_name">First Name:</label>
               <input
                   type="text"
                   id="first_name"
                   name="first_name"
+                  className="profile-first-name"
                   ref={first_name_ref}
                   value={userProfile.first_name}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />
             </div>
-            <div className='input-group'>
-              <span htmlFor="last_name">Last Name:</span>
+            <div className='profile-input-group'>
+              <label htmlFor="last_name">Last Name:</label>
               <input
                   type="text"
                   id="last_name"
                   name="last_name"
+                  className="profile-last-name"
                   value={userProfile.last_name}
                   ref={last_name_ref}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />
             </div>
-            <div className='input-group'>
-              <span htmlFor="age">Age:</span>
+            <div className='profile-input-group'>
+              <label htmlFor="age">Age:</label>
               <input
                   type="number"
                   id="age"
                   name="age"
+                  className="profile-age"
                   ref={age_ref}
                   value={userProfile.age}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />
             </div>
-            <div className='input-group'>
-              <span htmlFor="mail">Email:</span>
+            <div className='profile-input-group'>
+              <label htmlFor="mail">Email:</label>
               <input
                   type="email"
                   id="mail"
                   name="mail"
+                  className="profile-mail"
                   ref={mail_ref}
                   value={userProfile.mail}
                   onChange={handleInputChange}
                   readOnly={!isEditing}
               />
             </div>
-            <div className='input-group'>
-              <span htmlFor="phone_number">Phone Number:</span>
+            <div className='profile-input-group'>
+              <label htmlFor="phone_number">Phone Number:</label>
               <input
                   type="text"
                   id="phone_number"
                   name="phone_number"
+                  className="profile-phone-number"
                   ref={phone_number_ref}
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
@@ -257,7 +262,7 @@ const Profile = () => {
               )}
               {isEditing && <button type="submit" className="save-button">Save Changes</button>}
             </div>
-            <div>
+            <div className="password-reset-link">
               <Link to="/password-change">Change password</Link>
             </div>
           </form>

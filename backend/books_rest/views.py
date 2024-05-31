@@ -46,7 +46,7 @@ class CatalogView(APIView):
         year = data.get('year')
         description = data.get('description')
         book_status = data.get('status')
-        user_id = request   .user.id
+        user_id = request.user.id
         photo = data.get('file1')
         photo2 = data.get('file2')
         photo3 = data.get('file3')
@@ -192,7 +192,12 @@ class ISBNView(APIView):
 
         if response.status_code == 200:
             data = response.json()
-            return data['items'][0]['volumeInfo']
+
+            items = data.get('items')
+            if items:
+                return items[0]['volumeInfo']
+            return items
+
         return None
 
     @action(detail=False, methods=['post'])
@@ -206,7 +211,6 @@ class ISBNView(APIView):
             return Response(data={"error": "ISBN is not provided or invalid"}, status=status.HTTP_400_BAD_REQUEST)
 
         book_info = ISBNView.fetch_book(clean_ISBN)
-        print(clean_ISBN)
         if not book_info:
             return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -345,7 +349,7 @@ class UserView(APIView):
 
             if current_image_name != 'images/users/default.png' and uploaded_image_name != current_image_name:
                 print("Deleting " + media_dir + current_image_name)
-                os.remove(os.path.normpath(media_dir + current_image_name))
+                os.remove(os.path.normpath(media_dir + "\\" + current_image_name))
 
             print(f"Uploaded image: {uploaded_image_name}")
             print(f"Current image: {current_image_name}")
