@@ -23,6 +23,10 @@
 .profile-form {
     margin-bottom: 20px;
     width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .catalogContainer {
@@ -150,8 +154,13 @@
     margin-top: 20px;
 }
 
-.password-reset-link {
+.password-reset-link, .profile-button-container {
+    width: 40%;
     margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 
 .cancel-button:focus {
@@ -159,6 +168,7 @@
 }
 
 .profile-input-group, .signup-input-group {
+    width: 100%;
     display: flex;
     align-items: center;
     flex-direction: row;
@@ -168,6 +178,7 @@
 
 .input-group label {
     margin-right: 10px;
+    width: 50%
 }
 
 .profile-input-group > #image-delete {

@@ -254,7 +254,7 @@ const Profile = () => {
               />
             </div>
             <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="button-container">
+            <div className="profile-button-container">
               {isEditing ? (
                   <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
               ) : (

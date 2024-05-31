@@ -40,7 +40,6 @@ const Catalog = () => {
 
     return (
         <div className="catalog">
-            <h1>Catalog</h1>
             <div className="catalogContainer">
                 {items.map(item => (
                     <BookItem key={+item.id} bookItem={item}/>
