@@ -1,13 +1,24 @@
+.full-profile{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
 .profile-container, .change-container {
     display: flex;
-    flex-direction: column;
-    justify-content: center;
+    flex-direction: row;
+    justify-content: flex-start;
     align-items: center;
-    width: 100%;
-    margin: 0 auto;
+    width: 50%;
+    height: 100%;
+    margin: 0;
     padding: 20px;
 }
-
+.my-books{
+    width: 50%;
+    height: 800px;
+    border-left: 1px solid darkgray;
+    overflow: scroll;
+}
 .change-container {
     display: flex;
     justify-content: center;
@@ -21,11 +32,13 @@
 
 .profile-form {
     margin-bottom: 20px;
-    width: 35%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    /*border: 1px solid darkgray;*/
+    padding: 20px;
 }
 
 .catalogContainer {

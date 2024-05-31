@@ -5,6 +5,7 @@ import 'leaflet/dist/leaflet.css';
 import './profile.css'
 import {Link} from "react-router-dom";
 import {getConfig} from "../utils";
+import BookItem from "../Catalog/BookItem/BookItem";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
@@ -13,6 +14,7 @@ const Profile = () => {
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [items, setItems] = useState([]);
   const mapRef = useRef(null); // Create a ref for the map
   const markerRef = useRef(new L.Marker([51.505, -0.09])); // Create a ref for the marker
   const first_name_ref = useRef(null)
@@ -35,6 +37,8 @@ const Profile = () => {
         if(!initialProfileRef.current){
           initialProfileRef.current = response.data
         }
+        const books = await axios.get(`http://localhost:8000/api/profile/${response.data.userID}`, getConfig())
+        setItems(books.data.book_items)
       } catch (error) {
         setError(error.message);
         setLoading(false);
@@ -172,10 +176,11 @@ const Profile = () => {
   }
 
   return (
+      <div className="full-profile">
     <div className="profile-container">
-      <h1>@{userProfile.djuser.username}</h1>
       {userProfile && (
-          <form className="profile-form" onSubmit={handleSubmit}>
+          <form className="profile-form rounded-5" onSubmit={handleSubmit}>
+            <h1>@{userProfile.djuser.username}</h1>
             <div className="">
               <img id="profile-image" src="" alt="Profile Image"/>
               {(imagePresent && isEditing) &&
@@ -270,6 +275,14 @@ const Profile = () => {
 
       )}
     </div>
+        <div className="my-books">
+          <div className="catalogContainer">
+            {items.map(item => (
+                <BookItem key={+item.id} bookItem={item}/>
+            ))}
+          </div>
+        </div>
+      </div>
   );
 };
 export default Profile;

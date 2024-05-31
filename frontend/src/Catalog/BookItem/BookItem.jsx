@@ -15,7 +15,7 @@ const BookItem = ({bookItem}) => {
                                   backgroundImage: `url(http://localhost:8000/${photo})`,
                               }}/>
                     </div>
-                    <div className="card-body d-flex flex-wrap flex-column">
+                    <div className="card-body d-flex flex-wrap flex-column justify-content-between">
                         <div>
                             <h5 className="card-title">{bookItem.title}</h5>
                             <h6 className="card-subtitle author mb-2">{bookItem.author}</h6>
