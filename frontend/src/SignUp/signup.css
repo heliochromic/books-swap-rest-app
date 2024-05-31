@@ -46,46 +46,10 @@
   margin-top: 50px;
 }
 /* login.css */
-.input-username,
-.input-password,
-.input-first-name,
-.input-last-name,
-.input-age,
-.input-email,
-.input-phone-number{
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
+.form-control{
     border-radius: 25px;
-    box-sizing: border-box;
-    transition: border-color 0.3s, box-shadow 0.3s;
-    font-size: 16px;
-    text-align: center;
-    outline: none;
 }
 
-.input-username:focus,
-.input-password:focus,
-.input-first-name:focus,
-.input-last-name:focus,
-.input-age:focus,
-.input-email:focus,
-.input-phone-number:focus {
-    border-color: #6b73ff;
-    box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
-}
-
-.input-username::placeholder,
-.input-password::placeholder,
-.input-first-name::placeholder,
-.input-last-name::placeholder,
-.input-age::placeholder,
-.input-email::placeholder,
-.input-phone-number::placeholder {
-    color: #999;
-}
 .signup-button, #image-delete{
     margin-top: 10px;
     background: linear-gradient(135deg, dodgerblue, dodgerblue);

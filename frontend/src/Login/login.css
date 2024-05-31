@@ -1,3 +1,7 @@
 .login-page div button {
     background-color: dodgerblue;
+    border-radius: 25px;
+}
+#exampleInputEmail, #exampleInputPassword{
+    border-radius: 25px;
 }

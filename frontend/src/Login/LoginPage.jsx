@@ -43,7 +43,7 @@ const LoginPage = ({ setIsAuthenticated }) => {
                                            value={username}
                                            className="form-control"
                                            id="exampleInputEmail"
-                                           placeholder="Enter your username"
+                                           placeholder="Enter username"
                                            onChange={(e) => setUsername(e.target.value)}
                                            aria-describedby="emailHelp" />
                                 </div>
@@ -54,9 +54,9 @@ const LoginPage = ({ setIsAuthenticated }) => {
                                            className="form-control"
                                            id="exampleInputPassword"
                                            onChange={(e) => setPassword(e.target.value)}
-                                           placeholder="Enter your password" />
+                                           placeholder="Enter password" />
                                 </div>
-                                <button type="submit" className="btn btn-primary w-100">Submit</button>
+                                <button type="submit" className="btn btn-primary w-100">Log In</button>
                                 {error && <p style={{color: 'red'}}>{error}</p>}
                             </form>
                             <p className="signup-message text-center mt-3">

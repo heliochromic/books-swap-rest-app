@@ -51,3 +51,13 @@
 .uploadButton {
     margin-left: 20px;
 }
+#isbn, #title, #author, #genre, #language, #pages, #year, #description, #status{
+    border-radius: 25px;
+}
+#addBook > form > div.book-details.mb-4 > div > div.mb-4.col-md-6 > button{
+    border-radius: 25px;
+}
+#root > div > main{
+    padding-left: 10px;
+    padding-right: 10px;
+}

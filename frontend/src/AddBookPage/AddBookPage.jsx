@@ -283,7 +283,7 @@ const AddBookPage = () => {
                                 required></textarea>
                         </div>
                         <div className="mb-4 col-md-6">
-                            <button type="submit" className="btn btn-primary">Submit</button>
+                            <button type="submit" className="btn btn-primary">Add Book</button>
                         </div>
                     </div>
                 </div>
