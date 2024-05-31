@@ -70,6 +70,8 @@ class CatalogView(APIView):
             'publish_time': datetime.now()
         }
 
+        print()
+
         serializer = BookItemSerializer(data=book_item_data)
 
         if serializer.is_valid():
@@ -167,76 +169,75 @@ class CatalogMyItemsView(APIView):
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-
-class ISBNView(APIView):
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [TokenAuthentication]
-
-    @staticmethod
-    def clean_isbn(isbn):
-        return re.sub(r'\D', '', isbn)
-
-    @staticmethod
-    def is_valid_isbn(isbn):
-        cleaned_isbn = ISBNView.clean_isbn(isbn)
-        isbn_pattern = r'^(?:\d{10}|\d{13})$'
-        return re.match(isbn_pattern, cleaned_isbn) is not None
-
-    @staticmethod
-    def fetch_book(isbn):
-        url = "https://www.googleapis.com/books/v1/volumes"
-
-        params = {
-            "q": f"isbn:{isbn}"
-        }
-
-        response = requests.get(url, params=params)
-
-        if response.status_code == 200:
-            data = response.json()
-
-            items = data.get('items')
-            if items:
-                return items[0]['volumeInfo']
-            return items
-
-        return None
-
-    @action(detail=False, methods=['post'])
-    def post(self, request):
-        ISBN = request.data.get("isbn", None)
-
-        print(ISBN)
-        clean_ISBN = ISBNView.clean_isbn(ISBN)
-
-        if not ISBN or not ISBNView.is_valid_isbn(clean_ISBN):
-            return Response(data={"error": "ISBN is not provided or invalid"}, status=status.HTTP_400_BAD_REQUEST)
-
-        book_info = ISBNView.fetch_book(clean_ISBN)
-        if not book_info:
-            return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
-
-        date = book_info.get('publishedDate', 'N/A')
-        genre = book_info.get('categories', None)
-        pages = book_info.get('pageCount', None)
-
-        book_data = {
-            "ISBN": clean_ISBN,
-            "title": book_info.get('title', 'N/A'),
-            "author": book_info.get('authors', ['N/A'])[0],
-            "genre": ", ".join(genre) if genre else "-",
-            "language": book_info.get('language', 'N/A'),
-            "pages": pages if pages else None,
-            "year": date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
-            "description": book_info.get('description')
-        }
-
-        serializer = BookSerializer(data=book_data)
-
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+# class ISBNView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     authentication_classes = [TokenAuthentication]
+#
+#     @staticmethod
+#     def clean_isbn(isbn):
+#         return re.sub(r'\D', '', isbn)
+#
+#     @staticmethod
+#     def is_valid_isbn(isbn):
+#         cleaned_isbn = ISBNView.clean_isbn(isbn)
+#         isbn_pattern = r'^(?:\d{10}|\d{13})$'
+#         return re.match(isbn_pattern, cleaned_isbn) is not None
+#
+#     @staticmethod
+#     def fetch_book(isbn):
+#         url = "https://www.googleapis.com/books/v1/volumes"
+#
+#         params = {
+#             "q": f"isbn:{isbn}"
+#         }
+#
+#         response = requests.get(url, params=params)
+#
+#         if response.status_code == 200:
+#             data = response.json()
+#
+#             items = data.get('items')
+#             if items:
+#                 return items[0]['volumeInfo']
+#             return items
+#
+#         return None
+#
+#     @action(detail=False, methods=['post'])
+#     def post(self, request):
+#         ISBN = request.data.get("isbn", None)
+#
+#         print(ISBN)
+#         clean_ISBN = ISBNView.clean_isbn(ISBN)
+#
+#         if not ISBN or not ISBNView.is_valid_isbn(clean_ISBN):
+#             return Response(data={"error": "ISBN is not provided or invalid"}, status=status.HTTP_400_BAD_REQUEST)
+#
+#         book_info = ISBNView.fetch_book(clean_ISBN)
+#         if not book_info:
+#             return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
+#
+#         date = book_info.get('publishedDate', 'N/A')
+#         genre = book_info.get('categories', None)
+#         pages = book_info.get('pageCount', None)
+#
+#         book_data = {
+#             "ISBN": clean_ISBN,
+#             "title": book_info.get('title', 'N/A'),
+#             "author": book_info.get('authors', ['N/A'])[0],
+#             "genre": ", ".join(genre) if genre else "-",
+#             "language": book_info.get('language', 'N/A'),
+#             "pages": pages if pages else None,
+#             "year": date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
+#             "description": book_info.get('description')
+#         }
+#
+#         serializer = BookSerializer(data=book_data)
+#
+#         if serializer.is_valid():
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+#         else:
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class RequestView(APIView):
@@ -256,6 +257,7 @@ class RequestView(APIView):
 
         serializer = RequestSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 class RequestItemView(APIView):
