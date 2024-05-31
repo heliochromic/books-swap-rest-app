@@ -39,9 +39,11 @@ const AddBookPage = () => {
                 }
             };
 
+            console.log('hehe')
             const response = await axios.post('http://localhost:8000/api/isbn/', {
                 'isbn': isbn
             }, config);
+
             setBook(response.data);
             setFormValues({
                 title: response.data.title,
@@ -50,12 +52,13 @@ const AddBookPage = () => {
                 language: response.data.language,
                 pages: response.data.pages,
                 year: response.data.year,
-                description: response.data.descriptiona
+                description: response.data.description,
             });
         } catch (err) {
             setError(err);
         } finally {
             setLoading(false);
+            alert("Unable to fetch book data, please fill in the data manually")
         }
     };
 
@@ -114,6 +117,7 @@ const AddBookPage = () => {
                 }
             };
             const response = await axios.post('http://localhost:8000/api/catalog/', formData, config);
+
             alert('Book added successfully!');
             console.log(response.data)
             window.location.href = `/catalog/${response.data.itemID}`;
@@ -150,7 +154,7 @@ const AddBookPage = () => {
                         <div className="mb-3 col-md-6">
                             <label htmlFor="title" className="form-label">Title</label>
                             <input required
-                                    type="text"
+                                   type="text"
                                    className="form-control"
                                    placeholder="Title"
                                    id="title"
@@ -161,7 +165,7 @@ const AddBookPage = () => {
                         <div className="mb-3 col-md-6">
                             <label htmlFor="author" className="form-label">Author</label>
                             <input required
-                                type="text"
+                                   type="text"
                                    className="form-control"
                                    placeholder="Author"
                                    id="author"
@@ -183,7 +187,7 @@ const AddBookPage = () => {
                         <div className="mb-3 col-md-3">
                             <label htmlFor="language" className="form-label">Language</label>
                             <input required
-                                type="text"
+                                   type="text"
                                    className="form-control"
                                    placeholder="Language"
                                    id="language"
@@ -194,7 +198,7 @@ const AddBookPage = () => {
                         <div className="mb-3 col-md-3">
                             <label htmlFor="pages" className="form-label">Pages</label>
                             <input required
-                                type="number"
+                                   type="number"
                                    className="form-control"
                                    placeholder="Pages"
                                    id="pages"
@@ -205,7 +209,7 @@ const AddBookPage = () => {
                         <div className="mb-3 col-md-3">
                             <label htmlFor="year" className="form-label">Year</label>
                             <input required
-                                type="text"
+                                   type="text"
                                    className="form-control"
                                    placeholder="Year"
                                    id="year"
@@ -238,8 +242,9 @@ const AddBookPage = () => {
                                     name="status"
                                     value={formValues.status}
                                     onChange={handleInputChange}
+                                    required
                                 >
-                                    <option value="" disabled>
+                                    <option val="" disabled>
                                         Condition: A (Best) - E (Worst)
                                     </option>
                                     <option value="A">A - Best</option>
@@ -274,7 +279,8 @@ const AddBookPage = () => {
                                 rows="8"
                                 maxLength="500"
                                 value={formValues.description}
-                                onChange={handleInputChange}></textarea>
+                                onChange={handleInputChange}
+                                required></textarea>
                         </div>
                         <div className="mb-4 col-md-6">
                             <button type="submit" className="btn btn-primary">Submit</button>

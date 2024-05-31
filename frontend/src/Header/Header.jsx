@@ -62,9 +62,6 @@ const Header = () => {
                                         Requests
                                     </div>
                                 </li>}
-                            {/*{!isAuthenticated && <li className="nav-item mx-2">*/}
-                            {/*    <Link to="/login">Log In</Link>*/}
-                            {/*</li>}*/}
                             {isAuthenticated && <li className="nav-item mx-2">
                                 <Link to="/" onClick={handleLogout}>Logout</Link>
                             </li>}

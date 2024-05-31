@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import BookItemTiny from "./BookItemTiny/BookItemTiny";
 
-
 const RequestModal = () => {
-    const {id} = useParams();
+    const { id } = useParams();
     const [myBooks, setMyBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -14,7 +13,7 @@ const RequestModal = () => {
     const [selectedItemId, setSelectedBookId] = useState(null);
     const [alreadyRequested, setAlreadyRequested] = useState(false);
 
-    const handleRequestMyBooks = async () => {
+    const fetchMyBooks = async () => {
         try {
             const token = sessionStorage.getItem("token");
             const config = {
@@ -23,23 +22,14 @@ const RequestModal = () => {
                 },
             };
 
-            const response = await axios.get(
-                "http://localhost:8000/api/catalog/my/",
-                config
-            );
-
-
-            const requests = response.data;
-            console.log(requests.userID)
-            const isMine = requests.some(request => +request.itemID === +id);
-
+            const response = await axios.get("http://localhost:8000/api/catalog/my/", config);
+            const books = response.data;
+            setMyBooks(books);
+            setHasBooks(books.length > 0);
+            const isMine = books.some(book => +book.itemID === +id);
             setIsMineBook(isMine);
-            setMyBooks(response.data);
-            setHasBooks(response.data.length > 0);
         } catch (err) {
             setError(err.message);
-        } finally {
-            setLoading(false);
         }
     };
 
@@ -51,13 +41,10 @@ const RequestModal = () => {
                     Authorization: `Token ${token}`,
                 },
             };
-            const response = await axios.get(
-                "http://localhost:8000/api/requests/",
-                config
-            );
 
+            const response = await axios.get("http://localhost:8000/api/requests/", config);
             const requests = response.data;
-            const isRequested = requests.some(request => request.sender_book === parseInt(id, 10));
+            const isRequested = requests.some(request => request.sender_book === +id);
             setAlreadyRequested(isRequested);
         } catch (err) {
             setError(err.message);
@@ -73,21 +60,27 @@ const RequestModal = () => {
                 },
             };
 
-            const response = await axios.post(`http://localhost:8000/api/catalog/${+id}`, {
+            await axios.post(`http://localhost:8000/api/catalog/${id}`, {
                 receiver_book_id: +selectedItemId,
             }, config);
+            setAlreadyRequested(true);
+            alert('Book requested successfully!');
+            await fetchMyBooks();
         } catch (err) {
             setError(err.message);
-        } finally {
-            setLoading(false);
         }
-        alert('Book requested successfully!');
-
     };
+
     useEffect(() => {
-        handleRequestMyBooks();
-        checkIfAlreadyRequested();
-    }, []);
+        const fetchData = async () => {
+            setLoading(true);
+            await fetchMyBooks();
+            await checkIfAlreadyRequested();
+            setLoading(false);
+        };
+
+        fetchData();
+    }, [id]);
 
     return (
         <div>
@@ -107,7 +100,6 @@ const RequestModal = () => {
                             ) : (
                                 <>
                                     <button
-                                        onClick={handleRequestMyBooks}
                                         className="btn btn-outline-dark btn-md col-12"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"

@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import axios, {get} from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import L from 'leaflet';
 import BookItem from "../Catalog/BookItem/BookItem";
 import './userProfile.css';
 import {getConfig} from "../utils";
@@ -77,7 +76,7 @@ const UserProfile = () => {
                 <p>Phone number: {profileData.phone_number}</p>
                 <p>Age: {profileData.age}</p>
             </div>
-            <div className="bookContainer" style={{display: 'flex', flexWrap: 'wrap', justifyContent: 'center'}}>
+            <div className="catalogContainer">
                 {items.map(item => (
                     <BookItem key={item.id} bookItem={item}/>
                 ))}
