@@ -19,7 +19,7 @@ const BookItem = ({bookItem}) => {
                     <div className="card-body">
                         <h5 className="card-title">{bookItem.title}</h5>
                         <h6 className="card-subtitle">{bookItem.author}</h6>
-                        <p className="card-text mt-2">Genre: {bookItem.genre}</p>
+                        <p className="card-text mt-2">{bookItem.genre}</p>
                         <blockquote className="mb-0">
                             - {truncatedDescription}
                         </blockquote>

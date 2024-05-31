@@ -15,6 +15,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
+from django.db.models import Q
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
@@ -28,9 +29,10 @@ class CatalogView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        queryset = BookItem.objects.exclude(userID_id=request.user.id)
+        queryset = BookItem.objects.exclude(userID_id=request.user.id).filter(
+            Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)
+        )
         serializer = BookItemSerializer(queryset, many=True)
-        print(serializer.data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['post'])
