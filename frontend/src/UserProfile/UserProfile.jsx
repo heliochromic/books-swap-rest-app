@@ -56,7 +56,7 @@ const UserProfile = () => {
     }
 
     return (
-        <div className="profile-container">
+        <div className="d-flex flex-column justify-content-center align-items-center mt-5">
             {me.djuser.is_staff && (
                 <button className="user-delete-button" onClick={handleDelete}>Delete</button>
             )}

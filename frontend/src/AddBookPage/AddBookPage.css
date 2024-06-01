@@ -1,5 +1,7 @@
 #addBook {
     width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .no-resize {
@@ -56,8 +58,4 @@
 }
 #addBook > form > div.book-details.mb-4 > div > div.mb-4.col-md-6 > button{
     border-radius: 25px;
-}
-#root > div > main{
-    padding-left: 10px;
-    padding-right: 10px;
 }

@@ -163,7 +163,6 @@ const Profile = () => {
     setImagePresent(false)
     if (image_ref.current) {
       image_ref.current.value = null
-      image_ref.current = null;
     }
   }
 
