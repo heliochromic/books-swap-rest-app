@@ -11,7 +11,7 @@ from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
@@ -455,7 +455,7 @@ class SignUpView(APIView):
         password = request.data.get('password')
         first_name = request.data['first_name']
         last_name = request.data['last_name']
-        age = request.data['age']
+        date_of_birth = request.data['date_of_birth']
         mail = request.data['mail']
         phone_number = request.data['phone_number']
         latitude = request.data['latitude']
@@ -477,7 +477,7 @@ class SignUpView(APIView):
             djuser.save()
             user = DJUser.objects.latest('id').id
 
-            custom_user = User(first_name=first_name, last_name=last_name, age=age, mail=mail,
+            custom_user = User(first_name=first_name, last_name=last_name, date_of_birth=date_of_birth, mail=mail,
                                phone_number=phone_number, latitude=latitude, longitude=longitude,
                                image=image, django_id=user)
             custom_user.save()
@@ -542,3 +542,45 @@ class PasswordChangeView(APIView):
         user.save()
 
         return Response({"detail": "Password has been changed successfully."}, status=status.HTTP_200_OK)
+
+
+class MakeAdminView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        user_id = request.data.get("targetID")
+        try:
+            user_instance = User.objects.get(userID=user_id)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        django_id = user_instance.django.id if user_instance.django_id else None
+
+        with transaction.atomic():
+            user = DJUser.objects.get(id=django_id)
+            user.is_staff = True
+            user.save()
+        return Response({"message": "User received admin status successfully"}, status=status.HTTP_200_OK)
+
+
+class RemoveAdminView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['post'])
+    def post(self, request):
+        user_id = request.data.get("targetID")
+        try:
+            user_instance = User.objects.get(userID=user_id)
+        except User.DoesNotExist:
+            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        django_id = user_instance.django.id if user_instance.django_id else None
+
+        with transaction.atomic():
+            user = DJUser.objects.get(id=django_id)
+            user.is_staff = False
+            user.save()
+        return Response({"message": "User received admin status successfully"}, status=status.HTTP_200_OK)

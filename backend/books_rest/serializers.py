@@ -35,7 +35,7 @@ class RequestSerializer(serializers.ModelSerializer):
 class DJUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DJUser
-        fields = ['username', 'email', 'is_staff']
+        fields = ['username', 'email', 'is_staff', 'is_superuser']
 
 
 class UserLocationSerializer(serializers.ModelSerializer):
@@ -56,13 +56,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'age', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser']
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.age = validated_data.get('age', instance.age)
+        instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
         instance.mail = validated_data.get('mail', instance.mail)
         instance.phone_number = validated_data.get('phone_number', instance.phone_number)
         instance.latitude = validated_data.get('latitude', instance.latitude)
@@ -74,14 +74,22 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCatalogSerializer(serializers.ModelSerializer):
-    book_items = BookItemSerializer(many=True, read_only=True, source='bookitem_set')
+    book_items = serializers.SerializerMethodField()
     djuser = DJUserSerializer(source='django')
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'age', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser', 'book_items']
 
+    def get_book_items(self, obj):
+        book_items = obj.bookitem_set.filter(status="A")
+        return BookItemSerializer(book_items, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['book_items'] = self.get_book_items(instance)
+        return representation
 
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)

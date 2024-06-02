@@ -1,5 +1,7 @@
 #addBook {
     width: 100%;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .no-resize {
@@ -57,7 +59,33 @@
 #addBook > form > div.book-details.mb-4 > div > div.mb-4.col-md-6 > button{
     border-radius: 25px;
 }
-#root > div > main{
-    padding-left: 10px;
-    padding-right: 10px;
+.delete-book-button{
+    margin-top: 5px;
+    background: linear-gradient(135deg, #f44336, #f44336);
+    border: none;
+    border-radius: 25px;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.delete-book-button:hover {
+    background: linear-gradient(135deg, #f44336, #f44336);
+    transform: scale(1.05);
+}
+
+.delete-book-button:active{
+    transform: scale(0.95);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.delete-book-button:focus{
+    outline: none;
+    box-shadow: 0 0 0 3px #f44336;
 }

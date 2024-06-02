@@ -39,8 +39,8 @@ const Catalog = () => {
 
 
     return (
-        <div className="catalog">
-            <div className="catalogContainer">
+        <div id="catalog">
+            <div id="catalogContainer">
                 {items.map(item => (
                     <BookItem key={+item.id} bookItem={item}/>
                 ))}

@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './signup.css'
+import {calculateAge} from "../utils";
 
 const SignUpPage = ({setIsAuthenticated}) => {
   const [userProfile, setUserProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   let [imagePresent, setImagePresent] = useState(false)
   const mapRef = useRef(null);
@@ -25,7 +27,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
             "password": "",
             "first_name": "",
             "last_name": "",
-            "age": "",
+            "date_of_birth": "",
             "mail": "",
             "phone_number": "",
             "latitude": "",
@@ -94,9 +96,50 @@ const SignUpPage = ({setIsAuthenticated}) => {
       });
     }
   };
+  const validate = () => {
+    const newErrors = {};
+
+    if (!userProfile.first_name) {
+      newErrors.first_name = 'First name is required';
+    }
+
+    if(userProfile.first_name.trim().length > 50){
+      newErrors.first_name = 'First name has to be smaller than 50 characters';
+    }
+
+    if (!userProfile.last_name) {
+      newErrors.last_name = 'Last name is required';
+    }
+
+    if(userProfile.last_name.trim().length > 50){
+      newErrors.last_name = 'Last name has to be smaller than 50 characters';
+    }
+
+    const age = calculateAge(userProfile.date_of_birth);
+    if (!userProfile.date_of_birth || isNaN(age) || age <= 12 || age > 120) {
+      newErrors.date_of_birth = 'Please enter a valid age between 12 and 120';
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!userProfile.mail || !emailRegex.test(userProfile.mail)) {
+      newErrors.mail = 'Please enter a valid email address';
+    }
+
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!userProfile.phone_number || !phoneRegex.test(userProfile.phone_number)) {
+      newErrors.phone_number = 'Please enter a valid 10-digit phone number';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e) => {
+    const newErrors = {}
     e.preventDefault();
+     if (!validate()) {
+      return;
+    }
     try {
       const config = {
         headers: {
@@ -108,7 +151,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
       formData.append('password', userProfile.password);
       formData.append('first_name', userProfile.first_name);
       formData.append('last_name', userProfile.last_name);
-      formData.append('age', userProfile.age);
+      formData.append('date_of_birth', userProfile.date_of_birth);
       formData.append('mail', userProfile.mail);
       formData.append('phone_number', userProfile.phone_number);
       formData.append('latitude', userProfile.latitude);
@@ -124,10 +167,19 @@ const SignUpPage = ({setIsAuthenticated}) => {
             navigate('/catalog');
       alert('Profile created successfully!');
       setIsEditing(false);
-
     } catch (error) {
-      alert('Failed to create profile. Please try again.');
-      console.error('Error creating profile:', error);
+      if(error.response.data.error === "Username already exists"){
+        setErrors({
+        ...errors,
+        "username": error.response.data.error
+      });
+      }
+      else if(error.response.data.error === "Email already in use"){
+        setErrors({
+        ...errors,
+        "mail": error.response.data.error
+      })
+      }
     }
 
   setIsEditing(!isEditing)
@@ -166,85 +218,91 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   onChange={handleInputChange}
               />
             </div>
-            <div className="mb-3">
+            <div className="p-2">
               <input
                   type="text"
                   id="username"
                   name="username"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.username}
                   onChange={handleInputChange}
                   placeholder={userProfile.username ? '' : 'Enter your username'}
                  />
             </div>
-            <div className="mb-3">
+            {errors.username && <span className="signup-error">{errors.username}</span>}
+            <div className="p-2">
               <input
                   type="password"
                   id="password"
                   name="password"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.password}
                   onChange={handleInputChange}
                   placeholder={userProfile.password ? '' : 'Enter your password'}
                 />
             </div>
-            <div className="mb-3">
+            <div className="p-2">
               <input
                   type="text"
                   id="first_name"
                   name="first_name"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.first_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.first_name ? '' : 'Enter your first name'}
                  />
             </div>
-            <div className="mb-3">
+            {errors.first_name && <span className="signup-error">{errors.first_name}</span>}
+            <div className="p-2">
               <input
                   type="text"
                   id="last_name"
                   name="last_name"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.last_name}
                   onChange={handleInputChange}
                   placeholder={userProfile.last_name ? '' : 'Enter your last name'}
                  />
             </div>
-            <div className="mb-3">
+            {errors.last_name && <span className="signup-error">{errors.last_name}</span>}
+            <div className="p-2">
               <input
-                  type="text"
-                  id="age"
-                  name="age"
-                  className="form-control text-center"
-                  value={userProfile.age}
+                  type="date"
+                  id="date_of_birth"
+                  name="date_of_birth"
+                  className="form-control"
+                  value={userProfile.date_of_birth}
                   onChange={handleInputChange}
-                  placeholder={userProfile.age ? '' : 'Enter your age'}
+                  placeholder={userProfile.date_of_birth ? '' : 'Enter your date of birth'}
                  />
             </div>
-            <div className="mb-3">
+            {errors.date_of_birth && <span className="signup-error">{errors.date_of_birth}</span>}
+            <div className="p-2">
               <input
                   type="email"
                   id="mail"
                   name="mail"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.mail}
                   onChange={handleInputChange}
-                  placeholder={userProfile.email ? '' : 'Enter your email'}
+                  placeholder={userProfile.mail ? '' : 'Enter your email'}
                   />
             </div>
-            <div className="mb-3">
+            {errors.mail && <span className="signup-error">{errors.mail}</span>}
+            <div className="p-2">
               <input
                   type="text"
                   id="phone_number"
                   name="phone_number"
-                  className="form-control text-center"
+                  className="form-control"
                   value={userProfile.phone_number}
                   onChange={handleInputChange}
                   placeholder={userProfile.phone_number ? '' : 'Enter your phone number'}
                  />
             </div>
+            {errors.phone_number && <span className="signup-error">{errors.phone_number}</span>}
             <div id="signup-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="mb-3 mx-auto">
+            <div className="p-2 mx-auto">
               <button type="submit" className="signup-button">Sign Up</button>
             </div>
           </form>

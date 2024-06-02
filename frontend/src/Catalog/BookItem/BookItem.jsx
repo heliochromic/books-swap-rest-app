@@ -3,26 +3,27 @@ import '../Catalog.css';
 import {truncateDescription} from '../../utils'
 
 const BookItem = ({bookItem}) => {
-    const {itemID, photo} = bookItem;
-    const truncatedDescription = truncateDescription(bookItem.description, 80); // Truncate to 100 characters
+    const {itemID, photo, bookID, language} = bookItem;
 
     return (
         <div className="bookItemCard">
             <a href={`http://localhost:3000/catalog/${itemID}`}>
-                <div className="card">
-                    <div className="card-img-top">
-                        <span className="card-img-fit"
+                <div className="card rounded-5">
+                    <div className="card-img-top p-3 overflow-hidden">
+                        <span className="card-img-fit overflow-hidden"
                               style={{
                                   backgroundImage: `url(http://localhost:8000/${photo})`,
                               }}/>
                     </div>
-                    <div className="card-body">
-                        <h5 className="card-title">{bookItem.title}</h5>
-                        <h6 className="card-subtitle">{bookItem.author}</h6>
-                        <p className="card-text mt-2">{bookItem.genre}</p>
-                        <blockquote className="mb-0">
-                            - {truncatedDescription}
-                        </blockquote>
+                    <div className="card-body d-flex flex-wrap flex-column justify-content-between">
+                        <div>
+                            <h5 className="card-title">{bookItem.title}</h5>
+                            <h6 className="card-subtitle author mb-2">{bookItem.author}</h6>
+                        </div>
+                        <div>
+                            <span className="badge mx-1 text-bg-primary ms-0 rounded-5">{bookItem.genre}</span>
+                            <span className="badge mx-1 text-bg-primary rounded-5">{bookItem.language}</span>
+                        </div>
                     </div>
                 </div>
             </a>

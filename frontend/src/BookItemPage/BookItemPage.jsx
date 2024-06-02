@@ -1,26 +1,23 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import RequestModal from "./RequestModal/RequestModal"
+import {getConfig} from "../utils";
 
 const BookItemPage = () => {
     const {id} = useParams();
     const [book, setBook] = useState(null);
+    const [me, setMe] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchBook = async () => {
             try {
-                const token = sessionStorage.getItem('token')
-
-                const config = {
-                    headers: {
-                        'Authorization': `Token ${token}`
-                    }
-                }
-
-                const response = await axios.get(`http://localhost:8000/api/catalog/${id}`, config);
+                const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
+                setMe(me.data);
+                const response = await axios.get(`http://localhost:8000/api/catalog/${id}`, getConfig());
                 setBook(response.data);
             } catch (err) {
                 setError(err.message);
@@ -31,6 +28,15 @@ const BookItemPage = () => {
 
         fetchBook();
     }, [id]);
+
+    const handleBookDeletion = async () => {
+        try {
+            await axios.delete(`http://localhost:8000/api/catalog/${id}`, getConfig());
+            navigate('/profile');
+        } catch (err) {
+            console.error('Error deleting book:', err);
+        }
+    }
 
     if (loading) return <div className="text-center py-5">Loading...</div>;
     if (error) return <div className="alert alert-danger text-center">Error: {error}</div>;
@@ -110,6 +116,7 @@ const BookItemPage = () => {
                             <p className="lead">{book.description}</p>
                         </div>
                         <RequestModal />
+                        {book.userID === me.userID && <button className="delete-book-button" onClick={handleBookDeletion}>Delete</button>}
                     </div>
                 </div>
             </div>

@@ -11,7 +11,9 @@
 .navbar-nav {
     flex-direction: row;
 }
-
+.navbar{
+    border-bottom: 1px solid darkgray;
+}
 .container-fluid {
     width: 1400px !important;
 }
