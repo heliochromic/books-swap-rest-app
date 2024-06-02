@@ -22,7 +22,7 @@
 .profile-details p{
   margin-bottom: 2px;
 }
-.user-delete-button {
+.user-delete-button, .user-status-raise, .user-status-lower {
   position: absolute;
   top: 100px;
   right: 20px;
@@ -38,6 +38,12 @@
 
 .user-delete-button:hover {
   background-color: #d32f2f;
+}
+.user-status-raise, .user-status-lower{
+  top: 155px;
+}
+.user-status-raise{
+  background-color: dodgerblue;
 }
 .user-rating{
   display: flex;

@@ -26,6 +26,8 @@ router = routers.DefaultRouter()
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path('api/admin/users/', views.UserListView.as_view(), name='users'),
+                  path('api/admin/make-admin/', views.MakeAdminView.as_view(), name='make'),
+                  path('api/admin/remove-admin/', views.RemoveAdminView.as_view(), name='make'),
                   path('api/', include(router.urls)),
                   path('api/isbn/', views.ISBNView.as_view(), name='isbn'),
                   path('api/login/', views.LoginView.as_view(), name='login'),

@@ -35,7 +35,7 @@ class RequestSerializer(serializers.ModelSerializer):
 class DJUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DJUser
-        fields = ['username', 'email', 'is_staff']
+        fields = ['username', 'email', 'is_staff', 'is_superuser']
 
 
 class UserLocationSerializer(serializers.ModelSerializer):
