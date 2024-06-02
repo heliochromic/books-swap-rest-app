@@ -81,11 +81,11 @@ const UserProfile = () => {
             {me.djuser.is_staff && (
                 <button className="user-delete-button" onClick={handleDelete}>Delete</button>
             )}
-            {(me.djuser.is_superuser && isAdmin) ? (
-                    <button className="user-status-lower" onClick={handleDeleteAdmin}>Remove Admin</button>
-                ) : (
+            {(me.djuser.is_superuser && isAdmin) &&
+                    <button className="user-status-lower" onClick={handleDeleteAdmin}>Remove Admin</button>}
+            {(me.djuser.is_superuser && !isAdmin) &&
                     <button className="user-status-raise" onClick={handleMakeAdmin}>Give Admin</button>
-                )}
+                }
             <img
                 src={`http://localhost:8000${profileData.image}`}
                 alt="Profile Image"
