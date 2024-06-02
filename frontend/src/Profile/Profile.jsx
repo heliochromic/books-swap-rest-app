@@ -3,11 +3,11 @@ import axios from 'axios';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './profile.css';
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {calculateAge, getConfig} from "../utils";
 import BookItem from "../Catalog/BookItem/BookItem";
 
-const Profile = () => {
+const Profile = ({ setIsAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
   const initialProfileRef = useRef(null);
   const [loading, setLoading] = useState(true);
@@ -24,6 +24,7 @@ const Profile = () => {
   const mail_ref = useRef(null);
   const image_ref = useRef(null);
   let [imagePresent, setImagePresent] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -202,6 +203,17 @@ const Profile = () => {
     }
   };
 
+  const handleUserDeletion = async () =>{
+    try{
+      await axios.delete("http://localhost:8000/api/user/", getConfig())
+      setIsAuthenticated(false);
+      navigate('/')
+    }catch (error) {
+      alert('Failed to delete profile. Please try again.');
+      console.error('Error deleting profile:', error);
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -313,8 +325,8 @@ const Profile = () => {
                   <Link to="/password-change">Change password</Link>
                 </div>
               </form>
-
           )}
+          <button className="user-delete" onClick={handleUserDeletion}>Delete account</button>
         </div>
         <div className="my-books">
           <h1>MY BOOKS</h1>

@@ -5,7 +5,7 @@
 }
 .profile-container, .change-container {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 50%;
@@ -115,7 +115,7 @@
     box-shadow: 0 0 0 0;
 }
 
-.edit-button, .cancel-button, .save-button, .change-button, #image-delete {
+.edit-button, .cancel-button, .save-button, .change-button, #image-delete, .user-delete {
     margin-top: 10px;
     background: linear-gradient(135deg, dodgerblue, dodgerblue);
     border: none;
@@ -131,26 +131,28 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.cancel-button, #image-delete {
+.cancel-button, #image-delete, .user-delete {
     background: linear-gradient(135deg, #f44336, #f44336);
     margin-right: 10px;
 }
 
-.edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover, #image-delete:hover {
+.edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover, #image-delete:hover. .user-delete:hover {
     background: linear-gradient(135deg, dodgerblue, dodgerblue);
     transform: scale(1.05);
 }
 
-.cancel-button:hover, #image-delete:hover {
+.cancel-button:hover, #image-delete:hover, .user-delete:hover {
     background: linear-gradient(135deg, #f44336, #f44336);
 }
 
-.edit-button:active, .save-button:active, .cancel-button:active, .change-button:active, #image-delete:active {
+.edit-button:active, .save-button:active, .cancel-button:active, .change-button:active, #image-delete:active,
+.user-delete:active{
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.edit-button:focus, .save-button:focus, .cancel-button:focus, .change-button:focus, #image-delete:focus {
+.edit-button:focus, .save-button:focus, .cancel-button:focus, .change-button:focus, #image-delete:focus,
+.user-delete:focus{
     outline: none;
     box-shadow: 0 0 0 3px dodgerblue;
 }
@@ -170,6 +172,9 @@
 
 .cancel-button:focus {
     box-shadow: 0 0 0 3px #f44336;
+}
+.user-delete{
+   margin-right: 0;
 }
 
 .profile-input-group, .signup-input-group {

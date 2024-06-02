@@ -21,7 +21,7 @@ const Main = ({isAuthenticated, setIsAuthenticated}) => {
                     <Route path="/catalog" element={<Catalog/>}/>
                     <Route path="/catalog/:id" element={<BookItemPage/>}/>
                     <Route path="/catalog/add" element={<AddBookPage/>}/>
-                    <Route path="/profile" element={<Profile/>}/>
+                    <Route path="/profile" element={<Profile setIsAuthenticated={setIsAuthenticated}/>}/>
                     <Route path="/map" element={<Map/>}/>
                     <Route path="/login" element={<LoginPage setIsAuthenticated={setIsAuthenticated}/>}/>
                     <Route path="/signup" element={<SignUpPage setIsAuthenticated={setIsAuthenticated}/>}/>
