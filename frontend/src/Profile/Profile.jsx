@@ -13,17 +13,16 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
   const [items, setItems] = useState([]);
-  const mapRef = useRef(null); // Create a ref for the map
-  const markerRef = useRef(new L.Marker([51.505, -0.09])); // Create a ref for the marker
+  const mapRef = useRef(null);
+  const markerRef = useRef(new L.Marker([51.505, -0.09]));
   const first_name_ref = useRef(null)
   const last_name_ref = useRef(null)
   const age_ref = useRef(null)
   const phone_number_ref = useRef(null)
   const mail_ref = useRef(null)
   const image_ref = useRef(null)
-  let [imagePresent, setImagePresent] = useState(false)
+  let [imagePresent, setImagePresent] = useState(true)
 
 
 
@@ -153,7 +152,6 @@ const Profile = () => {
 
   const handleCancelClick = async (e) => {
     setUserProfile(initialProfileRef.current)
-     setImagePreview(null);
     setIsEditing(false);
     document.getElementById('profile-image').src = 'http://localhost:8000/' + initialProfileRef.current.image;
   }

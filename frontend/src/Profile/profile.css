@@ -12,11 +12,11 @@
     height: 100%;
     margin: 0;
     padding: 20px;
+    border-right: 1px solid darkgray;
 }
 .my-books{
     width: 50%;
     height: 800px;
-    border-left: 1px solid darkgray;
     overflow-y: scroll;
 }
 .change-container {
@@ -37,7 +37,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    /*border: 1px solid darkgray;*/
     padding: 20px;
 }
 
@@ -193,20 +192,20 @@
 }
 
 
-.my-books::-webkit-scrollbar {
-    width: 12px; /* Width of the scrollbar */
+.my-books::-webkit-scrollbar{
+    width: 12px;
 }
 
-.my-books::-webkit-scrollbar-track {
-    background: #f1f1f1; /* Background of the scrollbar track */
+.my-books::-webkit-scrollbar-track{
+    background: #f1f1f1;
     border-radius: 10px;
 }
 
-.my-books::-webkit-scrollbar-thumb {
-    background: #888; /* Color of the scrollbar thumb */
+.my-books::-webkit-scrollbar-thumb{
+    background: #888;
     border-radius: 10px;
 }
 
-.my-books::-webkit-scrollbar-thumb:hover {
-    background: #555; /* Color of the scrollbar thumb on hover */
+.my-books::-webkit-scrollbar-thumb:hover{
+    background: #555;
 }
