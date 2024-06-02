@@ -56,13 +56,13 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'age', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser']
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
-        instance.age = validated_data.get('age', instance.age)
+        instance.date_of_birth = validated_data.get('date_of_birth', instance.date_of_birth)
         instance.mail = validated_data.get('mail', instance.mail)
         instance.phone_number = validated_data.get('phone_number', instance.phone_number)
         instance.latitude = validated_data.get('latitude', instance.latitude)
@@ -79,7 +79,7 @@ class UserCatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'age', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser', 'book_items']
 
 

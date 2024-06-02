@@ -174,7 +174,7 @@
     flex-direction: row;
     text-align: center;
     justify-content: center;
-    margin-bottom: 5px;
+    padding: 5px;
 }
 
 .input-group label {
@@ -208,4 +208,12 @@
 
 .my-books::-webkit-scrollbar-thumb:hover{
     background: #555;
+}
+.error{
+    font-size: 14px;
+    color: red;
+    font-weight:normal;
+    width: 50%;
+    margin-left: auto;
+    text-align: center;
 }
