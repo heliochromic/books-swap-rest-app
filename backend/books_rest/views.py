@@ -451,7 +451,7 @@ class SignUpView(APIView):
         password = request.data.get('password')
         first_name = request.data['first_name']
         last_name = request.data['last_name']
-        age = request.data['age']
+        date_of_birth = request.data['date_of_birth']
         mail = request.data['mail']
         phone_number = request.data['phone_number']
         latitude = request.data['latitude']
@@ -473,7 +473,7 @@ class SignUpView(APIView):
             djuser.save()
             user = DJUser.objects.latest('id').id
 
-            custom_user = User(first_name=first_name, last_name=last_name, age=age, mail=mail,
+            custom_user = User(first_name=first_name, last_name=last_name, date_of_birth=date_of_birth, mail=mail,
                                phone_number=phone_number, latitude=latitude, longitude=longitude,
                                image=image, django_id=user)
             custom_user.save()

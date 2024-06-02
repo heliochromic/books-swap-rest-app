@@ -122,8 +122,16 @@ const Profile = () => {
       newErrors.first_name = 'First name is required';
     }
 
+    if(userProfile.first_name.trim().length > 50){
+      newErrors.first_name = 'First name has to be smaller than 50 characters';
+    }
+
     if (!userProfile.last_name) {
       newErrors.last_name = 'Last name is required';
+    }
+
+    if(userProfile.last_name.trim().length > 50){
+      newErrors.last_name = 'Last name has to be smaller than 50 characters';
     }
 
     const age = calculateAge(userProfile.date_of_birth);
@@ -204,110 +212,112 @@ const Profile = () => {
 
   return (
       <div className="full-profile">
-    <div className="profile-container">
-      {userProfile && (
-          <form className="profile-form rounded-5" onSubmit={handleSubmit}>
-            <h1>@{userProfile.djuser.username}</h1>
-            <div className="">
-              <img id="profile-image" src="" alt="Profile Image"/>
-              {(imagePresent && isEditing) &&
-                  <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
-              {isEditing && <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  ref={image_ref}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />}
-            </div>
-            <div className='profile-input-group'>
-              <label htmlFor="first_name">First Name:</label>
-              <input
-                  type="text"
-                  id="first_name"
-                  name="first_name"
-                  className="form-control"
-                  ref={first_name_ref}
-                  value={userProfile.first_name}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />
-            </div>
-            {errors.first_name && <span className="error">{errors.first_name}</span>}
-            <div className='profile-input-group'>
-              <label htmlFor="last_name">Last Name:</label>
-              <input
-                  type="text"
-                  id="last_name"
-                  name="last_name"
-                  className="form-control"
-                  value={userProfile.last_name}
-                  ref={last_name_ref}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />
-            </div>
-            {errors.last_name && <span className="error">{errors.last_name}</span>}
-            <div className='profile-input-group'>
-              <label htmlFor="date_of_birth">Date of birth:</label>
-              <input
-                  type="date"
-                  id="date_of_birth"
-                  name="date_of_birth"
-                  className="form-control"
-                  ref={date_of_birth_ref}
-                  value={userProfile.date_of_birth}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />
-            </div>
-            {errors.date_of_birth && <span className="error">{errors.date_of_birth}</span>}
-            <div className='profile-input-group'>
-              <label htmlFor="mail">Email:</label>
-              <input
-                  type="email"
-                  id="mail"
-                  name="mail"
-                  className="form-control"
-                  ref={mail_ref}
-                  value={userProfile.mail}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />
-            </div>
-            {errors.mail && <span className="error">{errors.mail}</span>}
-            <div className='profile-input-group'>
-              <label htmlFor="phone_number">Phone Number:</label>
-              <input
-                  type="text"
-                  id="phone_number"
-                  name="phone_number"
-                  className="form-control"
-                  ref={phone_number_ref}
-                  value={userProfile.phone_number}
-                  onChange={handleInputChange}
-                  readOnly={!isEditing}
-              />
-            </div>
-            {errors.phone_number && <span className="error">{errors.phone_number}</span>}
-            <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
-            <div className="profile-button-container">
-              {isEditing ? (
-                  <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
-              ) : (
-                  <button type="button" className="edit-button" onClick={() => setIsEditing(true)}>Edit Profile</button>
-              )}
-              {isEditing && <button type="submit" className="save-button">Save Changes</button>}
-            </div>
-            <div className="password-reset-link">
-              <Link to="/password-change">Change password</Link>
-            </div>
-          </form>
+        <div className="profile-container">
+          {userProfile && (
+              <form className="profile-form rounded-5" onSubmit={handleSubmit}>
+                <h1>@{userProfile.djuser.username}</h1>
+                <div className="">
+                  <img id="profile-image" src="" alt="Profile Image"/>
+                  {(imagePresent && isEditing) &&
+                      <button type="button" id='image-delete' onClick={handleDeleteImage}>Delete Image</button>}
+                  {isEditing && <input
+                      type="file"
+                      id="image"
+                      name="image"
+                      ref={image_ref}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />}
+                </div>
+                <div className='profile-input-group'>
+                  <label htmlFor="first_name">First Name:</label>
+                  <input
+                      type="text"
+                      id="first_name"
+                      name="first_name"
+                      className="form-control"
+                      ref={first_name_ref}
+                      value={userProfile.first_name}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />
+                </div>
+                {errors.first_name && <span className="error">{errors.first_name}</span>}
+                <div className='profile-input-group'>
+                  <label htmlFor="last_name">Last Name:</label>
+                  <input
+                      type="text"
+                      id="last_name"
+                      name="last_name"
+                      className="form-control"
+                      value={userProfile.last_name}
+                      ref={last_name_ref}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />
+                </div>
+                {errors.last_name && <span className="error">{errors.last_name}</span>}
+                <div className='profile-input-group'>
+                  <label htmlFor="date_of_birth">Date of birth:</label>
+                  <input
+                      type="date"
+                      id="date_of_birth"
+                      name="date_of_birth"
+                      className="form-control"
+                      ref={date_of_birth_ref}
+                      value={userProfile.date_of_birth}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />
+                </div>
+                {errors.date_of_birth && <span className="error">{errors.date_of_birth}</span>}
+                <div className='profile-input-group'>
+                  <label htmlFor="mail">Email:</label>
+                  <input
+                      type="email"
+                      id="mail"
+                      name="mail"
+                      className="form-control"
+                      ref={mail_ref}
+                      value={userProfile.mail}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />
+                </div>
+                {errors.mail && <span className="error">{errors.mail}</span>}
+                <div className='profile-input-group'>
+                  <label htmlFor="phone_number">Phone Number:</label>
+                  <input
+                      type="text"
+                      id="phone_number"
+                      name="phone_number"
+                      className="form-control"
+                      ref={phone_number_ref}
+                      value={userProfile.phone_number}
+                      onChange={handleInputChange}
+                      readOnly={!isEditing}
+                  />
+                </div>
+                {errors.phone_number && <span className="error">{errors.phone_number}</span>}
+                <div id="profile-mapid" style={{height: '200px', width: '100%'}}></div>
+                <div className="profile-button-container">
+                  {isEditing ? (
+                      <button type="button" className="cancel-button" onClick={handleCancelClick}>Cancel</button>
+                  ) : (
+                      <button type="button" className="edit-button" onClick={() => setIsEditing(true)}>Edit
+                        Profile</button>
+                  )}
+                  {isEditing && <button type="submit" className="save-button">Save Changes</button>}
+                </div>
+                <div className="password-reset-link">
+                  <Link to="/password-change">Change password</Link>
+                </div>
+              </form>
 
-      )}
-    </div>
+          )}
+        </div>
         <div className="my-books">
+          <h1>MY BOOKS</h1>
           <div className="catalogContainer">
             {items.map(item => (
                 <BookItem key={+item.id} bookItem={item}/>

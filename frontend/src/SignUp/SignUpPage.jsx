@@ -103,8 +103,16 @@ const SignUpPage = ({setIsAuthenticated}) => {
       newErrors.first_name = 'First name is required';
     }
 
+    if(userProfile.first_name.trim().length > 50){
+      newErrors.first_name = 'First name has to be smaller than 50 characters';
+    }
+
     if (!userProfile.last_name) {
       newErrors.last_name = 'Last name is required';
+    }
+
+    if(userProfile.last_name.trim().length > 50){
+      newErrors.last_name = 'Last name has to be smaller than 50 characters';
     }
 
     const age = calculateAge(userProfile.date_of_birth);
@@ -127,6 +135,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
   };
 
   const handleSubmit = async (e) => {
+    const newErrors = {}
     e.preventDefault();
      if (!validate()) {
       return;
@@ -158,10 +167,19 @@ const SignUpPage = ({setIsAuthenticated}) => {
             navigate('/catalog');
       alert('Profile created successfully!');
       setIsEditing(false);
-
     } catch (error) {
-      alert('Failed to create profile. Please try again.');
-      console.error('Error creating profile:', error);
+      if(error.response.data.error === "Username already exists"){
+        setErrors({
+        ...errors,
+        "username": error.response.data.error
+      });
+      }
+      else if(error.response.data.error === "Email already in use"){
+        setErrors({
+        ...errors,
+        "mail": error.response.data.error
+      })
+      }
     }
 
   setIsEditing(!isEditing)
@@ -211,6 +229,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
                   placeholder={userProfile.username ? '' : 'Enter your username'}
                  />
             </div>
+            {errors.username && <span className="signup-error">{errors.username}</span>}
             <div className="p-2">
               <input
                   type="password"

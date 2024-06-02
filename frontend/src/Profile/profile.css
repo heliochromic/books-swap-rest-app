@@ -18,6 +18,11 @@
     width: 50%;
     height: 800px;
     overflow-y: scroll;
+    padding: 40px;
+}
+.my-books h1{
+    font-size: 30px;
+    text-align: center;
 }
 .change-container {
     display: flex;

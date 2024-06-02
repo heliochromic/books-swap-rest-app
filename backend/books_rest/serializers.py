@@ -74,7 +74,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserCatalogSerializer(serializers.ModelSerializer):
-    book_items = BookItemSerializer(many=True, read_only=True, source='bookitem_set')
+    book_items = serializers.SerializerMethodField()
     djuser = DJUserSerializer(source='django')
 
     class Meta:
@@ -82,6 +82,14 @@ class UserCatalogSerializer(serializers.ModelSerializer):
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
                   'image', 'djuser', 'book_items']
 
+    def get_book_items(self, obj):
+        book_items = obj.bookitem_set.filter(status="A")
+        return BookItemSerializer(book_items, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['book_items'] = self.get_book_items(instance)
+        return representation
 
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
