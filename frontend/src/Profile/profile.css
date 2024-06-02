@@ -141,7 +141,7 @@
     transform: scale(1.05);
 }
 
-.cancel-button:hover, #image-delete {
+.cancel-button:hover, #image-delete:hover {
     background: linear-gradient(135deg, #f44336, #f44336);
 }
 
