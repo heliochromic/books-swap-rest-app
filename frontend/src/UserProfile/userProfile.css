@@ -10,6 +10,7 @@
   font-size: 18px;
   font-weight: normal;
     color: darkgray;
+  margin-bottom: 0;
 }
 
 .profile-details {
@@ -37,4 +38,17 @@
 
 .user-delete-button:hover {
   background-color: #d32f2f;
+}
+.user-rating{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+.user-rating img{
+  width: 3.5%;
+  height: 3.5%;
+  margin-bottom: 2px;
+  margin-right: 5px;
 }

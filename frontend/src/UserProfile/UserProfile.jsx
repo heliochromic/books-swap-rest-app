@@ -71,10 +71,15 @@ const UserProfile = () => {
             />
             <h2 className="first-last">{profileData.first_name} {profileData.last_name}</h2>
             <p className="username">@{profileData.djuser.username}</p>
+            <div className="user-rating">
+                <img src="http://localhost:8000/media/images/utils/star.png" alt="User Rating"/>
+                <span>{profileData.rating}</span>
+            </div>
             <div className="profile-details">
-                <p>Email: {profileData.djuser.email}</p>
-                <p>Phone number: {profileData.phone_number}</p>
-                <p>Age: {profileData.age}</p>
+                {me.djuser.is_staff && <p>Email: {profileData.djuser.email}</p>}
+                {me.djuser.is_staff && <p>Phone number: {profileData.phone_number}</p>}
+                <p>Date of birth: {profileData.date_of_birth}</p>
+                <p>Number of books: {items.length}</p>
             </div>
             <div className="catalogContainer">
                 {items.map(item => (

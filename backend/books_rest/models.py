@@ -17,7 +17,7 @@ class User(models.Model):
     phone_number = models.CharField(max_length=10, help_text="Enter your phone number")
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
-    rating = models.IntegerField(default=0)
+    rating = models.FloatField(default=0)
     image = models.ImageField(upload_to='images/users/', help_text="Upload your image",
                               default='images/users/default.png', null=False)
     registration_date = models.DateField(default=datetime.now)
