@@ -1,4 +1,10 @@
-.catalogContainer {
+#catalog {
+    padding: 50px 0;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+#catalogContainer {
     display: flex;
     flex-wrap: wrap;
     justify-content: left;
@@ -21,9 +27,6 @@
     height: 330px;
 }
 
-/*.card-body {*/
-/*    height: 110px;*/
-/*}*/
 .author{
   font-size: 0.875rem;
   font-style: italic;
