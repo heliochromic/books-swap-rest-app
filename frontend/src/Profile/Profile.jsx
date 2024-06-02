@@ -247,7 +247,7 @@ const Profile = ({ setIsAuthenticated }) => {
                       type="text"
                       id="first_name"
                       name="first_name"
-                      className="form-control"
+                      className="form-control profile-form-control"
                       ref={first_name_ref}
                       value={userProfile.first_name}
                       onChange={handleInputChange}
@@ -261,7 +261,7 @@ const Profile = ({ setIsAuthenticated }) => {
                       type="text"
                       id="last_name"
                       name="last_name"
-                      className="form-control"
+                      className="form-control profile-form-control"
                       value={userProfile.last_name}
                       ref={last_name_ref}
                       onChange={handleInputChange}
@@ -275,7 +275,7 @@ const Profile = ({ setIsAuthenticated }) => {
                       type="date"
                       id="date_of_birth"
                       name="date_of_birth"
-                      className="form-control"
+                      className="form-control profile-form-control"
                       ref={date_of_birth_ref}
                       value={userProfile.date_of_birth}
                       onChange={handleInputChange}
@@ -289,7 +289,7 @@ const Profile = ({ setIsAuthenticated }) => {
                       type="email"
                       id="mail"
                       name="mail"
-                      className="form-control"
+                      className="form-control profile-form-control"
                       ref={mail_ref}
                       value={userProfile.mail}
                       onChange={handleInputChange}
@@ -303,7 +303,7 @@ const Profile = ({ setIsAuthenticated }) => {
                       type="text"
                       id="phone_number"
                       name="phone_number"
-                      className="form-control"
+                      className="form-control profile-form-control"
                       ref={phone_number_ref}
                       value={userProfile.phone_number}
                       onChange={handleInputChange}

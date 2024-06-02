@@ -139,3 +139,11 @@ margin-left: 0 !important;
 .card{
     height: 480px;
 }
+
+#catalogSearch, #catalogSort, #catalogStatusFilter {
+    border-color: rgba(0, 0, 0, 0.175);
+}
+
+#catalogConfigs {
+    margin: 16px 8px;
+}
