@@ -1,26 +1,12 @@
+from django.db.models import Q
 from rest_framework import serializers
 from django.contrib.auth.models import User as DJUser
 from .models import User, BookItem, Request
 
 
-class BookSerializer(serializers.Serializer):
-    ISBN = serializers.CharField(allow_null=True)
-    title = serializers.CharField(allow_null=True)
-    author = serializers.CharField(allow_null=True)
-    genre = serializers.CharField(allow_null=True)
-    language = serializers.CharField(allow_null=True)
-    pages = serializers.IntegerField(allow_null=True)
-    year = serializers.CharField(allow_null=True)
-    description = serializers.CharField(allow_blank=True, allow_null=True)
-
-    # @staticmethod
-    # def validate_year(value):
-    #     if not value.isdigit() or len(value) != 4:
-    #         raise serializers.ValidationError("Year must be a 4-digit string.")
-    #     return value
-
-
 class BookItemSerializer(serializers.ModelSerializer):
+    distance = serializers.FloatField(read_only=True)
+
     class Meta:
         model = BookItem
         fields = '__all__'
@@ -47,7 +33,8 @@ class UserLocationSerializer(serializers.ModelSerializer):
         fields = ['userID', "djuser", 'latitude', 'longitude', 'image', 'active_book_items_count']
 
     def get_active_book_items_count(self, obj):
-        return BookItem.objects.filter(userID=obj.userID, status='A').count()
+        return BookItem.objects.exclude(userID_id=obj.userID).filter(
+            Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)).count()
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -56,7 +43,8 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
+                  'rating',
                   'image', 'djuser']
 
     def update(self, instance, validated_data):
@@ -79,17 +67,19 @@ class UserCatalogSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude', 'rating',
+        fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
+                  'rating',
                   'image', 'djuser', 'book_items']
 
     def get_book_items(self, obj):
-        book_items = obj.bookitem_set.filter(status="A")
+        book_items = obj.bookitem_set.filter( Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))
         return BookItemSerializer(book_items, many=True).data
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
         representation['book_items'] = self.get_book_items(instance)
         return representation
+
 
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)

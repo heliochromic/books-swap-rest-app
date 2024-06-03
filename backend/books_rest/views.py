@@ -1,12 +1,10 @@
-import re
 from datetime import datetime
 import os
-
-import requests
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
+from django.db.models import F, FloatField, ExpressionWrapper, Value
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
+from django.db.models.functions import Radians, ACos, Cos, Sin
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -19,7 +17,7 @@ from django.db.models import Q
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
-    UserLocationSerializer, BookSerializer, UserCatalogSerializer, PasswordChangeSerializer
+    UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer
 
 
 class CatalogView(APIView):
@@ -29,8 +27,23 @@ class CatalogView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
+        user = User.objects.filter(django=request.user).first()
+        user_lat = user.latitude
+        user_lon = user.longitude
+
         queryset = BookItem.objects.exclude(userID_id=request.user.id).filter(
             Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)
+        ).annotate(
+            latitude=F('userID__latitude'),
+            longitude=F('userID__longitude'),
+        ).annotate(
+            distance=ExpressionWrapper(
+                6371 * ACos(
+                    Cos(Radians(Value(user_lat))) * Cos(Radians(F('latitude'))) *
+                    Cos(Radians(F('longitude')) - Radians(Value(user_lon))) +
+                    Sin(Radians(Value(user_lat))) * Sin(Radians(F('latitude')))
+                ), output_field=FloatField()
+            )
         )
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -169,6 +182,7 @@ class CatalogMyItemsView(APIView):
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 # class ISBNView(APIView):
 #     permission_classes = [IsAuthenticated]
 #     authentication_classes = [TokenAuthentication]
@@ -257,7 +271,6 @@ class RequestView(APIView):
 
         serializer = RequestSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 
 class RequestItemView(APIView):

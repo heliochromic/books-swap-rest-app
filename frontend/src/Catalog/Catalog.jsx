@@ -4,6 +4,7 @@ import BookItem from "./BookItem/BookItem";
 import AddBookBadge from "./AddBookBadge/AddBookBadge";
 import "./Catalog.css"
 import {LoadingScreen} from "../Header/LoadingScreen";
+import {getConfig} from "../utils";
 
 const Catalog = () => {
     const [items, setItems] = useState([]);
@@ -16,15 +17,7 @@ const Catalog = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const token = sessionStorage.getItem('token');
-
-                const config = {
-                    headers: {
-                        'Authorization': `Token ${token}`
-                    }
-                };
-
-                const response = await axios.get('http://localhost:8000/api/catalog/', config);
+                const response = await axios.get('http://localhost:8000/api/catalog/', getConfig());
                 setItems(response.data);
                 console.log(response.data);
             } catch (err) {
@@ -62,6 +55,12 @@ const Catalog = () => {
             } else if (sortOrder === 'dateDesc') {
                 return new Date(b.date) - new Date(a.date);
             }
+            else if(sortOrder === 'distanceAsc'){
+                return a.distance - b.distance
+            }
+            else if(sortOrder === 'distanceDesc'){
+                return b.distance - a.distance
+            }
             return 0;
         });
 
@@ -89,6 +88,8 @@ const Catalog = () => {
                             <option value="titleDesc">From Z to A</option>
                             <option value="dateAsc">From Newest to Oldest</option>
                             <option value="dateDesc">From Oldest to Newest</option>
+                            <option value="distanceDesc">From Furthest to Nearest</option>
+                            <option value="distanceAsc">From Nearest to Furthest</option>
                         </select>
                     </div>
                     <div className="col-md-2">
