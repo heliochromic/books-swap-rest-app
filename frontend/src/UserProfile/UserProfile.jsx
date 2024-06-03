@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import BookItem from '../Catalog/BookItem/BookItem';
 import './userProfile.css';
 import { getConfig } from '../utils';
+import {LoadingScreen} from "../Header/LoadingScreen";
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -69,7 +70,7 @@ const UserProfile = () => {
     };
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <LoadingScreen></LoadingScreen>;
     }
 
     if (error) {

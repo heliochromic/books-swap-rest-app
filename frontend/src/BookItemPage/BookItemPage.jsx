@@ -3,6 +3,7 @@ import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import RequestModal from "./RequestModal/RequestModal"
 import {getConfig} from "../utils";
+import {LoadingScreen} from "../Header/LoadingScreen";
 
 const BookItemPage = () => {
     const {id} = useParams();
@@ -38,7 +39,7 @@ const BookItemPage = () => {
         }
     }
 
-    if (loading) return <div className="text-center py-5">Loading...</div>;
+    if (loading) return <LoadingScreen></LoadingScreen>;
     if (error) return <div className="alert alert-danger text-center">Error: {error}</div>;
 
     return (

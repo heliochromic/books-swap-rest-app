@@ -3,6 +3,7 @@ import axios from 'axios';
 import BookItem from "./BookItem/BookItem";
 import AddBookBadge from "./AddBookBadge/AddBookBadge";
 import "./Catalog.css"
+import {LoadingScreen} from "../Header/LoadingScreen";
 
 const Catalog = () => {
     const [items, setItems] = useState([]);
@@ -64,7 +65,7 @@ const Catalog = () => {
             return 0;
         });
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingScreen></LoadingScreen>;
     if (error) return <div>Error: {error.message}</div>;
 
     return (

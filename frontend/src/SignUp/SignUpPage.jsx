@@ -8,7 +8,6 @@ import {calculateAge} from "../utils";
 
 const SignUpPage = ({setIsAuthenticated}) => {
   const [userProfile, setUserProfile] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [errors, setErrors] = useState({});
   const [isEditing, setIsEditing] = useState(false);
@@ -34,10 +33,8 @@ const SignUpPage = ({setIsAuthenticated}) => {
             "longitude": "",
             "image": ""
         });
-        setLoading(false);
       } catch (error) {
         setError(error.message);
-        setLoading(false);
       }
     };
     fetchUserProfile()
@@ -191,10 +188,6 @@ const SignUpPage = ({setIsAuthenticated}) => {
     if (image_ref.current) {
       image_ref.current.value = null;
     }
-  }
-
-  if (loading) {
-    return <div>Loading...</div>;
   }
 
   if (error) {

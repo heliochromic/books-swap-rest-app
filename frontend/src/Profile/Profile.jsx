@@ -6,6 +6,7 @@ import './profile.css';
 import {Link, useNavigate} from "react-router-dom";
 import {calculateAge, getConfig} from "../utils";
 import BookItem from "../Catalog/BookItem/BookItem";
+import {LoadingScreen} from "../Header/LoadingScreen";
 
 const Profile = ({ setIsAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -215,7 +216,7 @@ const Profile = ({ setIsAuthenticated }) => {
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <LoadingScreen></LoadingScreen>;
   }
 
   if (error) {
@@ -224,7 +225,7 @@ const Profile = ({ setIsAuthenticated }) => {
 
   return (
       <div className="full-profile">
-        <div className="profile-container">
+      <div className="profile-container">
           {userProfile && (
               <form className="profile-form rounded-5" onSubmit={handleSubmit}>
                 <h1>@{userProfile.djuser.username}</h1>
