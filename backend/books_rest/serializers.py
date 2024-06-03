@@ -33,8 +33,8 @@ class UserLocationSerializer(serializers.ModelSerializer):
         fields = ['userID', "djuser", 'latitude', 'longitude', 'image', 'active_book_items_count']
 
     def get_active_book_items_count(self, obj):
-        return BookItem.objects.exclude(userID_id=obj.userID).filter(
-            Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)).count()
+        return BookItem.objects.filter(Q(userID_id=obj.userID) &
+                                       Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)).count()
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -72,7 +72,7 @@ class UserCatalogSerializer(serializers.ModelSerializer):
                   'image', 'djuser', 'book_items']
 
     def get_book_items(self, obj):
-        book_items = obj.bookitem_set.filter( Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))
+        book_items = obj.bookitem_set.filter(Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))
         return BookItemSerializer(book_items, many=True).data
 
     def to_representation(self, instance):

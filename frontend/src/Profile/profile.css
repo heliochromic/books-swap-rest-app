@@ -10,7 +10,7 @@
     justify-content: center;
     align-items: center;
     width: 50%;
-    height: 100%;
+    height: 930px;
     margin: 0;
     padding: 20px;
     border-right: 1px solid darkgray;
@@ -18,7 +18,7 @@
 
 .my-books {
     width: 50%;
-    height: 800px;
+    height: 930px;
     overflow-y: scroll;
     padding: 40px;
 }
@@ -52,7 +52,7 @@
 .catalogContainer {
     display: flex;
     flex-wrap: wrap;
-    justify-content: left;
+    justify-content: center;
     width: 100%
 }
 
