@@ -19,14 +19,13 @@ const Header = () => {
 
     const handleLogout = async () => {
         try {
-            const config = getConfig();
-            await axios.post('http://localhost:8000/api/logout/', {}, config);
-            sessionStorage.removeItem('token');
+            await axios.post('http://localhost:8000/api/logout/', getConfig());
             console.log('Logout successful');
         } catch (error) {
             console.error('Logout failed:', error);
         }
         sessionStorage.clear();
+        setIsAuthenticated(false);
         window.location.href = '/';
     };
 
