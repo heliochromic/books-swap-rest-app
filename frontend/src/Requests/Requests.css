@@ -1,0 +1,17 @@
+#requestsContainer {
+    height: 100%;
+    padding-top: 10px;
+}
+
+.nav {
+    --bs-nav-link-hover-color: black;
+}
+
+.nav-link {
+    color: black;
+}
+
+.nav-pills {
+--bs-nav-pills-border-radius: 20px;
+    --bs-nav-pills-link-active-bg: #3e3e3e;
+}

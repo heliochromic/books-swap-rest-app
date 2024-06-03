@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import axios from "axios";
 import BookItemTiny from "./BookItemTiny/BookItemTiny";
+import {getConfig} from "../../utils";
 
 const RequestModal = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [myBooks, setMyBooks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -42,9 +43,10 @@ const RequestModal = () => {
                 },
             };
 
-            const response = await axios.get("http://localhost:8000/api/requests/", config);
+            const response = await axios.get("http://localhost:8000/api/requests/my_requests/", config);
             const requests = response.data;
-            const isRequested = requests.some(request => request.sender_book === +id);
+            console.log(requests)
+            const isRequested = requests.some(request => request.receiver_book_id === +id);
             setAlreadyRequested(isRequested);
         } catch (err) {
             setError(err.message);
@@ -53,16 +55,10 @@ const RequestModal = () => {
 
     const requestBook = async () => {
         try {
-            const token = sessionStorage.getItem("token");
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                },
-            };
-
-            await axios.post(`http://localhost:8000/api/catalog/${id}`, {
-                receiver_book_id: +selectedItemId,
-            }, config);
+            console.log("ehe")
+            await axios.post(`http://localhost:8000/api/catalog/${+selectedItemId}`, {
+                receiver_book_id: +id,
+            }, getConfig());
             setAlreadyRequested(true);
             alert('Book requested successfully!');
             await fetchMyBooks();
@@ -104,7 +100,7 @@ const RequestModal = () => {
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
                                         type="button"
-                                        style={{ borderRadius: '25px' }}
+                                        style={{borderRadius: '25px'}}
                                     >
                                         Exchange books
                                     </button>
@@ -139,7 +135,7 @@ const RequestModal = () => {
                                                             <BookItemTiny
                                                                 key={book.itemID}
                                                                 book={book}
-                                                                onClick={(bookId) => setSelectedBookId(bookId)}
+                                                                onClick={() => setSelectedBookId(book.itemID)}
                                                             />
                                                         ))}
                                                         <div className="modal-footer">

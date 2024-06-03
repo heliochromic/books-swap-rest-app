@@ -1,5 +1,6 @@
 #addBook {
-    width: 100%;
+    max-width: 1200px;
+    margin: 25px auto;
     padding-left: 10px;
     padding-right: 10px;
 }
@@ -52,6 +53,7 @@
 
 .uploadButton {
     margin-left: 20px;
+    border-radius: 20px;
 }
 #isbn, #title, #author, #genre, #language, #pages, #year, #description, #status{
     border-radius: 25px;

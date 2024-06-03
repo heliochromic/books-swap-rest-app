@@ -83,8 +83,6 @@ class CatalogView(APIView):
             'publish_time': datetime.now()
         }
 
-        print()
-
         serializer = BookItemSerializer(data=book_item_data)
 
         if serializer.is_valid():
@@ -113,14 +111,20 @@ class BookItemView(APIView):
     def post(self, request, pk):
         receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
 
+        print("hehe")
+
         if not receiver_book_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        print("hehe1")
 
         try:
             sender_book_instance = BookItem.objects.get(itemID=pk)
             receiver_book_instance = BookItem.objects.get(itemID=receiver_book_id)
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        print("hehe2")
 
         if sender_book_instance.userID.userID == receiver_book_instance.userID.userID:
             return Response(data={"error": "Sender and receiver books cannot be the same"},
@@ -183,91 +187,26 @@ class CatalogMyItemsView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# class ISBNView(APIView):
-#     permission_classes = [IsAuthenticated]
-#     authentication_classes = [TokenAuthentication]
-#
-#     @staticmethod
-#     def clean_isbn(isbn):
-#         return re.sub(r'\D', '', isbn)
-#
-#     @staticmethod
-#     def is_valid_isbn(isbn):
-#         cleaned_isbn = ISBNView.clean_isbn(isbn)
-#         isbn_pattern = r'^(?:\d{10}|\d{13})$'
-#         return re.match(isbn_pattern, cleaned_isbn) is not None
-#
-#     @staticmethod
-#     def fetch_book(isbn):
-#         url = "https://www.googleapis.com/books/v1/volumes"
-#
-#         params = {
-#             "q": f"isbn:{isbn}"
-#         }
-#
-#         response = requests.get(url, params=params)
-#
-#         if response.status_code == 200:
-#             data = response.json()
-#
-#             items = data.get('items')
-#             if items:
-#                 return items[0]['volumeInfo']
-#             return items
-#
-#         return None
-#
-#     @action(detail=False, methods=['post'])
-#     def post(self, request):
-#         ISBN = request.data.get("isbn", None)
-#
-#         print(ISBN)
-#         clean_ISBN = ISBNView.clean_isbn(ISBN)
-#
-#         if not ISBN or not ISBNView.is_valid_isbn(clean_ISBN):
-#             return Response(data={"error": "ISBN is not provided or invalid"}, status=status.HTTP_400_BAD_REQUEST)
-#
-#         book_info = ISBNView.fetch_book(clean_ISBN)
-#         if not book_info:
-#             return Response(data={"error": "Unable to fetch book data"}, status=status.HTTP_404_NOT_FOUND)
-#
-#         date = book_info.get('publishedDate', 'N/A')
-#         genre = book_info.get('categories', None)
-#         pages = book_info.get('pageCount', None)
-#
-#         book_data = {
-#             "ISBN": clean_ISBN,
-#             "title": book_info.get('title', 'N/A'),
-#             "author": book_info.get('authors', ['N/A'])[0],
-#             "genre": ", ".join(genre) if genre else "-",
-#             "language": book_info.get('language', 'N/A'),
-#             "pages": pages if pages else None,
-#             "year": date if len(date) == 4 else datetime.fromisoformat(date).strftime('%Y'),
-#             "description": book_info.get('description')
-#         }
-#
-#         serializer = BookSerializer(data=book_data)
-#
-#         if serializer.is_valid():
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         else:
-#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 class RequestView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [TokenAuthentication]
 
-    @action(detail=False, methods=['get'])  # отримати всі свої запити на книгу
-    def get(self, request):
-        receiver_id = request.user.id
-        print(receiver_id)
-        if not receiver_id:
-            return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            queryset = Request.objects.filter(receiver_book_id__userID=receiver_id)
-        except Request.DoesNotExist:
-            return Response(data={"error": "Request not found"}, status=status.HTTP_404_NOT_FOUND)
+    @action(detail=False, methods=['get'])
+    def get(self, request, request_type):
+        user_id = request.user.id
+
+        print(request_type)
+
+        if request_type == "my_requests":
+            queryset = Request.objects.filter(sender_book_id__userID=user_id)
+        elif request_type == "requests_to_me":
+            queryset = Request.objects.filter(receiver_book_id__userID=user_id)
+        elif request_type == "rejected":
+            queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="R")
+        elif request_type == "confirmed":
+            queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="A")
+        else:
+            return Response(data={"error": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = RequestSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

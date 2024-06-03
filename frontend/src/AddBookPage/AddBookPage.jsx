@@ -211,7 +211,7 @@ const AddBookPage = () => {
                         </div>
                         <div className="mb-3 col-md-6">
                             <label className="form-label">
-                                Upload Files <small>(3 images max)</small>
+                                Upload Files <small>(1-3 needed)</small>
                             </label>
                             <button type="button" className="btn btn-secondary uploadButton" onClick={triggerFileInput}>
                                 Choose Files
