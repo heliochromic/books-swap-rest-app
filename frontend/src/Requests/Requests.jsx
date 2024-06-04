@@ -13,7 +13,7 @@ const Requests = () => {
             className={`btn nav-link ${activeTab === "requests_to_me" ? "active" : ""}`}
             onClick={() => setActiveTab("requests_to_me")}
           >
-            Запити мені
+            Incoming
           </button>
         </li>
         <li className="nav-item">
@@ -21,7 +21,7 @@ const Requests = () => {
             className={`btn nav-link ${activeTab === "my_requests" ? "active" : ""}`}
             onClick={() => setActiveTab("my_requests")}
           >
-            Мої запити
+            Sent
           </button>
         </li>
         <li className="nav-item">
@@ -29,7 +29,7 @@ const Requests = () => {
             className={`btn nav-link ${activeTab === "rejected" ? "active" : ""}`}
             onClick={() => setActiveTab("rejected")}
           >
-            Відхилені
+            Rejected
           </button>
         </li>
         <li className="nav-item">
@@ -37,7 +37,7 @@ const Requests = () => {
             className={`btn nav-link ${activeTab === "confirmed" ? "active" : ""}`}
             onClick={() => setActiveTab("confirmed")}
           >
-            Підтверджені
+            Approved
           </button>
         </li>
       </ul>

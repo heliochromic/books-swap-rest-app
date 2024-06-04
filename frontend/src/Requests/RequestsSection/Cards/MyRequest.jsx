@@ -43,8 +43,8 @@ const MyRequest = ({request}) => {
                             <p>Автор: {request.sender_book.author}</p>
                         </Link>
                     </div>
+                    <div className="request-answer">Request is waiting for being approved</div>
                 </div>
-                <div className="request-answer">Request is waiting for being approved</div>
             </div>
         </div>
     );

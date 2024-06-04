@@ -48,12 +48,12 @@ const ApprovedRequest = ({ request }) => {
                         </Link>
                     </div>
                     <svg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path d="m0 0h24v24h-24z" fill="#fff" opacity="0" transform="matrix(0 -1 1 0 0 24)" />
+                        <path d="m0 0h24v24h-24z" fill="#fff" opacity="0" transform="matrix(0 -1 1 0 0 24)"/>
                         <g fill="#231f20">
                             <path
-                                d="m4 9h13l-1.6 1.2a1 1 0 0 0 -.2 1.4 1 1 0 0 0 .8.4 1 1 0 0 0 .6-.2l4-3a1 1 0 0 0 0-1.59l-3.86-3a1 1 0 0 0 -1.23 1.58l1.57 1.21h-13.08a1 1 0 0 0 0 2z" />
+                                d="m4 9h13l-1.6 1.2a1 1 0 0 0 -.2 1.4 1 1 0 0 0 .8.4 1 1 0 0 0 .6-.2l4-3a1 1 0 0 0 0-1.59l-3.86-3a1 1 0 0 0 -1.23 1.58l1.57 1.21h-13.08a1 1 0 0 0 0 2z"/>
                             <path
-                                d="m20 16h-13l1.6-1.2a1 1 0 0 0 -1.2-1.6l-4 3a1 1 0 0 0 0 1.59l3.86 3a1 1 0 0 0 .61.21 1 1 0 0 0 .79-.39 1 1 0 0 0 -.17-1.4l-1.57-1.21h13.08a1 1 0 0 0 0-2z" />
+                                d="m20 16h-13l1.6-1.2a1 1 0 0 0 -1.2-1.6l-4 3a1 1 0 0 0 0 1.59l3.86 3a1 1 0 0 0 .61.21 1 1 0 0 0 .79-.39 1 1 0 0 0 -.17-1.4l-1.57-1.21h13.08a1 1 0 0 0 0-2z"/>
                         </g>
                     </svg>
                     <div className="book-info">
@@ -70,33 +70,23 @@ const ApprovedRequest = ({ request }) => {
                             <p>Автор: {request.sender_book.author}</p>
                         </Link>
                     </div>
-                </div>
-                <div className="request-buttons">
-                    <button
-                        className="btn btn-primary"
-                        data-bs-toggle="collapse"
-                        href={`#collapse${request.requestID}`}
-                        role="button"
-                        aria-expanded="false"
-                        onClick={handleToggle}
-                    >
-                        Contacts
-                    </button>
-                    <div className="collapse" id={`collapse${request.requestID}`}>
-                        <div className="card card-body card-creds">
-                            {loading ? (
-                                <p>Loading...</p>
-                            ) : error ? (
-                                <p>{error}</p>
-                            ) : user ? (
-                                <div>
-                                    <p>{user.first_name} {user.last_name}</p>
-                                    <p>Email: {user.mail}</p>
-                                    <p>Phone: {user.phone_number}</p>
-                                </div>
-                            ) : (
-                                <p>No user data available.</p>
-                            )}
+                    <div className="request-answer">
+                        <div>
+                            <strong>Contacts:</strong>
+                        </div>
+                        <div>
+                                {loading ? (
+                                    <p>Loading...</p>
+                                ) : error ? (
+                                    <p>{error}</p>
+                                ) : user ? (
+                                    <div>
+                                        <p>Name: {user.first_name} {user.last_name}</p>
+                                        <p>Phone: {user.phone_number}</p>
+                                    </div>
+                                ) : (
+                                    <p>No user data available.</p>
+                                )}
                         </div>
                     </div>
                 </div>
