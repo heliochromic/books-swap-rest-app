@@ -19,8 +19,7 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const config = getConfig();
-                const response = await axios.get(`http://localhost:8000/api/profile/${id}`, config);
+                const response = await axios.get(`http://localhost:8000/api/profile/${id}`, getConfig());
                 const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
                 setProfileData(response.data);
                 setMe(me.data);
@@ -36,7 +35,7 @@ const UserProfile = () => {
 
     useEffect(() => {
         if (profileData && me) {
-            setIsAdmin(me.djuser.is_superuser && profileData.djuser.is_staff);
+            setIsAdmin(me.djuser.is_superuser && profileData.djuser && profileData.djuser.is_staff);
         }
     }, [profileData, me]);
 
@@ -97,14 +96,14 @@ const UserProfile = () => {
                 className="profile-image"
             />
             <h2 className="first-last">{profileData.first_name} {profileData.last_name}</h2>
-            <p className="username">@{profileData.djuser.username}</p>
+            {profileData.djuser && <p className="username">@{profileData.djuser.username}</p>}
             <div className="user-rating">
                 <img src="http://localhost:8000/media/images/utils/star.png" alt="User Rating" />
                 <span>{profileData.rating}</span>
             </div>
             <div className="profile-details">
-                {me.djuser.is_staff && <p>Email: {profileData.djuser.email}</p>}
-                {me.djuser.is_staff && <p>Phone number: {profileData.phone_number}</p>}
+                {(me.djuser.is_staff && profileData.djuser) && <p>Email: {profileData.djuser.email}</p>}
+                {(me.djuser.is_staff && profileData.djuser) && <p>Phone number: {profileData.phone_number}</p>}
                 <p>Date of birth: {profileData.date_of_birth}</p>
                 <p>Number of books: {items.length}</p>
             </div>
