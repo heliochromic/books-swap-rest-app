@@ -1,8 +1,12 @@
 import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {getConfig} from "../../utils";
+import RequestToMe from "./Cards/RequestToMe";
+import MyRequest from "./Cards/MyRequest";
+import ApprovedRequest from "./Cards/ApprovedRequest";
+import RejectedRequest from "./Cards/RejectedRequest";
 
-const RequestsSection = ({title, requestType}) => {
+const RequestsSection = ({requestType}) => {
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,8 +14,10 @@ const RequestsSection = ({title, requestType}) => {
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/requests/${requestType}/`, getConfig());
-                console.log(response.data)
+                const response = await axios.get(
+                    `http://localhost:8000/api/requests/${requestType}/`,
+                    getConfig()
+                );
                 setRequests(response.data);
                 setLoading(false);
             } catch (err) {
@@ -20,7 +26,7 @@ const RequestsSection = ({title, requestType}) => {
             }
         };
 
-        fetchRequests().then(e => console.log(e));
+        fetchRequests();
     }, [requestType]);
 
     if (loading) {
@@ -32,12 +38,23 @@ const RequestsSection = ({title, requestType}) => {
     }
 
     return (
-        <div className="requestBlock">
+        <div id="requestBlock">
             {requests.length > 0 ? (
                 requests.map((request) => (
-                    <div key={request.id} className="request-item">
-                        <p>{request.requestID}</p>
-                    </div>
+                    <>
+                        {requestType === "requests_to_me" && (
+                            <RequestToMe request={request}/>
+                        )}
+                        {requestType === "my_requests" && (
+                            <MyRequest request={request}/>
+                        )}
+                        {requestType === "rejected" && (
+                            <RejectedRequest request={request}/>
+                        )}
+                        {requestType === "confirmed" && (
+                            <ApprovedRequest request={request}/>
+                        )}
+                    </>
                 ))
             ) : (
                 <p>No requests found.</p>

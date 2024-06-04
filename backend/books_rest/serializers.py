@@ -18,6 +18,16 @@ class RequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class RequestItemSerializer(serializers.ModelSerializer):
+    receiver_book = BookItemSerializer()
+    sender_book = BookItemSerializer()
+
+    class Meta:
+        model = Request
+        fields = ['requestID', 'receiver_book', 'sender_book', 'status', 'sending_time', 'approval_time',
+                  'deletion_time']
+
+
 class DJUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = DJUser
@@ -44,8 +54,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
-                  'rating',
-                  'image', 'djuser']
+                  'rating', 'image', 'djuser']
 
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
@@ -68,8 +77,7 @@ class UserCatalogSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
-                  'rating',
-                  'image', 'djuser', 'book_items']
+                  'rating', 'image', 'djuser', 'book_items']
 
     def get_book_items(self, obj):
         book_items = obj.bookitem_set.filter(Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))

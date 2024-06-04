@@ -17,7 +17,7 @@ from django.db.models import Q
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
-    UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer
+    UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer, RequestItemSerializer
 
 
 class CatalogView(APIView):
@@ -87,7 +87,6 @@ class CatalogView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            print(serializer.data)
             return Response(serializer.data, status=201)
         print(serializer.errors)
         return Response(serializer.errors, status=400)
@@ -102,7 +101,7 @@ class BookItemView(APIView):
         try:
             book_item_instance = BookItem.objects.get(itemID=pk)
         except User.DoesNotExist:
-            return Response(data={"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(data={"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = BookItemSerializer(instance=book_item_instance)
         return Response(serializer.data)
@@ -111,20 +110,14 @@ class BookItemView(APIView):
     def post(self, request, pk):
         receiver_book_id = request.data.get('receiver_book_id')  # тут ти пропонуєш свою книгу
 
-        print("hehe")
-
         if not receiver_book_id:
             return Response(data={"error": "Receiver book ID not provided"}, status=status.HTTP_400_BAD_REQUEST)
-
-        print("hehe1")
 
         try:
             sender_book_instance = BookItem.objects.get(itemID=pk)
             receiver_book_instance = BookItem.objects.get(itemID=receiver_book_id)
         except BookItem.DoesNotExist:
             return Response(data={"error": "Book item not found"}, status=status.HTTP_404_NOT_FOUND)
-
-        print("hehe2")
 
         if sender_book_instance.userID.userID == receiver_book_instance.userID.userID:
             return Response(data={"error": "Sender and receiver books cannot be the same"},
@@ -208,7 +201,7 @@ class RequestView(APIView):
         else:
             return Response(data={"error": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer = RequestSerializer(queryset, many=True)
+        serializer = RequestItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 

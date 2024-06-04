@@ -43,10 +43,10 @@ const Requests = () => {
       </ul>
 
       <div className="requests-section">
-        {activeTab === "requests_to_me" && <RequestsSection title="Запити мені" requestType="requests_to_me" />}
-        {activeTab === "my_requests" && <RequestsSection title="Мої запити" requestType="my_requests" />}
-        {activeTab === "rejected" && <RequestsSection title="Відхилені запити" requestType="rejected" />}
-        {activeTab === "confirmed" && <RequestsSection title="Підтверджені запити" requestType="confirmed" />}
+        {activeTab === "requests_to_me" && <RequestsSection requestType="requests_to_me" />}
+        {activeTab === "my_requests" && <RequestsSection requestType="my_requests" />}
+        {activeTab === "rejected" && <RequestsSection requestType="rejected" />}
+        {activeTab === "confirmed" && <RequestsSection requestType="confirmed" />}
       </div>
     </div>
   );
