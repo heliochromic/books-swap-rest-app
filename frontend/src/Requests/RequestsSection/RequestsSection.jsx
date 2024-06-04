@@ -5,6 +5,7 @@ import RequestToMe from "./Cards/RequestToMe";
 import MyRequest from "./Cards/MyRequest";
 import ApprovedRequest from "./Cards/ApprovedRequest";
 import RejectedRequest from "./Cards/RejectedRequest";
+import {LoadingScreen} from "../../Header/LoadingScreen";
 
 const RequestsSection = ({ requestType }) => {
     const [requests, setRequests] = useState([]);
@@ -30,7 +31,7 @@ const RequestsSection = ({ requestType }) => {
     }, [requestType]);
 
     if (loading) {
-        return <p>Loading...</p>;
+        return <LoadingScreen></LoadingScreen>;
     }
 
     if (error) {

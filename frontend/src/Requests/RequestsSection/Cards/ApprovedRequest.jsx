@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { getConfig } from "../../../utils";
+import {LoadingScreen} from "../../../Header/LoadingScreen";
 
 const ApprovedRequest = ({ request }) => {
     const [isExpanded, setIsExpanded] = useState(false);
