@@ -166,7 +166,7 @@ svg {
     margin-top: 15px;
 }
 
-a {
+#requestBlock > div > div > div > div > a {
     text-decoration: none;
     color: inherit;
     pointer: cursor;

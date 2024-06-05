@@ -138,9 +138,10 @@
 
 .cancel-button, #image-delete, .user-delete {
     background: linear-gradient(135deg, #f44336, #f44336);
-    margin-right: 10px;
 }
-
+ #image-delete, .user-delete {
+  margin-right: 10px;
+ }
 .edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover, #image-delete:hover. .user-delete:hover {
     background: linear-gradient(135deg, dodgerblue, dodgerblue);
     transform: scale(1.05);
