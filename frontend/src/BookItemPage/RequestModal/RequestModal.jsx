@@ -16,14 +16,8 @@ const RequestModal = () => {
 
     const fetchMyBooks = async () => {
         try {
-            const token = sessionStorage.getItem("token");
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                },
-            };
-
-            const response = await axios.get("http://localhost:8000/api/catalog/my/", config);
+            const response = await axios.get("http://localhost:8000/api/catalog/my/", getConfig());
+            console.log("fetchMyBooks")
             const books = response.data;
             setMyBooks(books);
             setHasBooks(books.length > 0);
@@ -36,16 +30,9 @@ const RequestModal = () => {
 
     const checkIfAlreadyRequested = async () => {
         try {
-            const token = sessionStorage.getItem("token");
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                },
-            };
-
-            const response = await axios.get("http://localhost:8000/api/requests/my_requests/", config);
+            const response = await axios.get("http://localhost:8000/api/requests/my_requests/", getConfig())
+            console.log("checkIfAlreadyRequested")
             const requests = response.data;
-            console.log(requests)
             const isRequested = requests.some(request => request.receiver_book_id === +id);
             setAlreadyRequested(isRequested);
         } catch (err) {
@@ -55,10 +42,10 @@ const RequestModal = () => {
 
     const requestBook = async () => {
         try {
-            console.log("ehe")
             await axios.post(`http://localhost:8000/api/catalog/${+selectedItemId}`, {
                 receiver_book_id: +id,
             }, getConfig());
+            console.log("requestBook")
             setAlreadyRequested(true);
             alert('Book requested successfully!');
             await fetchMyBooks();
@@ -98,7 +85,7 @@ const RequestModal = () => {
                                     <button
                                         className="btn btn-outline-dark btn-md col-12"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal"
+                                        data-bs-target="#requestModal"
                                         type="button"
                                         style={{borderRadius: '25px'}}
                                     >
@@ -106,16 +93,16 @@ const RequestModal = () => {
                                     </button>
                                     <div
                                         className="modal fade"
-                                        id="exampleModal"
+                                        id="requestModal"
                                         tabIndex="-1"
-                                        aria-labelledby="exampleModalLabel"
+                                        aria-labelledby="requestModalLabel"
                                         aria-hidden="true"
                                     >
                                         <div className="modal-dialog">
                                             <div className="modal-content">
                                                 <div className="modal-header">
-                                                    <h1 className="modal-title fs-5" id="exampleModalLabel">
-                                                        Modal title
+                                                    <h1 className="modal-title fs-5" id="requestModalLabel">
+                                                        Select a Book to Exchange
                                                     </h1>
                                                     <button
                                                         type="button"
@@ -146,8 +133,7 @@ const RequestModal = () => {
                                                             >
                                                                 Close
                                                             </button>
-                                                            <button type="submit" className="btn btn-primary"
-                                                                    data-bs-dismiss="modal">
+                                                            <button type="submit" className="btn btn-primary">
                                                                 Request
                                                             </button>
                                                         </div>

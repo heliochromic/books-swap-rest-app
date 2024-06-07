@@ -175,6 +175,8 @@ class CatalogMyItemsView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
+        print(request.user.id)
+
         queryset = BookItem.objects.filter(userID=request.user.id)
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
