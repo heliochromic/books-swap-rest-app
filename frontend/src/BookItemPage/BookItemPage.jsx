@@ -12,6 +12,8 @@ const BookItemPage = () => {
     const [me, setMe] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [alreadyRequested, setAlreadyRequested] = useState(false);
+
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -20,6 +22,14 @@ const BookItemPage = () => {
                 const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
                 setMe(me.data);
                 const response = await axios.get(`http://localhost:8000/api/catalog/${+id}`, getConfig());
+                console.log(response.data)
+                console.log(response.data.publish_time)
+                console.log(response.data.deletion_time)
+                console.log(response.data.exchange_time)
+                if (response.data.deletion_time !== null || response.data.exchange_time !== null) {
+                    console.log("іді нахуй")
+                    setAlreadyRequested(true)
+                }
                 setBook(response.data);
             } catch (err) {
                 setError(err);
@@ -118,8 +128,9 @@ const BookItemPage = () => {
                         <div>
                             <p className="lead">{book.description}</p>
                         </div>
-                        <RequestModal />
-                        {book.userID === me.userID && <button className="delete-book-button" onClick={handleBookDeletion}>Delete</button>}
+                        <RequestModal alreadyRequested={alreadyRequested} setAlreadyRequested={setAlreadyRequested}/>
+                        {book.userID === me.userID &&
+                            <button className="delete-book-button" onClick={handleBookDeletion}>Delete</button>}
                     </div>
                 </div>
             </div>

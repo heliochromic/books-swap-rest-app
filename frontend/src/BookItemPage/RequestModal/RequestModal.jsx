@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import BookItemTiny from "./BookItemTiny/BookItemTiny";
 import {errorMessage, getConfig, successMessage} from "../../utils";
 
-const RequestModal = () => {
+const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
     const {id} = useParams();
     const [myBooks, setMyBooks] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,12 +12,12 @@ const RequestModal = () => {
     const [hasBooks, setHasBooks] = useState(false);
     const [isMineBook, setIsMineBook] = useState(false);
     const [selectedItemId, setSelectedBookId] = useState(null);
-    const [alreadyRequested, setAlreadyRequested] = useState(false);
 
-    const fetchMyBooks = async () => {
+    const fetchMyBooks = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:8000/api/catalog/my/", getConfig());
             const books = response.data;
+            console.log(alreadyRequested)
             setMyBooks(books);
             setHasBooks(books.length > 0);
             const isMine = books.some(book => +book.itemID === +id);
@@ -25,23 +25,21 @@ const RequestModal = () => {
         } catch (err) {
             setError(err.message);
         }
-    };
+    }, [id]);
 
-    const checkIfAlreadyRequested = async () => {
+    const checkIfAlreadyRequested = useCallback(async () => {
         try {
             const response = await axios.get("http://localhost:8000/api/requests/my_requests/", getConfig());
             const requests = response.data;
-            console.log(requests)
-            const isRequested = requests.some(request => request.receiver_book_id === +id);
+            const isRequested = requests.some(request => request.receiver_book_id === +id && request.status !== "A");
             setAlreadyRequested(isRequested);
         } catch (err) {
             setError(err.message);
         }
-    };
+    }, [id]);
 
     const requestBook = async () => {
         try {
-            console.log("ehe")
             await axios.post(`http://localhost:8000/api/catalog/${+selectedItemId}`, {
                 receiver_book_id: +id,
             }, getConfig());
@@ -57,13 +55,15 @@ const RequestModal = () => {
     useEffect(() => {
         const fetchData = async () => {
             setLoading(true);
+            if (!alreadyRequested) {
+                await checkIfAlreadyRequested();
+            }
             await fetchMyBooks();
-            await checkIfAlreadyRequested();
             setLoading(false);
         };
 
-        fetchData();
-    }, [id]);
+        fetchData().then(r => console.log(r));
+    }, [id, fetchMyBooks, checkIfAlreadyRequested]);
 
     return (
         <div>
@@ -75,21 +75,23 @@ const RequestModal = () => {
             {!loading && hasBooks && (
                 <>
                     {alreadyRequested ? (
-                        <p>You have already requested this book.</p>
+                        <></>
                     ) : (
                         <>
                             {isMineBook ? (
                                 <p>You cannot request your own book.</p>
                             ) : (
                                 <>
-                                    <button
-                                        className="exchange-button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal"
-                                        type="button"
-                                    >
-                                        Exchange books
-                                    </button>
+                                    {!alreadyRequested && (
+                                        <button
+                                            className="exchange-button"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#exampleModal"
+                                            type="button"
+                                        >
+                                            Exchange books
+                                        </button>
+                                    )}
                                     <div
                                         className="modal fade"
                                         id="exampleModal"
@@ -114,7 +116,7 @@ const RequestModal = () => {
                                                     <form
                                                         onSubmit={(e) => {
                                                             e.preventDefault();
-                                                            requestBook().then(r => console.log(r));
+                                                            requestBook();
                                                         }}
                                                     >
                                                         {myBooks.map((book) => (
