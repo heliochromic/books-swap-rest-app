@@ -7,6 +7,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {calculateAge, getConfig} from "../utils";
 import BookItem from "../Catalog/BookItem/BookItem";
 import {LoadingScreen} from "../Header/LoadingScreen";
+import ErrorPage from "../Errors/ErrorPage";
 
 const Profile = ({ setIsAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -220,7 +221,7 @@ const Profile = ({ setIsAuthenticated }) => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return  <ErrorPage error={error} />;
   }
 
   return (

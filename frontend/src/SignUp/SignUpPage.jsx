@@ -5,6 +5,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './signup.css'
 import {calculateAge} from "../utils";
+import ErrorPage from "../Errors/ErrorPage";
 
 const SignUpPage = ({setIsAuthenticated}) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -191,7 +192,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <ErrorPage error={error}></ErrorPage>;
   }
 
   return (

@@ -15,7 +15,11 @@
     padding: 20px;
     border-right: 1px solid darkgray;
 }
-
+.change-container{
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
 .my-books {
     width: 50%;
     height: 930px;
@@ -110,7 +114,7 @@
 
 .profile-first-name:focus, .profile-last-name:focus,
 .profile-age:focus, .profile-mail:focus, .profile-phone-number:focus,
-#cur-password:focus, #new-password:focus {
+#cur-password:focus, #new-password:focus, .exchange-button:focus {
     border-color: #6b73ff;
     box-shadow: 0 0 5px rgba(107, 115, 255, 0.5);
 }
@@ -120,7 +124,7 @@
     box-shadow: 0 0 0 0;
 }
 
-.edit-button, .cancel-button, .save-button, .change-button, #image-delete, .user-delete {
+.edit-button, .cancel-button, .save-button, .change-button, #image-delete, .user-delete, .exchange-button {
     margin-top: 10px;
     background: linear-gradient(135deg, dodgerblue, dodgerblue);
     border: none;
@@ -135,14 +139,17 @@
     transition: background 0.3s, transform 0.3s;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-
+.exchange-button{
+    width: 100%;
+}
 .cancel-button, #image-delete, .user-delete {
     background: linear-gradient(135deg, #f44336, #f44336);
 }
  #image-delete, .user-delete {
   margin-right: 10px;
  }
-.edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover, #image-delete:hover. .user-delete:hover {
+.edit-button:hover, .save-button:hover, .cancel-button:hover. .change-button:hover,
+#image-delete:hover, .user-delete:hover, .exchange-button:hover {
     background: linear-gradient(135deg, dodgerblue, dodgerblue);
     transform: scale(1.05);
 }
@@ -152,15 +159,14 @@
 }
 
 .edit-button:active, .save-button:active, .cancel-button:active, .change-button:active, #image-delete:active,
-.user-delete:active {
+.user-delete:active,.exchange-button:active {
     transform: scale(0.95);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .edit-button:focus, .save-button:focus, .cancel-button:focus, .change-button:focus, #image-delete:focus,
-.user-delete:focus {
+.user-delete:focus, .exchange-button:focus {
     outline: none;
-    box-shadow: 0 0 0 3px dodgerblue;
 }
 
 .edit-button, .save-button, .cancel-button {

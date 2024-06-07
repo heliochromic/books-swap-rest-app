@@ -4,6 +4,7 @@ import axios from 'axios';
 import RequestModal from "./RequestModal/RequestModal"
 import {getConfig} from "../utils";
 import {LoadingScreen} from "../Header/LoadingScreen";
+import ErrorPage from "../Errors/ErrorPage";
 
 const BookItemPage = () => {
     const {id} = useParams();
@@ -21,7 +22,7 @@ const BookItemPage = () => {
                 const response = await axios.get(`http://localhost:8000/api/catalog/${+id}`, getConfig());
                 setBook(response.data);
             } catch (err) {
-                setError(err.message);
+                setError(err);
             } finally {
                 setLoading(false);
             }
@@ -40,7 +41,7 @@ const BookItemPage = () => {
     }
 
     if (loading) return <LoadingScreen></LoadingScreen>;
-    if (error) return <div className="alert alert-danger text-center">Error: {error}</div>;
+    if (error) return <ErrorPage error={error}></ErrorPage>;
 
     return (
         <section>

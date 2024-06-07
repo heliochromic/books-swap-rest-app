@@ -6,6 +6,7 @@ import MyRequest from "./Cards/MyRequest";
 import ApprovedRequest from "./Cards/ApprovedRequest";
 import RejectedRequest from "./Cards/RejectedRequest";
 import {LoadingScreen} from "../../Header/LoadingScreen";
+import ErrorPage from "../../Errors/ErrorPage";
 
 const RequestsSection = ({ requestType }) => {
     const [requests, setRequests] = useState([]);
@@ -18,6 +19,7 @@ const RequestsSection = ({ requestType }) => {
                 `http://localhost:8000/api/requests/${requestType}/`,
                 getConfig()
             );
+            console.log(response.data)
             setRequests(response.data);
             setLoading(false);
         } catch (err) {
@@ -35,7 +37,7 @@ const RequestsSection = ({ requestType }) => {
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return <ErrorPage error={error}></ErrorPage>;
     }
 
     return (
@@ -58,7 +60,7 @@ const RequestsSection = ({ requestType }) => {
                     </React.Fragment>
                 ))
             ) : (
-                <p>No requests found.</p>
+                <p class="request-message">No requests found.</p>
             )}
         </div>
     );

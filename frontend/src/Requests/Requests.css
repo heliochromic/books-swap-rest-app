@@ -187,3 +187,7 @@ svg {
 #requestsNavbar > li > button{
     margin-right: 5px;
 }
+.request-message{
+    padding-left: 16px;
+    margin-top: 10px;
+}

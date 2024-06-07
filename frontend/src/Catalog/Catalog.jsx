@@ -5,6 +5,7 @@ import AddBookBadge from "./AddBookBadge/AddBookBadge";
 import "./Catalog.css"
 import {LoadingScreen} from "../Header/LoadingScreen";
 import {getConfig} from "../utils";
+import ErrorPage from "../Errors/ErrorPage";
 
 const Catalog = () => {
     const [items, setItems] = useState([]);
@@ -65,7 +66,7 @@ const Catalog = () => {
         });
 
     if (loading) return <LoadingScreen></LoadingScreen>;
-    if (error) return <div>Error: {error.message}</div>;
+    if (error) return <ErrorPage error={error}></ErrorPage>;
 
     return (
         <div id="catalog">
