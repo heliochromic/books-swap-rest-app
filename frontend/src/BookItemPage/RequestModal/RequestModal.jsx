@@ -16,14 +16,7 @@ const RequestModal = () => {
 
     const fetchMyBooks = async () => {
         try {
-            const token = sessionStorage.getItem("token");
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                },
-            };
-
-            const response = await axios.get("http://localhost:8000/api/catalog/my/", config);
+            const response = await axios.get("http://localhost:8000/api/catalog/my/", getConfig());
             const books = response.data;
             setMyBooks(books);
             setHasBooks(books.length > 0);
@@ -36,14 +29,7 @@ const RequestModal = () => {
 
     const checkIfAlreadyRequested = async () => {
         try {
-            const token = sessionStorage.getItem("token");
-            const config = {
-                headers: {
-                    Authorization: `Token ${token}`,
-                },
-            };
-
-            const response = await axios.get("http://localhost:8000/api/requests/my_requests/", config);
+            const response = await axios.get("http://localhost:8000/api/requests/my_requests/", getConfig());
             const requests = response.data;
             console.log(requests)
             const isRequested = requests.some(request => request.receiver_book_id === +id);
@@ -127,7 +113,7 @@ const RequestModal = () => {
                                                     <form
                                                         onSubmit={(e) => {
                                                             e.preventDefault();
-                                                            requestBook();
+                                                            requestBook().then(r => console.log(r));
                                                         }}
                                                     >
                                                         {myBooks.map((book) => (
@@ -142,12 +128,20 @@ const RequestModal = () => {
                                                                 type="button"
                                                                 className="btn btn-secondary"
                                                                 data-bs-dismiss="modal"
-                                                                style={{borderRadius: '25px', backgroundColor: 'red', border: '0'}}
+                                                                style={{
+                                                                    borderRadius: '25px',
+                                                                    backgroundColor: 'red',
+                                                                    border: '0'
+                                                                }}
                                                             >
                                                                 Close
                                                             </button>
                                                             <button type="submit" className="btn btn-primary"
-                                                                    data-bs-dismiss="modal" style={{borderRadius: '25px', backgroundColor: 'dodgerblue', border: '0'}}>
+                                                                    data-bs-dismiss="modal" style={{
+                                                                borderRadius: '25px',
+                                                                backgroundColor: 'dodgerblue',
+                                                                border: '0'
+                                                            }}>
                                                                 Request
                                                             </button>
                                                         </div>

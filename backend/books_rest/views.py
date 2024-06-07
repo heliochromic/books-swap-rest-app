@@ -175,9 +175,9 @@ class CatalogMyItemsView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        print(request.user.id)
-
-        queryset = BookItem.objects.filter(userID=request.user.id)
+        queryset = BookItem.objects.filter(userID=request.user.id).filter(
+            Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)
+        )
         serializer = BookItemSerializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -197,9 +197,15 @@ class RequestView(APIView):
         elif request_type == "requests_to_me":
             queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="P")
         elif request_type == "rejected":
-            queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="R")
+            queryset = Request.objects.filter(
+                Q(receiver_book_id__userID=user_id) | Q(sender_book_id__userID=user_id),
+                status="R"
+            )
         elif request_type == "confirmed":
-            queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="A")
+            queryset = Request.objects.filter(
+                Q(receiver_book_id__userID=user_id) | Q(sender_book_id__userID=user_id),
+                status="A"
+            )
         else:
             return Response(data={"error": "Invalid request type"}, status=status.HTTP_400_BAD_REQUEST)
 
