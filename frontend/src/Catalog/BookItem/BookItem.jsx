@@ -3,7 +3,7 @@ import '../Catalog.css';
 import {truncateDescription} from '../../utils'
 
 const BookItem = ({bookItem}) => {
-    const {itemID, photo, bookID, language} = bookItem;
+    const {itemID, photo, genre, language, author, title} = bookItem;
 
     return (
         <div className="bookItemCard">
@@ -17,12 +17,12 @@ const BookItem = ({bookItem}) => {
                     </div>
                     <div className="card-body d-flex flex-wrap flex-column justify-content-between">
                         <div>
-                            <h5 className="card-title">{bookItem.title}</h5>
-                            <h6 className="card-subtitle author mb-2">{bookItem.author}</h6>
+                            <h5 className="card-title">{title}</h5>
+                            <h6 className="card-subtitle author mb-2">{author}</h6>
                         </div>
                         <div>
-                            <span className="badge mx-1 text-bg-primary ms-0 rounded-5">{bookItem.genre}</span>
-                            <span className="badge mx-1 text-bg-primary rounded-5">{bookItem.language}</span>
+                            <span className="badge mx-1 text-bg-primary ms-0 rounded-5">{genre}</span>
+                            <span className="badge mx-1 text-bg-primary rounded-5">{language}</span>
                         </div>
                     </div>
                 </div>

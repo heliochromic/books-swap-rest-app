@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './signup.css'
-import {calculateAge} from "../utils";
+import {calculateAge, successMessage} from "../utils";
 import ErrorPage from "../Errors/ErrorPage";
 
 const SignUpPage = ({setIsAuthenticated}) => {
@@ -163,7 +163,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
             sessionStorage.setItem('token', authToken);
             setIsAuthenticated(true);
             navigate('/catalog');
-      alert('Profile created successfully!');
+      successMessage('Profile created successfully!');
       setIsEditing(false);
     } catch (error) {
       if(error.response.data.error === "Username already exists"){

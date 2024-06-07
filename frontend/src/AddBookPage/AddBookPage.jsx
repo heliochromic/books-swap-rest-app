@@ -2,7 +2,7 @@ import React, {useEffect, useState, useRef} from "react";
 import axios from "axios";
 import "./AddBookPage.css";
 import ImagePreview from './ImagePreview';
-import {fetchBook} from "../utils";
+import {errorMessage, fetchBook, getConfig, successMessage} from "../utils";
 
 const AddBookPage = () => {
     const [isbn, setIsbn] = useState('');
@@ -45,7 +45,7 @@ const AddBookPage = () => {
                     status: ''
                 });
             } else {
-                alert("Unable to fetch book data, please fill in the data manually");
+                errorMessage("Unable to fetch book data, please fill in the data manually");
             }
         } catch (err) {
             setError(err);
@@ -101,16 +101,8 @@ const AddBookPage = () => {
         });
 
         try {
-            const token = sessionStorage.getItem('token');
-            const config = {
-                headers: {
-                    'Authorization': `Token ${token}`,
-                    'Content-Type': 'multipart/form-data'
-                }
-            };
-            const response = await axios.post('http://localhost:8000/api/catalog/', formData, config);
-
-            alert('Book added successfully!');
+            const response = await axios.post('http://localhost:8000/api/catalog/', formData, getConfig());
+            successMessage('Book added successfully!');
             console.log(response.data)
             window.location.href = `/catalog/${response.data.itemID}`;
         } catch (err) {

@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import {Bounce, toast} from "react-toastify";
 export const getCookie = (name) => {
     const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
     return cookieValue ? cookieValue.pop() : '';
@@ -60,4 +60,32 @@ export const fetchBook = async (isbn) => {
     }
 
     return null;
+}
+
+export const successMessage = (text) =>{
+    toast.success(text, {
+position: "top-center",
+autoClose: 5000,
+hideProgressBar: false,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "light",
+transition: Bounce,
+});
+}
+
+export const errorMessage = (text) =>{
+    toast.error(text, {
+position: "top-center",
+autoClose: 5000,
+hideProgressBar: false,
+closeOnClick: true,
+pauseOnHover: true,
+draggable: true,
+progress: undefined,
+theme: "light",
+transition: Bounce,
+});
 }

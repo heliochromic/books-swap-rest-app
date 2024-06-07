@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import BookItem from '../Catalog/BookItem/BookItem';
 import './userProfile.css';
-import { getConfig } from '../utils';
+import {errorMessage, getConfig, successMessage} from '../utils';
 import {LoadingScreen} from "../Header/LoadingScreen";
 import ErrorPage from "../Errors/ErrorPage";
 
@@ -44,8 +44,9 @@ const UserProfile = () => {
         try {
             await axios.delete(`http://localhost:8000/api/profile/${profileData.userID}`, getConfig());
             navigate('/catalog');
+            successMessage("You deleted " + profileData.first_name + " " + profileData.last_name)
         } catch (err) {
-            console.error('Error deleting user:', err);
+            errorMessage('Error deleting ' + profileData.first_name + " " + profileData.last_name + "'s profile");
         }
     };
 
@@ -53,9 +54,10 @@ const UserProfile = () => {
         try {
             const data = { targetID: profileData.userID };
             await axios.post(`http://localhost:8000/api/admin/make-admin/`, data, getConfig());
-            setIsAdmin(true); // Set isAdmin state to true after making the user an admin
+            setIsAdmin(true);
+            successMessage(profileData.first_name + " " + profileData.last_name + " is admin now!")
         } catch (err) {
-            console.error('Error giving admin to user:', err);
+            errorMessage('Error giving admin to ' + profileData.first_name + " " + profileData.last_name);
         }
     };
 
@@ -63,9 +65,10 @@ const UserProfile = () => {
         try {
             const data = { targetID: profileData.userID };
             await axios.post(`http://localhost:8000/api/admin/remove-admin/`, data, getConfig());
-            setIsAdmin(false); // Set isAdmin state to false after removing admin privileges
+            setIsAdmin(false);
+            successMessage("You removed admin from " + profileData.first_name + " " + profileData.last_name)
         } catch (err) {
-            console.error('Error removing admin from user:', err);
+           errorMessage("Error removing admin from" + profileData.first_name + " " + profileData.last_name)
         }
     };
 

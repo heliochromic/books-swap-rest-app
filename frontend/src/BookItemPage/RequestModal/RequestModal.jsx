@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import axios from "axios";
 import BookItemTiny from "./BookItemTiny/BookItemTiny";
-import {getConfig} from "../../utils";
+import {errorMessage, getConfig, successMessage} from "../../utils";
 
 const RequestModal = () => {
     const {id} = useParams();
@@ -60,10 +60,11 @@ const RequestModal = () => {
                 receiver_book_id: +id,
             }, getConfig());
             setAlreadyRequested(true);
-            alert('Book requested successfully!');
+            successMessage('Book requested successfully!');
             await fetchMyBooks();
         } catch (err) {
             setError(err.message);
+            errorMessage("Error requesting the book")
         }
     };
 

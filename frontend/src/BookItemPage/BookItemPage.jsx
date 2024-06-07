@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
 import RequestModal from "./RequestModal/RequestModal"
-import {getConfig} from "../utils";
+import {errorMessage, getConfig, successMessage} from "../utils";
 import {LoadingScreen} from "../Header/LoadingScreen";
 import ErrorPage from "../Errors/ErrorPage";
 
@@ -35,8 +35,9 @@ const BookItemPage = () => {
         try {
             await axios.delete(`http://localhost:8000/api/catalog/${id}`, getConfig());
             navigate('/profile');
+            successMessage("You successfully deleted the book")
         } catch (err) {
-            console.error('Error deleting book:', err);
+            errorMessage('Error deleting book:');
         }
     }
 

@@ -4,7 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './profile.css';
 import {Link, useNavigate} from "react-router-dom";
-import {calculateAge, getConfig} from "../utils";
+import {calculateAge, errorMessage, getConfig, successMessage} from "../utils";
 import BookItem from "../Catalog/BookItem/BookItem";
 import {LoadingScreen} from "../Header/LoadingScreen";
 import ErrorPage from "../Errors/ErrorPage";
@@ -179,12 +179,10 @@ const Profile = ({ setIsAuthenticated }) => {
       }
 
       await axios.put('http://localhost:8000/api/user/', formData, getConfig());
-
-      alert('Profile updated successfully!');
       setIsEditing(false);
+      successMessage("Profile update successful!")
     } catch (error) {
-      alert('Failed to update profile. Please try again.');
-      console.error('Error updating profile:', error);
+      errorMessage("An updating profile")
     }
 
     setIsEditing(!isEditing);

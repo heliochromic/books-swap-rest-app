@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {useNavigate} from "react-router-dom";
-import {getConfig} from "../../utils";
+import {getConfig, successMessage} from "../../utils";
 
 const PasswordChange = () => {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -18,6 +18,7 @@ const PasswordChange = () => {
             }, getConfig());
             setMessage(response.data.detail);
             navigate('/profile')
+            successMessage("You changed your password successfully")
         } catch (error) {
             if (error.response) {
                 setMessage(error.response.data.current_password ? error.response.data.current_password[0] : 'Error changing password');
