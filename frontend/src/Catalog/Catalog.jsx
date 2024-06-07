@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from 'axios';
 import BookItem from "./BookItem/BookItem";
 import AddBookBadge from "./AddBookBadge/AddBookBadge";
-import "./Catalog.css"
+import "./Catalog.css";
 import {LoadingScreen} from "../Header/LoadingScreen";
 import {getConfig} from "../utils";
 import ErrorPage from "../Errors/ErrorPage";
@@ -11,7 +11,7 @@ const Catalog = () => {
     const [items, setItems] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [sortOrder, setSortOrder] = useState('title');
+    const [sortOrder, setSortOrder] = useState('titleAsc');
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
 
@@ -55,18 +55,16 @@ const Catalog = () => {
                 return new Date(a.date) - new Date(b.date);
             } else if (sortOrder === 'dateDesc') {
                 return new Date(b.date) - new Date(a.date);
-            }
-            else if(sortOrder === 'distanceAsc'){
-                return a.distance - b.distance
-            }
-            else if(sortOrder === 'distanceDesc'){
-                return b.distance - a.distance
+            } else if (sortOrder === 'distanceAsc') {
+                return a.distance - b.distance;
+            } else if (sortOrder === 'distanceDesc') {
+                return b.distance - a.distance;
             }
             return 0;
         });
 
-    if (loading) return <LoadingScreen></LoadingScreen>;
-    if (error) return <ErrorPage error={error}></ErrorPage>;
+    if (loading) return <LoadingScreen/>;
+    if (error) return <ErrorPage error={error}/>;
 
     return (
         <div id="catalog">
@@ -89,8 +87,8 @@ const Catalog = () => {
                             <option value="titleDesc">From Z to A</option>
                             <option value="dateAsc">From Newest to Oldest</option>
                             <option value="dateDesc">From Oldest to Newest</option>
-                            <option value="distanceDesc">From Furthest to Nearest</option>
                             <option value="distanceAsc">From Nearest to Furthest</option>
+                            <option value="distanceDesc">From Furthest to Nearest</option>
                         </select>
                     </div>
                     <div className="col-md-2">
@@ -104,12 +102,11 @@ const Catalog = () => {
                             <option value="E">E</option>
                         </select>
                     </div>
-
                 </form>
 
                 <div id="catalogContainer">
                     {filteredItems.map(item => (
-                        <BookItem key={item.id} bookItem={item}/>
+                        <BookItem key={+item.itemID} bookItem={item}/>
                     ))}
                 </div>
             </div>

@@ -22,12 +22,7 @@ const BookItemPage = () => {
                 const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
                 setMe(me.data);
                 const response = await axios.get(`http://localhost:8000/api/catalog/${+id}`, getConfig());
-                console.log(response.data)
-                console.log(response.data.publish_time)
-                console.log(response.data.deletion_time)
-                console.log(response.data.exchange_time)
                 if (response.data.deletion_time !== null || response.data.exchange_time !== null) {
-                    console.log("іді нахуй")
                     setAlreadyRequested(true)
                 }
                 setBook(response.data);

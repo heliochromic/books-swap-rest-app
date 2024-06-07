@@ -1,13 +1,13 @@
 import React from 'react';
 import '../Catalog.css';
-import {truncateDescription} from '../../utils'
+import {Link} from "react-router-dom";
 
 const BookItem = ({bookItem}) => {
     const {itemID, photo, genre, language, author, title} = bookItem;
 
     return (
         <div className="bookItemCard">
-            <a href={`http://localhost:3000/catalog/${itemID}`}>
+            <Link to={`http://localhost:3000/catalog/${itemID}`}>
                 <div className="card rounded-5">
                     <div className="card-img-top p-3">
                         <span className="card-img-fit"
@@ -26,7 +26,7 @@ const BookItem = ({bookItem}) => {
                         </div>
                     </div>
                 </div>
-            </a>
+            </Link>
         </div>
     );
 }

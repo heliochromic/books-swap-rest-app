@@ -60,7 +60,7 @@ const RequestsSection = ({ requestType }) => {
                     </React.Fragment>
                 ))
             ) : (
-                <p class="request-message">No requests found.</p>
+                <p className="request-message">No requests found.</p>
             )}
         </div>
     );
