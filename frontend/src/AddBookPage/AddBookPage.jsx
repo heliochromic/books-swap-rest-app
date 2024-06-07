@@ -3,12 +3,14 @@ import axios from "axios";
 import "./AddBookPage.css";
 import ImagePreview from './ImagePreview';
 import {errorMessage, fetchBook, getConfig, successMessage} from "../utils";
+import {useNavigate} from "react-router-dom";
 
 const AddBookPage = () => {
     const [isbn, setIsbn] = useState('');
     const [book, setBook] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
     const [formValues, setFormValues] = useState({
         title: '',
         author: '',
@@ -102,9 +104,9 @@ const AddBookPage = () => {
 
         try {
             const response = await axios.post('http://localhost:8000/api/catalog/', formData, getConfig());
-            successMessage('Book added successfully!');
             console.log(response.data)
-            window.location.href = `/catalog/${response.data.itemID}`;
+            navigate(`/catalog/${response.data.itemID}`);
+            successMessage('Book added successfully!');
         } catch (err) {
             setError(err);
         }
