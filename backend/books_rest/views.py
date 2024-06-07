@@ -191,9 +191,9 @@ class RequestView(APIView):
         print(request_type)
 
         if request_type == "my_requests":
-            queryset = Request.objects.filter(sender_book_id__userID=user_id)
+            queryset = Request.objects.filter(sender_book_id__userID=user_id, status="P")
         elif request_type == "requests_to_me":
-            queryset = Request.objects.filter(receiver_book_id__userID=user_id)
+            queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="P")
         elif request_type == "rejected":
             queryset = Request.objects.filter(receiver_book_id__userID=user_id, status="R")
         elif request_type == "confirmed":

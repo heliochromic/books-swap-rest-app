@@ -96,11 +96,10 @@ const RequestModal = () => {
                             ) : (
                                 <>
                                     <button
-                                        className="btn btn-outline-dark btn-md col-12"
+                                        className="exchange-button"
                                         data-bs-toggle="modal"
                                         data-bs-target="#exampleModal"
                                         type="button"
-                                        style={{borderRadius: '25px'}}
                                     >
                                         Exchange books
                                     </button>
@@ -143,11 +142,12 @@ const RequestModal = () => {
                                                                 type="button"
                                                                 className="btn btn-secondary"
                                                                 data-bs-dismiss="modal"
+                                                                style={{borderRadius: '25px', backgroundColor: 'red', border: '0'}}
                                                             >
                                                                 Close
                                                             </button>
                                                             <button type="submit" className="btn btn-primary"
-                                                                    data-bs-dismiss="modal">
+                                                                    data-bs-dismiss="modal" style={{borderRadius: '25px', backgroundColor: 'dodgerblue', border: '0'}}>
                                                                 Request
                                                             </button>
                                                         </div>

@@ -18,6 +18,7 @@ const RequestsSection = ({ requestType }) => {
                 `http://localhost:8000/api/requests/${requestType}/`,
                 getConfig()
             );
+            console.log(response.data)
             setRequests(response.data);
             setLoading(false);
         } catch (err) {
@@ -58,7 +59,7 @@ const RequestsSection = ({ requestType }) => {
                     </React.Fragment>
                 ))
             ) : (
-                <p>No requests found.</p>
+                <p class="request-message">No requests found.</p>
             )}
         </div>
     );
