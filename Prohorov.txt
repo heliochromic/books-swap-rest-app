@@ -1,3 +1,0 @@
-CatalogView, BookItemView, RequestView
-Catalog, Book Item, Book-Item-Creation, Home Page
-Filters: authors, name, range.

@@ -19,7 +19,7 @@ const BookItemPage = () => {
             try {
                 const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
                 setMe(me.data);
-                const response = await axios.get(`http://localhost:8000/api/catalog/${id}`, getConfig());
+                const response = await axios.get(`http://localhost:8000/api/catalog/${+id}`, getConfig());
                 setBook(response.data);
             } catch (err) {
                 setError(err);
@@ -33,7 +33,7 @@ const BookItemPage = () => {
 
     const handleBookDeletion = async () => {
         try {
-            await axios.delete(`http://localhost:8000/api/catalog/${id}`, getConfig());
+            await axios.delete(`http://localhost:8000/api/catalog/${+id}`, getConfig());
             navigate('/profile');
             successMessage("You successfully deleted the book")
         } catch (err) {

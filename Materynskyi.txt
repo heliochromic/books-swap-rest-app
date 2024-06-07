@@ -1,2 +1,0 @@
-UserView, LoginView, SignUpView
-Sign up, Log In, Map, Profile, User page, Header.

@@ -1,12 +1,11 @@
+.img-container {
+    overflow: hidden;
+    width: 60%;
+    height: auto;
+    text-align: center;
+}
 
-    .img-container {
-      overflow: hidden;
-      width: 100%;
-      height: auto;
-      text-align: center;
-    }
-
-    .img-container > img {
-      width: 60%;
-      height: auto;
-    }
+.img-container > img {
+    width: 60%;
+    height: auto;
+}

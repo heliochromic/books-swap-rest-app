@@ -3,7 +3,7 @@
 }
 
 .main-banner {
-    background-image: url(../../../backend/media/8598876.jpg);
+    background-image: url('http://localhost:8000/media/8598876.jpg');
     background-position: top center;
     background-size: cover;
     height: 100%;
