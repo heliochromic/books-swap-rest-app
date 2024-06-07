@@ -6,6 +6,7 @@ import MyRequest from "./Cards/MyRequest";
 import ApprovedRequest from "./Cards/ApprovedRequest";
 import RejectedRequest from "./Cards/RejectedRequest";
 import {LoadingScreen} from "../../Header/LoadingScreen";
+import ErrorPage from "../../Errors/ErrorPage";
 
 const RequestsSection = ({ requestType }) => {
     const [requests, setRequests] = useState([]);
@@ -36,7 +37,7 @@ const RequestsSection = ({ requestType }) => {
     }
 
     if (error) {
-        return <p>Error: {error}</p>;
+        return <ErrorPage error={error}></ErrorPage>;
     }
 
     return (

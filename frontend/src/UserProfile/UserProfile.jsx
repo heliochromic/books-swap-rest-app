@@ -5,6 +5,7 @@ import BookItem from '../Catalog/BookItem/BookItem';
 import './userProfile.css';
 import { getConfig } from '../utils';
 import {LoadingScreen} from "../Header/LoadingScreen";
+import ErrorPage from "../Errors/ErrorPage";
 
 const UserProfile = () => {
     const { id } = useParams();
@@ -73,7 +74,7 @@ const UserProfile = () => {
     }
 
     if (error) {
-        return <div>Error fetching profile</div>;
+        return <ErrorPage error={error}></ErrorPage>;
     }
 
     return (

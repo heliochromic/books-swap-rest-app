@@ -13,7 +13,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.db.models import Q
+from django.db.models import Q, ObjectDoesNotExist
 
 from .models import BookItem, User, Request
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
@@ -100,7 +100,7 @@ class BookItemView(APIView):
     def get(self, request, pk):
         try:
             book_item_instance = BookItem.objects.get(itemID=pk)
-        except User.DoesNotExist:
+        except BookItem.DoesNotExist:
             return Response(data={"error": "Book not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = BookItemSerializer(instance=book_item_instance)
@@ -339,9 +339,15 @@ class ProfileView(APIView):
     @action(detail=False, methods=['get'])  # отримати сторінку чужого профілю
     def get(self, request, pk):
         userID = pk
-        user = User.objects.get(userID=userID)
+        try:
+            user = User.objects.get(userID=userID)
+
+        except User.DoesNotExist:
+            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
         if not user:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+
 
         serializer = UserCatalogSerializer(user, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
