@@ -35,7 +35,7 @@ const Header = () => {
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/">
                         <h2 id="logo">
-                            svvap
+                            <i>svvap</i>
                         </h2></Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"

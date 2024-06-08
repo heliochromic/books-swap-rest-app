@@ -7,8 +7,8 @@ const HomePage = (isAuthenticated) => {
         <div id="landing-page">
             <div className="row">
                 <div className="col-lg-7 main-banner"></div>
-                <div className="col-lg-5 my-auto">
-                    <h2>svvap</h2>
+                <div className="col-lg-5 col-md-12 px-5 pb-5 my-auto">
+                    <h2><i>svvap</i></h2>
                     <h6><i>Your Community for Sharing and Discovering Books!</i></h6>
                     {!isAuthenticated.isAuthenticated && <div className="mt-4">
                         <Link to="/signup">

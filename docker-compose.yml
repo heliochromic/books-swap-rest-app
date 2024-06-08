@@ -1,11 +1,13 @@
 version: '3.8'
 
+name: svvap
+
 services:
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
-    container_name: django_container
+    container_name: django
     command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - ./backend:/app
@@ -18,8 +20,10 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    container_name: react_container
+    container_name: react
     volumes:
       - ./frontend:/app
+    depends_on:
+      - backend
     ports:
       - "3000:80"
