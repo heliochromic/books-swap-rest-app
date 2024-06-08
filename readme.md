@@ -25,4 +25,4 @@ This command will build and start the application using Docker, ensuring that yo
 
 ## Contact
 
-This pet-project developed by Volodymyr Materynskyi and Bohdan Prokhorov 
+This pet project was developed by Volodymyr Materynskyi and Bohdan Prokhorov 
