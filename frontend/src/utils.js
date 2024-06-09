@@ -55,6 +55,12 @@ export const fetchBook = async (isbn) => {
     return null;
 }
 
+export const fetchCurrentUser = async (setCurrentUserID) => {
+    const user = getConfig();
+    const userID = user.userID;
+    setCurrentUserID(userID);
+};
+
 export const successMessage = (text) => {
     toast.success(text, {
         position: "top-center",

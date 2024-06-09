@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Routes, Route} from 'react-router-dom';
 import HomePage from '../HomePage/HomePage';
 import Catalog from '../Catalog/Catalog';
@@ -12,9 +12,11 @@ import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";
 import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
 import Requests from "../Requests/Requests";
-import ErrorPage from "../Errors/ErrorPage";
+import Visualizations from "../Visualizations/Visualizations";
 
-const Main = ({isAuthenticated, setIsAuthenticated}) => {
+const Main = ({isAdmin, isAuthenticated, setIsAuthenticated}) => {
+
+
     return (
         <main>
             <section id="content-section">
@@ -30,7 +32,7 @@ const Main = ({isAuthenticated, setIsAuthenticated}) => {
                     <Route path="/requests" element={<Requests/>}/>
                     <Route path="/user/:id" element={<UserProfile/>}/>
                     <Route path="/password-change" element={<PasswordChangePage/>}/>
-                    {/*<Route path={<ErrorPage/>}/>*/}
+                    {isAdmin && <Route path="/visualizations" element={<Visualizations/>}/>}
                 </Routes>
             </section>
         </main>

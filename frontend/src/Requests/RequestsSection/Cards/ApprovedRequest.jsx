@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React, {useState, useEffect} from "react";
 import axios from "axios";
-import {getConfig} from "../../../utils";
+import {fetchCurrentUser, getConfig} from "../../../utils";
 
 const ApprovedRequest = ({request}) => {
     const [loading, setLoading] = useState(true);
@@ -10,13 +10,7 @@ const ApprovedRequest = ({request}) => {
     const [currentUserID, setCurrentUserID] = useState(null);
 
     useEffect(() => {
-        const fetchCurrentUser = async () => {
-            const user = getConfig();
-            const userID = user.userID;
-            setCurrentUserID(userID);
-        };
-
-        fetchCurrentUser();
+        fetchCurrentUser(setCurrentUserID);
     }, []);
 
     useEffect(() => {
