@@ -80,6 +80,7 @@ const SignUpPage = ({setIsAuthenticated}) => {
   const handleInputChange = (e) => {
     if (e.target.name === 'image') {
       const file = e.target.files[0];
+      if(file){
       const reader = new FileReader();
         reader.onload = function(e) {
           const previewImage = document.getElementById('signup-image');
@@ -87,6 +88,12 @@ const SignUpPage = ({setIsAuthenticated}) => {
           setImagePresent(true)
         };
         reader.readAsDataURL(file);
+        }
+      else{
+        const previewImage = document.getElementById('signup-image');
+               previewImage.src = 'http://localhost:8000/media/images/users/default.png';
+               setImagePresent(false)
+      }
     } else {
       setUserProfile({
         ...userProfile,
