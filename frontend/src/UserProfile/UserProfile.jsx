@@ -124,18 +124,18 @@ const UserProfile = () => {
                 <p>Date of birth: {profileData.date_of_birth}</p>
                 <p>Number of books: {items.length}</p>
                 {profileData.has_exchanged && (
-            <form onSubmit={handleRatingSubmit}>
-                    <select value={rating} onChange={(e) => setRating(e.target.value)} required>
-                        <option value="">Select Rating</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                <button type="submit">Rate</button>
-            </form>
-        )}
+                    <form onSubmit={handleRatingSubmit}>
+                        <select value={rating} onChange={(e) => setRating(e.target.value)} required>
+                            <option value="">Select Rating</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                        <button type="submit">Rate</button>
+                    </form>
+                )}
             </div>
             <div className="catalogContainer">
                 {items.map(item => (
