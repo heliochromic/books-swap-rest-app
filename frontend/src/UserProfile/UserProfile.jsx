@@ -79,6 +79,10 @@ const UserProfile = () => {
         try {
             const data = {score: rating};
             await axios.put(`http://localhost:8000/api/profile/${id}/rate/`, data, getConfig());
+            const response = await axios.get(`http://localhost:8000/api/profile/${id}`, getConfig());
+            setProfileData({...profileData,
+                                rating: response.data.rating}
+            );
             successMessage("Rating submitted successfully!");
         } catch (err) {
             errorMessage("Error submitting rating");
