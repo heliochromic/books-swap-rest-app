@@ -45,6 +45,11 @@ const SignUpPage = ({setIsAuthenticated}) => {
     if (userProfile && !mapRef.current) {
       document.getElementById('signup-image').src = 'http://localhost:8000/media/images/users/default.png'
       const newLatLng = L.latLng(50.46446973182625, 30.51927042844712);
+      setUserProfile({
+        ...userProfile,
+        latitude: newLatLng.lat,
+        longitude: newLatLng.lng
+      })
       const newIcon = L.icon({
         iconUrl: `http://localhost:8000/media/location-pointer_68545.png`,
         iconSize: [30, 30],
@@ -61,8 +66,9 @@ const SignUpPage = ({setIsAuthenticated}) => {
       }).addTo(newMap);
       newMap.on('click', handleMapClick)
       markerRef.current.addTo(newMap);
-      mapRef.current = newMap; // Store map instance in ref
+      mapRef.current = newMap;
       markerRef.current.setLatLng(newLatLng);
+
     }
 
   }, [userProfile]);

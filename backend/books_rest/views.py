@@ -32,8 +32,8 @@ class CatalogView(APIView):
         user = User.objects.filter(django=request.user).first()
         user_lat = user.latitude
         user_lon = user.longitude
-
-        queryset = BookItem.objects.exclude(userID_id=request.user.id).filter(
+        userID = User.objects.get(django=request.user).userID
+        queryset = BookItem.objects.exclude(userID_id=userID).filter(
             Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)
         ).annotate(
             latitude=F('userID__latitude'),
@@ -63,7 +63,7 @@ class CatalogView(APIView):
         year = data.get('year')
         description = data.get('description')
         book_status = data.get('status')
-        user_id = request.user.id
+        user_id = User.objects.get(django=request.user).userID
         photo = data.get('file1')
         photo2 = data.get('file2')
         photo3 = data.get('file3')
@@ -177,7 +177,7 @@ class CatalogMyItemsView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        queryset = BookItem.objects.filter(userID=request.user.id).filter(
+        queryset = BookItem.objects.filter(userID=User.objects.get(django=request.user).userID).filter(
             Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True)
         )
         serializer = BookItemSerializer(queryset, many=True)
@@ -190,7 +190,7 @@ class RequestView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request, request_type):
-        user_id = request.user.id
+        user_id = User.objects.get(django=request.user).userID
 
         print(request_type)
 
@@ -221,7 +221,7 @@ class RequestItemView(APIView):
 
     @action(detail=False, methods=['put'])  # видалення або схвалення запиту на книгу
     def put(self, request, pk):
-        receiver_id = request.user.id  # я зараз sender
+        receiver_id = User.objects.get(django=request.user).userID  # я зараз sender
         request_status = request.data.get('status')
 
         if request_status not in ["A", "R"]:
@@ -272,7 +272,7 @@ class UserView(APIView):
 
     @action(detail=False, methods=['get'])  # отримати або редагувати сторінку свого профілю (токен)
     def get(self, request):
-        user_id = request.user.id
+        user_id = User.objects.get(django=request.user).userID
         try:
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
@@ -288,7 +288,7 @@ class UserView(APIView):
     def put(self, request, format=None):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         media_dir = os.path.normpath(os.path.join(dir_path, '..', 'media\\'))
-        user_id = request.user.id
+        user_id = User.objects.get(django=request.user).userID
         try:
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
@@ -321,7 +321,7 @@ class UserView(APIView):
 
     @action(detail=False, methods=['delete'])  # видалення свого профілю (токен)
     def delete(self, request):
-        user_id = request.user.id
+        user_id = User.objects.get(django=request.user).userID
         try:
             user_instance = User.objects.get(userID=user_id)
         except User.DoesNotExist:
@@ -355,7 +355,7 @@ class ProfileView(APIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        if not user or request.user.id == pk:
+        if not user or User.objects.get(django=request.user).userID == pk:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
         serializer = UserCatalogSerializer(user, many=False, context={'request': request})
@@ -389,7 +389,7 @@ class RateView(APIView):
     authentication_classes = [TokenAuthentication]
 
     def put(self, request, pk):
-        rater = User.objects.get(userID=request.user.id)
+        rater = User.objects.get(userID=User.objects.get(django=request.user).userID)
         ratee = User.objects.get(userID=pk)
         score = request.data.get("score")
 
@@ -427,7 +427,7 @@ class LoginView(APIView):
 
             return Response({
                 "token": token.key,
-                "userID": user.id,
+                "userID": User.objects.get(django=user).userID,
                 "message": "Login successful"
             }, status=status.HTTP_200_OK)
         else:
@@ -495,7 +495,7 @@ class MapView(APIView):
 
     @action(detail=False, methods=['get'])
     def get(self, request):
-        users = User.objects.exclude(userID=request.user.id)
+        users = User.objects.exclude(userID=User.objects.get(django=request.user).userID)
         serializer = UserLocationSerializer(users, many=True)
         return Response(serializer.data)
 
