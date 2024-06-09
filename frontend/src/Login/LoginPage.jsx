@@ -13,19 +13,19 @@ const LoginPage = ({ setIsAuthenticated }) => {
         e.preventDefault();
 
         try {
-            console.log(username, password)
             const response = await axios.post('http://localhost:8000/api/login/', {
                 username,
                 password
             });
-            console.log(response)
             const authToken = response.data.token;
+            const userID = response.data.userID;
             sessionStorage.setItem('token', authToken);
+            sessionStorage.setItem('userID', userID);
             setIsAuthenticated(true);
             navigate('/catalog');
         } catch (error) {
             setError('Login failed. Please check your credentials and try again.');
-            console.error('There was an error logging in:', error);
+            console.error(error);
         }
     };
 

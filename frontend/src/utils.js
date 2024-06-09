@@ -9,21 +9,17 @@ export const getCookie = (name) => {
 export const getConfig = () => {
     const token = sessionStorage.getItem('token');
     const csrftoken = getCookie('csrftoken');
+    const userID = sessionStorage.getItem('userID');
     return {
         headers: {
             'X-CSRFToken': csrftoken,
             'Authorization': `Token ${token}`,
             'Content-Type': 'multipart/form-data'
-        }
+        },
+        userID: +userID,
     };
 }
 
-export const truncateDescription = (description, maxLength) => {
-    if (description.length <= maxLength) {
-        return description;
-    }
-    return description.substring(0, maxLength) + '...';
-};
 
 export const calculateAge = (dob) => {
     const today = new Date();
@@ -35,10 +31,6 @@ export const calculateAge = (dob) => {
     }
     return age;
 };
-
-export const cleanIsbn = (isbn) => {
-    return isbn.replace(/\D/g, '');
-}
 
 export const fetchBook = async (isbn) => {
     const url = "https://www.googleapis.com/books/v1/volumes";

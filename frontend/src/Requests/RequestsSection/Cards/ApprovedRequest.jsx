@@ -1,20 +1,34 @@
-import { Link } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import {Link} from "react-router-dom";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
-import { getConfig } from "../../../utils";
-import {LoadingScreen} from "../../../Header/LoadingScreen";
+import {getConfig} from "../../../utils";
 
-const ApprovedRequest = ({ request }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+const ApprovedRequest = ({request}) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+    const [currentUserID, setCurrentUserID] = useState(null);
+
+    useEffect(() => {
+        const fetchCurrentUser = async () => {
+            const user = getConfig();
+            const userID = user.userID;
+            setCurrentUserID(userID);
+        };
+
+        fetchCurrentUser();
+    }, []);
 
     useEffect(() => {
         const fetchUser = async () => {
+            if (currentUserID === null) return;
+
+            const userIDToFetch = request.sender_book.userID === currentUserID
+                ? request.receiver_book.userID
+                : request.sender_book.userID;
+
             try {
-                const response = await axios.get(`http://localhost:8000/api/profile/${request.sender_book.userID}`, getConfig());
-                console.log(response.data)
+                const response = await axios.get(`http://localhost:8000/api/profile/${userIDToFetch}`, getConfig());
                 setUser(response.data);
                 setLoading(false);
             } catch (error) {
@@ -24,14 +38,10 @@ const ApprovedRequest = ({ request }) => {
         };
 
         fetchUser();
-    }, [request.sender_book.userID]);
-
-    const handleToggle = () => {
-        setIsExpanded(!isExpanded);
-    };
+    }, [currentUserID, request.sender_book.userID, request.receiver_book.userID]);
 
     return (
-        <div className={`card approved-requests ${isExpanded ? "expanded" : ""}`}>
+        <div className="card approved-requests">
             <div className="card-body swapContainer">
                 <div className="request-body">
                     <div className="book-info">
@@ -75,21 +85,21 @@ const ApprovedRequest = ({ request }) => {
                         <div>
                             <strong>Contacts:</strong>
                         </div>
-                       <div>
-                                {loading ? (
-                                    <p>Loading...</p>
-                                ) : error ? (
-                                    <p>{error}</p>
-                                ) : user ? (
-                                     <Link to={`/user/${user.userID}`}>
+                        <div>
+                            {loading ? (
+                                <p>Loading...</p>
+                            ) : error ? (
+                                <p>{error}</p>
+                            ) : user ? (
+                                <Link to={`/user/${user.userID}`}>
                                     <div>
                                         <p>Name: {user.first_name} {user.last_name}</p>
                                         <p>Phone: {user.phone_number}</p>
                                     </div>
-                                         </Link>
-                                ) : (
-                                    <p>No user data available.</p>
-                                )}
+                                </Link>
+                            ) : (
+                                <p>No user data available.</p>
+                            )}
                         </div>
                     </div>
                 </div>
