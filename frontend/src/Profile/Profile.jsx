@@ -101,13 +101,20 @@ const Profile = ({ setIsAuthenticated }) => {
   const handleInputChange = (e) => {
     if (e.target.name === 'image') {
       const file = e.target.files[0];
+      if(file){
       const reader = new FileReader();
       reader.onload = function (e) {
         const previewImage = document.getElementById('profile-image');
         previewImage.src = e.target.result;
         setImagePresent(true);
-      };
+      }
       reader.readAsDataURL(file);
+      }
+      else{
+         const previewImage = document.getElementById('profile-image');
+               previewImage.src = 'http://localhost:8000/media/images/users/default.png';
+               setImagePresent(false)
+      }
     } else {
       console.log(userProfile)
       setUserProfile({

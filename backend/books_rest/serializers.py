@@ -66,7 +66,6 @@ class UserSerializer(serializers.ModelSerializer):
         instance.phone_number = validated_data.get('phone_number', instance.phone_number)
         instance.latitude = validated_data.get('latitude', instance.latitude)
         instance.longitude = validated_data.get('longitude', instance.longitude)
-        instance.rating = validated_data.get('rating', instance.rating)
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
