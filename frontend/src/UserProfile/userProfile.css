@@ -53,8 +53,45 @@
   margin-bottom: 5px;
 }
 .user-rating img{
-  width: 3.5%;
-  height: 3.5%;
+  width: 25px;
+  height: 25px;
   margin-bottom: 2px;
   margin-right: 5px;
+}
+.profile-details label{
+    display: inline;
+}
+#content-section > div > div.profile-details > form{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.profile-details select {
+    height: 70%;
+    flex: 1;
+    width: 40%;
+    border: 1px solid #ccc;
+    border-radius: 25px;
+    font-size: 16px;
+    outline: none;
+    text-align: center;
+    display: inline;
+}
+
+.profile-details button {
+    margin-left: 5px;
+    padding: 0 10px;
+    width: 40%;
+    height: 70%;
+    background-color: dodgerblue;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 25px;
+    flex: 0;
 }

@@ -15,7 +15,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Q, ObjectDoesNotExist
 
-from .models import BookItem, User, Request
+from .models import BookItem, User, Request, Rating
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
     UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer, RequestItemSerializer
 
@@ -357,7 +357,7 @@ class ProfileView(APIView):
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-        serializer = UserCatalogSerializer(user, many=False)
+        serializer = UserCatalogSerializer(user, many=False, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     @action(detail=False, methods=['delete'])  # видалення чужого профілю (токен)
@@ -381,6 +381,30 @@ class ProfileView(APIView):
                 user.groups.clear()
                 user.delete()
         return Response({"message": "User deleted successfully"}, status=status.HTTP_200_OK)
+
+
+class RateView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def put(self, request, pk):
+        rater = User.objects.get(userID=request.user.id)
+        ratee = User.objects.get(userID=pk)
+        score = request.data.get("score")
+
+        if score is None:
+            return Response({"error": "Score is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        rating, created = Rating.objects.update_or_create(
+            rater=rater,
+            ratee=ratee,
+            defaults={'score': score}
+        )
+
+        if created:
+            return Response({"message": "Rating created successfully"}, status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Rating updated successfully"}, status=status.HTTP_200_OK)
 
 
 class LoginView(APIView):

@@ -30,7 +30,7 @@ const Main = ({isAuthenticated, setIsAuthenticated}) => {
                     <Route path="/requests" element={<Requests/>}/>
                     <Route path="/user/:id" element={<UserProfile/>}/>
                     <Route path="/password-change" element={<PasswordChangePage/>}/>
-                    <Route path={<ErrorPage/>}/>
+                    {/*<Route path={<ErrorPage/>}/>*/}
                 </Routes>
             </section>
         </main>

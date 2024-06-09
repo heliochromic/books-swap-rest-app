@@ -79,11 +79,13 @@ class UserSerializer(serializers.ModelSerializer):
 class UserCatalogSerializer(serializers.ModelSerializer):
     book_items = serializers.SerializerMethodField()
     djuser = DJUserSerializer(source='django')
+    rating = serializers.SerializerMethodField()
+    has_exchanged = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
-                  'rating', 'image', 'djuser', 'book_items']
+                  'rating', 'image', 'djuser', 'book_items', 'has_exchanged']
 
     def get_book_items(self, obj):
         book_items = obj.bookitem_set.filter(Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))
@@ -93,6 +95,25 @@ class UserCatalogSerializer(serializers.ModelSerializer):
         representation = super().to_representation(instance)
         representation['book_items'] = self.get_book_items(instance)
         return representation
+
+    def get_rating(self, obj):
+        avg_rating = Rating.objects.filter(ratee=obj).aggregate(Avg('score'))['score__avg']
+        return avg_rating if avg_rating is not None else 0
+
+    def get_has_exchanged(self, obj):
+        request = self.context.get('request')
+        if not request:
+            return False
+
+        user = User.objects.get(userID=request.user.id)
+        user_books = BookItem.objects.filter(userID=user)
+
+        has_exchanged = Request.objects.filter(
+            Q(sender_book__in=user_books, receiver_book__userID=obj, status="A") |
+            Q(receiver_book__in=user_books, sender_book__userID=obj, status="A")
+        ).exists()
+
+        return has_exchanged
 
 
 class PasswordChangeSerializer(serializers.Serializer):

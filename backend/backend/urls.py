@@ -32,6 +32,7 @@ urlpatterns = [
                   path('api/login/', views.LoginView.as_view(), name='login'),
                   path('api/signup/', views.SignUpView.as_view(), name='signup'),
                   path('api/profile/<int:pk>', views.ProfileView.as_view(), name='profile'),
+                  path('api/profile/<int:pk>/rate/', views.RateView.as_view(), name='rate'),
                   path('api/catalog/', views.CatalogView.as_view(), name='catalog'),
                   path('api/catalog/my/', views.CatalogMyItemsView.as_view(), name='my-catalog'),
                   path('api/catalog/<int:pk>', views.BookItemView.as_view(), name='book-item'),

@@ -241,6 +241,10 @@ const Profile = ({ setIsAuthenticated }) => {
                       readOnly={!isEditing}
                   />}
                 </div>
+                <div className="user-rating">
+                  <img src="http://localhost:8000/media/images/utils/star.png" alt="User Rating"/>
+                  <span>{userProfile.rating}</span>
+                </div>
                 <div className='profile-input-group'>
                   <label htmlFor="first_name">First Name:</label>
                   <input
@@ -326,8 +330,8 @@ const Profile = ({ setIsAuthenticated }) => {
                 </div>
               </form>
           )}
-          <button className="user-delete" onClick={handleUserDeletion}>Delete account</button>
-        </div>
+        <button className="user-delete" onClick={handleUserDeletion}>Delete account</button>
+      </div>
         <div className="my-books">
           <h1>MY BOOKS</h1>
           <div className="catalogContainer">

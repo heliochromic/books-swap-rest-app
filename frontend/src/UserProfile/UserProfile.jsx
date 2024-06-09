@@ -14,7 +14,8 @@ const UserProfile = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [items, setItems] = useState([]);
-    const [isAdmin, setIsAdmin] = useState(false); // State to track if the user is an admin
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [rating, setRating] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -25,6 +26,7 @@ const UserProfile = () => {
                 setProfileData(response.data);
                 setMe(me.data);
                 setItems(response.data.book_items);
+                setRating(response.data.rating)
                 setLoading(false);
             } catch (err) {
                 setError(err);
@@ -72,6 +74,17 @@ const UserProfile = () => {
         }
     };
 
+    const handleRatingSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const data = {score: rating};
+            await axios.put(`http://localhost:8000/api/profile/${id}/rate/`, data, getConfig());
+            successMessage("Rating submitted successfully!");
+        } catch (err) {
+            errorMessage("Error submitting rating");
+        }
+    };
+
     if (loading) {
         return <LoadingScreen></LoadingScreen>;
     }
@@ -110,6 +123,19 @@ const UserProfile = () => {
                 {(me.djuser.is_staff && profileData.djuser) && <p>Phone number: {profileData.phone_number}</p>}
                 <p>Date of birth: {profileData.date_of_birth}</p>
                 <p>Number of books: {items.length}</p>
+                {profileData.has_exchanged && (
+            <form onSubmit={handleRatingSubmit}>
+                    <select value={rating} onChange={(e) => setRating(e.target.value)} required>
+                        <option value="">Select Rating</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                <button type="submit">Rate</button>
+            </form>
+        )}
             </div>
             <div className="catalogContainer">
                 {items.map(item => (
@@ -117,7 +143,7 @@ const UserProfile = () => {
                 ))}
             </div>
         </div>
-
     );
 };
+
 export default UserProfile;
