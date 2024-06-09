@@ -75,16 +75,18 @@ const ApprovedRequest = ({ request }) => {
                         <div>
                             <strong>Contacts:</strong>
                         </div>
-                        <div>
+                       <div>
                                 {loading ? (
                                     <p>Loading...</p>
                                 ) : error ? (
                                     <p>{error}</p>
                                 ) : user ? (
+                                     <Link to={`/user/${user.userID}`}>
                                     <div>
                                         <p>Name: {user.first_name} {user.last_name}</p>
                                         <p>Phone: {user.phone_number}</p>
                                     </div>
+                                         </Link>
                                 ) : (
                                     <p>No user data available.</p>
                                 )}

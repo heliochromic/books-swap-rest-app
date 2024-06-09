@@ -105,9 +105,14 @@
     height: 100%;
     font-weight: normal;
 }
-div.request-answer > div > div > p{
+div.request-answer > div > a {
+    text-decoration: none;
+}
+div.request-answer > div > a > div > p{
+    text-decoration: none;
     margin-bottom: 0;
     font-weight: normal;
+    color: black;
 }
 .book-info {
     display: flex;
