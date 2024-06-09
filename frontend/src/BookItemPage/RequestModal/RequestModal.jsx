@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from "react";
-import {useParams} from "react-router-dom";
+import {Link, useParams} from "react-router-dom";
 import axios from "axios";
 import BookItemTiny from "./BookItemTiny/BookItemTiny";
 import {errorMessage, getConfig, successMessage} from "../../utils";
@@ -70,7 +70,7 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
             {!loading && !hasBooks && (
-                <p>Please add at least one book to exchange with other users</p>
+                <p>Please <Link to="/catalog/add">add</Link> at least one book to exchange with other users</p>
             )}
             {!loading && hasBooks && (
                 <>

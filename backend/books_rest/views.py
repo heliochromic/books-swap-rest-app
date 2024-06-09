@@ -353,7 +353,7 @@ class ProfileView(APIView):
         except User.DoesNotExist:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        if not user:
+        if not user or request.user.id == pk:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
 

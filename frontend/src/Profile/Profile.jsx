@@ -37,8 +37,7 @@ const Profile = ({ setIsAuthenticated }) => {
         if (!initialProfileRef.current) {
           initialProfileRef.current = response.data;
         }
-        const books = await axios.get(`http://localhost:8000/api/profile/${response.data.userID}`, getConfig());
-        setItems(books.data.book_items);
+        setItems(response.data.book_items);
       } catch (error) {
         setError(error.message);
         setLoading(false);

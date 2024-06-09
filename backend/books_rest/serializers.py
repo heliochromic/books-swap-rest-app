@@ -50,14 +50,14 @@ class UserLocationSerializer(serializers.ModelSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
+    book_items = serializers.SerializerMethodField()
     djuser = DJUserSerializer(source='django')
     rating = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
-                  'rating', 'image', 'djuser']
-
+                  'rating', 'image', 'djuser', 'book_items']
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
@@ -74,6 +74,15 @@ class UserSerializer(serializers.ModelSerializer):
     def get_rating(self, obj):
         avg_rating = Rating.objects.filter(ratee=obj).aggregate(Avg('score'))['score__avg']
         return avg_rating if avg_rating is not None else 0
+
+    def get_book_items(self, obj):
+        book_items = obj.bookitem_set.filter(Q(exchange_time__isnull=True) & Q(deletion_time__isnull=True))
+        return BookItemSerializer(book_items, many=True).data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['book_items'] = self.get_book_items(instance)
+        return representation
 
 
 class UserCatalogSerializer(serializers.ModelSerializer):
