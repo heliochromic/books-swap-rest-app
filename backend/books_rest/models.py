@@ -17,7 +17,6 @@ class User(models.Model):
     phone_number = models.CharField(max_length=10, help_text="Enter your phone number")
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
-    rating = models.FloatField(default=0)
     image = models.ImageField(upload_to='images/users/', help_text="Upload your image",
                               default='images/users/default.png', null=False)
     registration_date = models.DateField(default=datetime.now)
@@ -33,6 +32,15 @@ class User(models.Model):
 
     def get_absolute_url(self):
         return reverse('user', kwargs={'pk': str(self.userID)})
+
+
+class Rating(models.Model):
+    rater = models.ForeignKey(User, on_delete=models.CASCADE, related_name='given_ratings')
+    ratee = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_ratings')
+    score = models.IntegerField()
+
+    def __str__(self):
+        return f'Rating from {self.rater} to {self.ratee} - Score: {self.score}'
 
 
 class BookItem(models.Model):

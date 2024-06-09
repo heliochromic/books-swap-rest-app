@@ -1,7 +1,8 @@
 from django.db.models import Q
 from rest_framework import serializers
 from django.contrib.auth.models import User as DJUser
-from .models import User, BookItem, Request
+from .models import User, BookItem, Request, Rating
+from django.db.models import Avg
 
 
 class BookItemSerializer(serializers.ModelSerializer):
@@ -50,6 +51,7 @@ class UserLocationSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(required=False)
     djuser = DJUserSerializer(source='django')
+    rating = serializers.SerializerMethodField()
 
     class Meta:
         model = User
@@ -68,6 +70,10 @@ class UserSerializer(serializers.ModelSerializer):
         instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
+
+    def get_rating(self, obj):
+        avg_rating = Rating.objects.filter(ratee=obj).aggregate(Avg('score'))['score__avg']
+        return avg_rating if avg_rating is not None else 0
 
 
 class UserCatalogSerializer(serializers.ModelSerializer):
