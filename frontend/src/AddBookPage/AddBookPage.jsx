@@ -146,6 +146,7 @@ const AddBookPage = () => {
                                    id="title"
                                    name="title"
                                    value={formValues.title}
+                                   maxLength={200}
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="mb-3 col-md-6">
@@ -157,6 +158,7 @@ const AddBookPage = () => {
                                    id="author"
                                    name="author"
                                    value={formValues.author}
+                                   maxLength={200}
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="mb-3 col-md-3">
@@ -168,6 +170,7 @@ const AddBookPage = () => {
                                    id="genre"
                                    name="genre"
                                    value={formValues.genre}
+                                   maxLength={30}
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="mb-3 col-md-3">
@@ -179,6 +182,7 @@ const AddBookPage = () => {
                                    id="language"
                                    name="language"
                                    value={formValues.language}
+                                   maxLength={20}
                                    onChange={handleInputChange}/>
                         </div>
                         <div className="mb-3 col-md-3">
