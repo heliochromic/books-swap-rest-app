@@ -123,8 +123,8 @@ const UserProfile = () => {
                 <span>{profileData.rating}</span>
             </div>
             <div className="profile-details">
-                {(me.djuser.is_staff && profileData.djuser) && <p>Email: {profileData.djuser.email}</p>}
-                {(me.djuser.is_staff && profileData.djuser) && <p>Phone number: {profileData.phone_number}</p>}
+                {((me.djuser.is_staff && profileData.djuser) || profileData.has_exchanged) && <p>Email: {profileData.djuser.email}</p>}
+                {((me.djuser.is_staff && profileData.djuser) || profileData.has_exchanged) && <p>Phone number: {profileData.phone_number}</p>}
                 <p>Date of birth: {profileData.date_of_birth}</p>
                 <p>Number of books: {items.length}</p>
                 {profileData.has_exchanged && (

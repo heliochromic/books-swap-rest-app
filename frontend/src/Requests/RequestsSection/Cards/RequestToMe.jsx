@@ -58,8 +58,8 @@ const RequestToMe = ({ request, refreshRequests }) => {
                         </Link>
                     </div>
                     <div className="request-buttons">
-                        <button onClick={() => handleRequest('A')} className="btn btn-primary">Підтвердити</button>
-                        <button onClick={() => handleRequest('R')} className="btn btn-outline-danger">Скасувати
+                        <button onClick={() => handleRequest('A')} className="btn btn-primary">Approve</button>
+                        <button onClick={() => handleRequest('R')} className="btn btn-outline-danger">Reject
                         </button>
                     </div>
                 </div>

@@ -127,18 +127,6 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
                                                             />
                                                         ))}
                                                         <div className="modal-footer">
-                                                            <button
-                                                                type="button"
-                                                                className="btn btn-secondary"
-                                                                data-bs-dismiss="modal"
-                                                                style={{
-                                                                    borderRadius: '25px',
-                                                                    backgroundColor: 'red',
-                                                                    border: '0'
-                                                                }}
-                                                            >
-                                                                Close
-                                                            </button>
                                                             <button type="submit" className="btn btn-primary"
                                                                     data-bs-dismiss="modal" style={{
                                                                 borderRadius: '25px',

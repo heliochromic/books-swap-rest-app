@@ -43,7 +43,7 @@ const RejectedRequest = ({request}) => {
                             <p>Автор: {request.sender_book.author}</p>
                         </Link>
                     </div>
-                    <div className="request-answer">Unfortunately owner of this book rejected this request :((</div>
+                    <div className="request-answer">Unfortunately owner of this book or you rejected this request :((</div>
                 </div>
             </div>
         </div>
