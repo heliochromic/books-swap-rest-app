@@ -12,6 +12,7 @@ import AddBookPage from "../AddBookPage/AddBookPage";
 import UserProfile from "../UserProfile/UserProfile";
 import PasswordChangePage from "../Profile/PasswordChange/PasswordChangePage";
 import Requests from "../Requests/Requests";
+import ErrorPage from "../Errors/ErrorPage";
 
 const Main = ({isAuthenticated, setIsAuthenticated}) => {
     return (
@@ -29,6 +30,7 @@ const Main = ({isAuthenticated, setIsAuthenticated}) => {
                     <Route path="/requests" element={<Requests/>}/>
                     <Route path="/user/:id" element={<UserProfile/>}/>
                     <Route path="/password-change" element={<PasswordChangePage/>}/>
+                    <Route path={<ErrorPage/>}/>
                 </Routes>
             </section>
         </main>

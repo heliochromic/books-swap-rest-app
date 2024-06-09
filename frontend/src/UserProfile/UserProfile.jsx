@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import axios from 'axios';
-import { useNavigate, useParams } from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 import BookItem from '../Catalog/BookItem/BookItem';
 import './userProfile.css';
 import {errorMessage, getConfig, successMessage} from '../utils';
@@ -8,7 +8,7 @@ import {LoadingScreen} from "../Header/LoadingScreen";
 import ErrorPage from "../Errors/ErrorPage";
 
 const UserProfile = () => {
-    const { id } = useParams();
+    const {id} = useParams();
     const [profileData, setProfileData] = useState(null);
     const [me, setMe] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -52,7 +52,7 @@ const UserProfile = () => {
 
     const handleMakeAdmin = async () => {
         try {
-            const data = { targetID: profileData.userID };
+            const data = {targetID: profileData.userID};
             await axios.post(`http://localhost:8000/api/admin/make-admin/`, data, getConfig());
             setIsAdmin(true);
             successMessage(profileData.first_name + " " + profileData.last_name + " is admin now!")
@@ -63,12 +63,12 @@ const UserProfile = () => {
 
     const handleDeleteAdmin = async () => {
         try {
-            const data = { targetID: profileData.userID };
+            const data = {targetID: profileData.userID};
             await axios.post(`http://localhost:8000/api/admin/remove-admin/`, data, getConfig());
             setIsAdmin(false);
             successMessage("You removed admin from " + profileData.first_name + " " + profileData.last_name)
         } catch (err) {
-           errorMessage("Error removing admin from" + profileData.first_name + " " + profileData.last_name)
+            errorMessage("Error removing admin from" + profileData.first_name + " " + profileData.last_name)
         }
     };
 
@@ -86,10 +86,10 @@ const UserProfile = () => {
                 <button className="user-delete-button" onClick={handleDelete}>Delete</button>
             )}
             {(me.djuser.is_superuser && isAdmin) &&
-                    <button className="user-status-lower" onClick={handleDeleteAdmin}>Remove Admin</button>}
+                <button className="user-status-lower" onClick={handleDeleteAdmin}>Remove Admin</button>}
             {(me.djuser.is_superuser && !isAdmin) &&
-                    <button className="user-status-raise" onClick={handleMakeAdmin}>Give Admin</button>
-                }
+                <button className="user-status-raise" onClick={handleMakeAdmin}>Give Admin</button>
+            }
             <img
                 src={`http://localhost:8000${profileData.image}`}
                 alt="Profile Image"
@@ -102,7 +102,7 @@ const UserProfile = () => {
             <h2 className="first-last">{profileData.first_name} {profileData.last_name}</h2>
             {profileData.djuser && <p className="username">@{profileData.djuser.username}</p>}
             <div className="user-rating">
-                <img src="http://localhost:8000/media/images/utils/star.png" alt="User Rating" />
+                <img src="http://localhost:8000/media/images/utils/star.png" alt="User Rating"/>
                 <span>{profileData.rating}</span>
             </div>
             <div className="profile-details">
@@ -113,7 +113,7 @@ const UserProfile = () => {
             </div>
             <div className="catalogContainer">
                 {items.map(item => (
-                    <BookItem key={item.id} bookItem={item} />
+                    <BookItem key={item.id} bookItem={item}/>
                 ))}
             </div>
         </div>
