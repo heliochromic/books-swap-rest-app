@@ -1,10 +1,11 @@
 from datetime import datetime
 import os
 from django.contrib.auth import authenticate, login
-from django.db.models import F, FloatField, ExpressionWrapper, Value
+from django.db.models import F, FloatField, ExpressionWrapper, Value, Count
 from django.contrib.auth.models import User as DJUser
 from django.db import transaction
 from django.db.models.functions import Radians, ACos, Cos, Sin
+from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -17,7 +18,8 @@ from django.db.models import Q, ObjectDoesNotExist
 
 from .models import BookItem, User, Request, Rating
 from .serializers import BookItemSerializer, UserSerializer, RequestSerializer, \
-    UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer, RequestItemSerializer
+    UserLocationSerializer, UserCatalogSerializer, PasswordChangeSerializer, RequestItemSerializer, StatusSerializer, \
+    LanguageSerializer, BookCountSerializer
 
 
 class CatalogView(APIView):
@@ -356,7 +358,6 @@ class ProfileView(APIView):
         if not user or request.user.id == pk:
             return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
 
-
         serializer = UserCatalogSerializer(user, many=False, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -572,3 +573,27 @@ class RemoveAdminView(APIView):
             user.is_staff = False
             user.save()
         return Response({"message": "User received admin status successfully"}, status=status.HTTP_200_OK)
+
+
+class VisualizationsView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    authentication_classes = [TokenAuthentication]
+
+    @action(detail=False, methods=['get'])
+    def get(self, request):
+        statuses1 = Request.objects.values('status').annotate(count=Count('status'))
+        serializer1 = StatusSerializer(statuses1, many=True)
+
+        statuses2 = BookItem.objects.values('language').annotate(count=Count('language'))
+        serializer2 = LanguageSerializer(statuses2, many=True)
+
+        bar_data = BookItem.objects.values('userID').annotate(count=Count('userID'))
+        bar_serializer = BookCountSerializer(bar_data, many=True)
+
+        response_data = {
+            'chart1': serializer1.data,
+            'chart2': serializer2.data,
+            'barChart': bar_serializer.data
+        }
+
+        return Response(response_data)

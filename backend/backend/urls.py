@@ -42,5 +42,5 @@ urlpatterns = [
                   path('api/user/', views.UserView.as_view(), name='user'),
                   path('api/logout/', views.LogoutView.as_view(), name='logout'),
                   path('api/password-change/', views.PasswordChangeView.as_view(), name='password-change'),
-
+                  path('api/visualizations/', views.VisualizationsView.as_view(), name='visualizations'),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

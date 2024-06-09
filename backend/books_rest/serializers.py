@@ -58,6 +58,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['userID', 'first_name', 'last_name', 'date_of_birth', 'mail', 'phone_number', 'latitude', 'longitude',
                   'rating', 'image', 'djuser', 'book_items']
+
     def update(self, instance, validated_data):
         instance.first_name = validated_data.get('first_name', instance.first_name)
         instance.last_name = validated_data.get('last_name', instance.last_name)
@@ -127,3 +128,21 @@ class UserCatalogSerializer(serializers.ModelSerializer):
 class PasswordChangeSerializer(serializers.Serializer):
     current_password = serializers.CharField(required=True)
     new_password = serializers.CharField(required=True)
+
+
+class StatusSerializer(serializers.Serializer):
+    status = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class LanguageSerializer(serializers.Serializer):
+    language = serializers.CharField()
+    count = serializers.IntegerField()
+
+
+class BookCountSerializer(serializers.Serializer):
+    userID = serializers.IntegerField()
+    count = serializers.IntegerField()
+
+
+
