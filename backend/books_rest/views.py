@@ -297,8 +297,6 @@ class UserView(APIView):
 
     @action(detail=False, methods=['put'])  # Update user profile
     def put(self, request, format=None):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
-        media_dir = os.path.normpath(os.path.join(dir_path, '..', 'media\\'))
         user_id = User.objects.get(django=request.user).userID
         try:
             user_instance = User.objects.get(userID=user_id)
@@ -307,23 +305,7 @@ class UserView(APIView):
 
         if not (request.user.is_staff or user_instance.django_id == request.user.id):
             return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
-        uploaded_image = request.data.get('image')
-        if uploaded_image is None:
-            if not request.data.get('imageNotUpdated') and user_instance.image.name != 'images/users/default.png':
-                os.remove(os.path.normpath(media_dir + "\\" + user_instance.image.name))
-                user_instance.image = 'images/users/default.png'
-        else:
 
-            uploaded_image_name = uploaded_image.name
-            current_image_name = user_instance.image.name
-
-            if current_image_name != 'images/users/default.png' and uploaded_image_name != current_image_name:
-                print("Deleting " + media_dir + current_image_name)
-                if os.path.exists(os.path.normpath(media_dir + "\\" + current_image_name)):
-                    os.remove(os.path.normpath(media_dir + "\\" + current_image_name))
-
-            print(f"Uploaded image: {uploaded_image_name}")
-            print(f"Current image: {current_image_name}")
         serializer = UserSerializer(user_instance, data=request.data, partial=True)
 
         if serializer.is_valid():
