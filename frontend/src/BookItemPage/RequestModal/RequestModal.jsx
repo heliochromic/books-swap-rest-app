@@ -17,7 +17,6 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
         try {
             const response = await axios.get("http://localhost:8000/api/catalog/my/", getConfig());
             const books = response.data;
-            console.log(alreadyRequested)
             setMyBooks(books);
             setHasBooks(books.length > 0);
             const isMine = books.some(book => +book.itemID === +id);
@@ -29,14 +28,16 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
 
     const checkIfAlreadyRequested = useCallback(async () => {
         try {
+            console.log("іді нахуй")
             const response = await axios.get("http://localhost:8000/api/requests/my_requests/", getConfig());
             const requests = response.data;
-            const isRequested = requests.some(request => request.receiver_book_id === +id && request.status !== "A");
+            const isRequested = requests.some(request => request.receiver_book.itemID === +id && request.sender_book.itemID && request.status !== "A");
+            console.log(isRequested)
             setAlreadyRequested(isRequested);
         } catch (err) {
             setError(err.message);
         }
-    }, [id]);
+    }, [id, setAlreadyRequested]);
 
     const requestBook = async () => {
         try {
@@ -63,7 +64,7 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
         };
 
         fetchData().then(r => console.log(r));
-    }, [id, fetchMyBooks, checkIfAlreadyRequested]);
+    }, [id, fetchMyBooks, checkIfAlreadyRequested, alreadyRequested]);
 
     return (
         <div>
@@ -75,7 +76,7 @@ const RequestModal = ({alreadyRequested, setAlreadyRequested}) => {
             {!loading && hasBooks && (
                 <>
                     {alreadyRequested ? (
-                        <></>
+                        <p>You can't request this book</p>
                     ) : (
                         <>
                             {isMineBook ? (

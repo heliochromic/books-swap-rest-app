@@ -22,8 +22,8 @@ const BookItemPage = () => {
                 const me = await axios.get(`http://localhost:8000/api/user/`, getConfig());
                 setMe(me.data);
                 const response = await axios.get(`http://localhost:8000/api/catalog/${+id}`, getConfig());
-                if (response.data.deletion_time !== null || response.data.exchange_time !== null) {
-                    setAlreadyRequested(true)
+                if (response.data && (response.data.deletion_time !== null || response.data.exchange_time !== null)) {
+                    setAlreadyRequested(true);
                 }
                 setBook(response.data);
             } catch (err) {
@@ -34,7 +34,7 @@ const BookItemPage = () => {
         };
 
         fetchBook();
-    }, [id]);
+    }, [id, alreadyRequested]);
 
     const handleBookDeletion = async () => {
         try {

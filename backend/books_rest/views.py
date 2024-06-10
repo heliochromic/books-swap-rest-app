@@ -192,8 +192,6 @@ class RequestView(APIView):
     def get(self, request, request_type):
         user_id = User.objects.get(django=request.user).userID
 
-        print(request_type)
-
         if request_type == "my_requests":
             queryset = Request.objects.filter(sender_book_id__userID=user_id, status="P")
         elif request_type == "requests_to_me":
@@ -244,6 +242,19 @@ class RequestItemView(APIView):
 
         if receiver_id != receiver_book_item_instance.userID.userID:
             return Response(data={"error": "Permission denied"}, status=status.HTTP_403_FORBIDDEN)
+
+        other_requests = Request.objects.exclude(pk=pk).filter(
+            Q(sender_book_id=request_instance.sender_book_id) | Q(
+                receiver_book_id=request_instance.receiver_book_id) | Q(
+                receiver_book_id=request_instance.sender_book_id) |
+            Q(sender_book_id=request_instance.receiver_book_id),
+            status='P'
+        )
+
+        for other_request in other_requests:
+            other_request.status = 'R'
+            other_request.deletion_date = datetime.now()
+            other_request.save()
 
         time = datetime.now()
 
