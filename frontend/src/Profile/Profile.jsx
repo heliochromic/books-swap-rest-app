@@ -191,7 +191,7 @@ const Profile = ({ setIsAuthenticated }) => {
       errorMessage("An updating profile")
     }
 
-    setIsEditing(!isEditing);
+
   };
 
   const handleCancelClick = async (e) => {

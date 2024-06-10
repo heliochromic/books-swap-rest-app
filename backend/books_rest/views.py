@@ -319,7 +319,8 @@ class UserView(APIView):
 
             if current_image_name != 'images/users/default.png' and uploaded_image_name != current_image_name:
                 print("Deleting " + media_dir + current_image_name)
-                os.remove(os.path.normpath(media_dir + "\\" + current_image_name))
+                if os.path.exists(os.path.normpath(media_dir + "\\" + current_image_name)):
+                    os.remove(os.path.normpath(media_dir + "\\" + current_image_name))
 
             print(f"Uploaded image: {uploaded_image_name}")
             print(f"Current image: {current_image_name}")
